@@ -1,80 +1,190 @@
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+
+    <title>Blue Digital Solutions</title>
+
     <link rel="stylesheet" href="css/style.css">
+
+    <script src="js/main.js" defer></script>
 </head>
+
 <body>
 
-    <!-- page header it contains the website name and navigation links to follow in the same page  -->
+    <!-- page header with the company name and navigation links -->
     <header>
         <h1>Blue Digital Solutions</h1>
 
-        <nav>
+        <nav aria-label="Main navigation">
             <a href="#home">Home</a>
+            <a href="#about">About Us</a>
             <a href="#services">Services</a>
+            <a href="#statistics">Statistics</a>
             <a href="#contact">Contact</a>
         </nav>
     </header>
 
     <main>
 
-        <!--short introduction -->
+        <!-- Hero section contains  main introduction and call-to-action -->
         <section id="home">
-            <h2>Simple Digital Solutions</h2>
+            <h2>Simple Digital Solutions for Your Business</h2>
 
             <p>
-                We help businesses create useful websites and digital products
+                We help businesses create useful websites, mobile applications,
+                and reliable digital products.
             </p>
 
-            <!--  temp i will fill it latter  -->
-            <article>
-                <h3>test</h3>
-                <p>Hiii! :3 </p>
-            </article>
+            <a href="#contact">Start Your Project</a>
         </section>
 
-        <!-- services section -->
+        <!-- about Us section -->
+        <section id="about">
+            <h2>About Us</h2>
+
+            <p>
+                Bluee Digital Solutions is a technology company that helps
+                businesses improve their digital presence. We provide practical,
+                user friendly, and reliable solutions based on each client's needs.
+            </p>
+        </section>
+
+        <!-- services section  -->
         <section id="services">
             <h2>Our Services</h2>
 
-            <ul>
-                <li>Web Development</li>
-                <li>Mobile Applications</li>
-                <li>UI/UX Design</li>
-                <li>Backend Development</li>
-                <li>Database Solutions</li>
-                <li>Technical Support</li>
-            </ul>
+            <div class="services-container">
+
+                <article class="service-card">
+                    <h3>Web Development</h3>
+                    <p>
+                        We create responsive and user friendly websites for
+                        businesses and organizations
+                    </p>
+                </article>
+
+                <article class="service-card">
+                    <h3>Mobile Applications</h3>
+                    <p>
+                        We develop useful mobile applications that work smoothly
+                        across different devices
+                    </p>
+                </article>
+
+                <article class="service-card">
+                    <h3>UI/UX Design</h3>
+                  
+                </article>
+
+                <article class="service-card">
+                    <h3>Backend Development</h3>
+                    
+                </article>
+
+                <article class="service-card">
+                    <h3>Database Solutions</h3>
+                    
+                </article>
+
+                <article class="service-card">
+                    <h3>Technical Support</h3>
+                    <p>
+                        We provide technical assistance and help maintain digital
+                        systems after development
+                    </p>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- statistics section-->
+        <section id="statistics">
+            <h2>Our Statistics</h2>
+
+            <div class="statistics-container">
+
+                <article class="statistic-card">
+                    <h3>150+</h3>
+                    <p>Completed Projects</p>
+                </article>
+
+                <article class="statistic-card">
+                    <h3>200+</h3>
+                    <p>Satisfied Clients</p>
+                </article>
+
+              
+
+            </div>
         </section>
 
         <!-- contact section -->
         <section id="contact">
             <h2>Contact Us</h2>
 
+            <p>
+                Complete the form below  to tell us how we can help you
+            </p>
+
+            <!-- browser validation is disabled because JavaScript handles it -->
             <form id="contact-form" novalidate>
 
-                <!-- full name is required -->
+                <!-- Full name is required -->
                 <label for="name">Full Name</label>
-                <input type="text" id="name" name="name">
-                <small id="name-error"></small>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Enter your full name"
+                    autocomplete="name"
+                    required
+                >
+                <small id="name-error" class="error-message"></small>
 
-                <!-- email is also required + must have a valid format -->
+                <!-- email is required and must have a valid format -->
                 <label for="email">Email Address</label>
-                <input type="email" id="email" name="email">
-                <small id="email-error"></small>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email address"
+                    autocomplete="email"
+                    required
+                >
+                <small id="email-error" class="error-message"></small>
 
                 <!-- phone number is optional -->
-                <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone">
+                <label for="phone">Phone Number (Optional)</label>
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    placeholder="Enter your phone number"
+                    autocomplete="tel"
+                >
 
-                <!--  the subject is  required -->
+                <!-- subject is required -->
                 <label for="subject">Subject</label>
-                <input type="text" id="subject" name="subject">
-                <small id="subject-error"></small>
+                <input
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    placeholder="Enter the message subject"
+                    required
+                >
+                <small id="subject-error" class="error-message"></small>
 
-                <!--  the messagen is required -->
+                <!-- message is required -->
                 <label for="message">Message</label>
-                <textarea id="message" name="message" rows="4"></textarea>
-                <small id="message-error"></small>
+                <textarea
+                    id="message"
+                    name="message"
+                    rows="5"
+                    placeholder="Write your message here"
+                    required
+                ></textarea>
+                <small id="message-error" class="error-message"></small>
 
                 <button type="submit">Send</button>
             </form>
@@ -82,9 +192,24 @@
 
     </main>
 
-    <!-- footer -->
+    <!-- page footer contains company information and useful links -->
     <footer>
-        <p>&copy; 200000000026  Blue Digital Solutions</p>
+        <p>&copy;Blue Digital Solutions  All rights reserved.</p>
+
+        <address>
+            Al-Bireh,Palestine<br>
+            Email:
+            <a href="mailto:info@blue.ps">
+                info@blue.ps
+            </a>
+        </address>
+        <nav aria-label="Footer navigation">
+            <a href="#home">Home</a>  <a href="#about">About Us</a>
+            <a href="#services">Services</a>
+        <a href="#contact">Contact</a>
+        </nav>
     </footer>
 
 </body>
+
+</html>
