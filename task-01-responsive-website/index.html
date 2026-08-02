@@ -1,0 +1,90 @@
+
+<head>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- page header it contains the website name and navigation links to follow in the same page  -->
+    <header>
+        <h1>Blue Digital Solutions</h1>
+
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#services">Services</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <!--short introduction -->
+        <section id="home">
+            <h2>Simple Digital Solutions</h2>
+
+            <p>
+                We help businesses create useful websites and digital products
+            </p>
+
+            <!--  temp i will fill it latter  -->
+            <article>
+                <h3>test</h3>
+                <p>Hiii! :3 </p>
+            </article>
+        </section>
+
+        <!-- services section -->
+        <section id="services">
+            <h2>Our Services</h2>
+
+            <ul>
+                <li>Web Development</li>
+                <li>Mobile Applications</li>
+                <li>UI/UX Design</li>
+                <li>Backend Development</li>
+                <li>Database Solutions</li>
+                <li>Technical Support</li>
+            </ul>
+        </section>
+
+        <!-- contact section -->
+        <section id="contact">
+            <h2>Contact Us</h2>
+
+            <form id="contact-form" novalidate>
+
+                <!-- full name is required -->
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name">
+                <small id="name-error"></small>
+
+                <!-- email is also required + must have a valid format -->
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email">
+                <small id="email-error"></small>
+
+                <!-- phone number is optional -->
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone">
+
+                <!--  the subject is  required -->
+                <label for="subject">Subject</label>
+                <input type="text" id="subject" name="subject">
+                <small id="subject-error"></small>
+
+                <!--  the messagen is required -->
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="4"></textarea>
+                <small id="message-error"></small>
+
+                <button type="submit">Send</button>
+            </form>
+        </section>
+
+    </main>
+
+    <!-- footer -->
+    <footer>
+        <p>&copy; 200000000026  Blue Digital Solutions</p>
+    </footer>
+
+</body>

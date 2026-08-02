@@ -1,0 +1,19 @@
+/* page background */
+body {
+    margin: 0;
+    background-color: #f2f2f2;
+}
+
+/* header color  */
+header {
+    padding: 20px;
+    color: white;
+    background-color: #2f6690;
+}
+
+/* footer color */
+footer {
+    padding: 15px;
+    color: white;
+    background-color: #16425b;
+}
