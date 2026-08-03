@@ -59,7 +59,7 @@ document.getElementById("message-error").textContent = "";
     // show  success message when all inputs are valid
     if (isValid) {
         alert("form completed successfully.");
-        // clear to make sure user understode it was don successfully 
+        // clear to make sure user understand it was done successfully 
         contactForm.reset();
     }
 });

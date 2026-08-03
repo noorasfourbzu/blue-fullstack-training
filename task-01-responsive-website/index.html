@@ -13,19 +13,27 @@
 
 <body>
 
+    
     <!-- page header with the company name and navigation links -->
     <header>
-        <h1>Blue Digital Solutions</h1>
+    <a href="#home" class="brand">
+        <img
+            src="images/asfoura-bandora-logo.png"
+            alt="AsfouraBandora company logo"
+            class="brand-logo"
+        >
 
-        <nav aria-label="Main navigation">
-            <a href="#home">Home</a>
-            <a href="#about">About Us</a>
-            <a href="#services">Services</a>
-            <a href="#statistics">Statistics</a>
-            <a href="#contact">Contact</a>
-        </nav>
-    </header>
+        <h1>AsfouraBandora</h1>
+    </a>
 
+    <nav aria-label="Main navigation">
+        <a href="#home">Home</a>
+        <a href="#about">About Us</a>
+        <a href="#services">Services</a>
+        <a href="#statistics">Statistics</a>
+        <a href="#contact">Contact</a>
+    </nav>
+</header>
     <main>
 
         <!-- Hero section contains  main introduction and call-to-action -->
@@ -37,12 +45,12 @@
                 and reliable digital products.
             </p>
 
-            <a href="#contact">Start Your Project</a>
+            <a href="#contact" class ="button">Start Your Project</a>
         </section>
 
         <!-- about Us section -->
-        <section id="about">
-            <h2>About Us</h2>
+        <section id="about" class ="section">
+            <h2 class= "section-title">About Us</h2>
 
             <p>
                 Blue Digital Solutions is a technology company that helps
@@ -52,12 +60,15 @@
         </section>
 
         <!-- services section  -->
-        <section id="services">
-            <h2>Our Services</h2>
+        <section id="services" class = "section">
 
-            <div class="services-container">
+            <div class="container">
+            
+            <h2 class = "section-title">Our Services</h2>
 
-                <article class="service-card">
+               <div class="services-container">
+
+                <article class=" card service-card">
                     <h3>Web Development</h3>
                     <p>
                         We create responsive and user friendly websites for
@@ -65,7 +76,7 @@
                     </p>
                 </article>
 
-                <article class="service-card">
+                <article class="card service-card">
                     <h3>Mobile Applications</h3>
                     <p>
                         We develop useful mobile applications that work smoothly
@@ -73,66 +84,66 @@
                     </p>
                 </article>
 
-                <article class="service-card">
+                <article class=" card service-card">
                     <h3>UI/UX Design</h3>
                   <p>We design simple and user friendly interfaces that are easy
         to understand and use</p>
                 </article>
 
-                <article class="service-card">
+                <article class=" card service-card">
                     <h3>Backend Development</h3>
                     <p> We build the systems behind websites and applications to manage
         data and functionality</p>
                 </article>
 
-                <article class="service-card">
+                <article class=" card service-card">
                     <h3>Database Solutions</h3>
                     <p>We create and manage databases to store information safely
         and keep it organized</p>
                     
                 </article>
 
-                <article class="service-card">
+                <article class="card service-card">
                     <h3>Technical Support</h3>
                     <p>
                         We provide technical assistance and help maintain digital
                         systems after development
                     </p>
                 </article>
-
+                  </div>
             </div>
         </section>
 
         <!-- statistics section-->
-        <section id="statistics">
-            <h2>Our Statistics</h2>
-
+        <section id="statistics" class="section">
+            <h2 class = "section-title">Our Statistics</h2>
+        <div class="container">
             <div class="statistics-container">
 
-                <article class="statistic-card">
+                <article class=" card statistic-card">
                     <h3>150+</h3>
                     <p>Completed Projects</p>
                 </article>
 
-                <article class="statistic-card">
+                <article class=" card statistic-card">
                     <h3>200+</h3>
                     <p>Satisfied Clients</p>
                 </article>
 
-                <article class = "statistic-card">
+                <article class = " card statistic-card">
                   <h3>5+</h3>
                 <p>Years Of Experience </p>
                 </article>
 
              
 
-
+            </div>
             </div>
         </section>
 
         <!-- contact section -->
-        <section id="contact">
-            <h2>Contact Us</h2>
+        <section id="contact" class="section">
+            <h2 class = "section-title">Contact Us</h2>
 
             <p>
                 Complete the form below  to tell us how we can help you
@@ -150,6 +161,7 @@
                     placeholder="Enter your full name"
                     autocomplete="name"
                     required
+                    class ="form-control"
                 >
                 <small id="name-error" class="error-message"></small>
 
@@ -162,6 +174,8 @@
                     placeholder="Enter your email address"
                     autocomplete="email"
                     required
+                    class ="form-control"
+
                 >
                 <small id="email-error" class="error-message"></small>
 
@@ -173,6 +187,8 @@
                     name="phone"
                     placeholder="Enter your phone number"
                     autocomplete="tel"
+                    class ="form-control"
+
                 >
 
                 <!-- subject is required -->
@@ -183,6 +199,8 @@
                     name="subject"
                     placeholder="Enter the message subject"
                     required
+                    class ="form-control"
+
                 >
                 <small id="subject-error" class="error-message"></small>
 
@@ -194,10 +212,12 @@
                     rows="5"
                     placeholder="Write your message here"
                     required
+                    class ="form-control"
+
                 ></textarea>
                 <small id="message-error" class="error-message"></small>
 
-                <button type="submit">Send</button>
+                <button type="submit" class="button">Send</button>
             </form>
         </section>
 
@@ -217,7 +237,7 @@
         <nav aria-label="Footer navigation">
             <a href="#home">Home</a>  <a href="#about">About Us</a>
             <a href="#services">Services</a>
-        <a href="#contact">Contact</a>
+        <a href="#contact" >Contact</a>
         </nav>
     </footer>
 
