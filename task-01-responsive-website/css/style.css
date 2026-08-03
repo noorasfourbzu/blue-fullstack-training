@@ -153,32 +153,33 @@ header nav a:focus{
 
 /* hero section */
 #home {
-    min-height: 75vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    color: var(--color-text);
     background: linear-gradient(
-        135deg,
+        to right,
         var(--color-primary),
         var(--color-background)
     );
 }
 
+.hero-content {
+    min-height: 750px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
 #home h2 {
-    max-width: 700px;
-    margin-bottom: 20px;
-    color: var(--color-text);
-    font-size: 3rem;
-    line-height: 1.2;
-    text-align: left;
+    max-width: 850px;
+    margin-bottom: 25px;
+    font-size: 4rem;
+    line-height: 1.15;
 }
 
 #home p {
-    max-width: 650px;
-    margin-bottom: 30px;
-    font-size: 1.2rem;
+    max-width: 850px;
+    margin-bottom: 35px;
+    font-size: 1.5rem;
+    line-height: 1.6;
 }
 
 
