@@ -46,7 +46,7 @@ header nav a {
 }
 
 header nav a:hover,
-header nav a:focus {
+header nav a:focus{
     color: #9ad1d4;
 }
 
@@ -106,10 +106,13 @@ main section h2 {
 
 /* about section */
 #about {
+    align-self: flex-start;
     background-color: white;
 }
 
 #about p {
+        align-self: flex-start;
+
     max-width: 800px;
     margin: 0 auto;
     color: #52616b;
@@ -163,15 +166,17 @@ main section h2 {
 }
 
 #statistics h2 {
-    color: rgb(225, 238, 125);
+    color: rgb(230, 238, 245);
 }
 
 .statistics-container {
     display: grid;
-    grid-template-columns: repeat(2, minmax(200px, 300px));
     justify-content: center;
     gap: 10px;
     max-width: 900px;
+
+      grid-template-columns: repeat(3, minmax(180px, 250px));
+    margin: 0 auto;
 }
 
 .statistic-card {
@@ -204,7 +209,16 @@ main section h2 {
 }
 
 /* contact form */
+#contact-form {
+display: flex; 
+flex-direction: column ;
+max-width: 700%;
+margin: 0 auto ;
+padding : 30px; 
+border-radius: 15px;
+background-color: #d3f4f5;
 
+}
 
 #contact-form label {
     margin: 14px 0 6px;

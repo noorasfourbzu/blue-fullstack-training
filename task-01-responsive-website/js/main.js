@@ -3,7 +3,17 @@ const contactForm = document.getElementById("contact-form");
 
 // runs when the user submit the form 
 contactForm.addEventListener("submit", function (event) {
-    
+document.getElementById("name-error").textContent = "";
+document.getElementById("email-error").textContent = "";
+document.getElementById("subject-error").textContent = "";
+document.getElementById("message-error").textContent = "";
+
+
+    // بمنع التصرف الافتراضي للمتصفح , عشان الحق اعمل فاليديشن قبل يعمل ريفريش للصفحة او ارسال للرسالة 
+    event.preventDefault();
+
+
+
 
     // get the inputs + remove extra spaces
     const name = document.getElementById("name").value.trim();
@@ -14,7 +24,7 @@ contactForm.addEventListener("submit", function (event) {
     // to track if all fields are valid
     let isValid = true;
     
-    // Chec name field 
+    // Check name field 
     if (name === "")/* is empty? */ {
         document.getElementById("name-error").textContent =
             "Please enter your name.";
