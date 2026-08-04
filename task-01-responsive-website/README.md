@@ -1,18 +1,28 @@
-# Blue Digital Solutions
-A simple responsive website created for Task 01 of the Blue Full Stack Training Program
+# AsfouraBandora
 
-# Technologies
+A responsive website for an independent game studio, created during the Blue Full Stack Training Program.
+
+## Technologies
+
 - HTML
 - CSS
 - JavaScript
 
-# Features
-- Responsive design
-- Services and statistics sections
+## Features
+
+- Responsive design for desktop, tablet, and mobile
+- Custom studio logo and color palette
+- About section
+- Game services section
+- Statistics section
 - Contact form with JavaScript validation
+- Responsive navigation and footer
 
-# How to Run
-- Open the 'index.html' file in a web browser
+## How to Run
 
-# Author
-- Noor Asfour
+1. Download or clone the project.
+2. Open the `index.html` file in a web browser.
+
+## Author
+
+Noor Asfour

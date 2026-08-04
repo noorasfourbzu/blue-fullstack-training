@@ -1,6 +1,5 @@
 /*Varaibles*/
 :root{
-    /* Main Colors*/
     /* Main brand colors */
     --color-background: #FFEFE3;
     --color-primary: #99C2FF;
@@ -35,7 +34,6 @@ select {
 }
 
 
-/* the code doesnt have any ol or ul yet  but to finish the reset */
 ul,
 ol {
     list-style: none;
@@ -88,6 +86,11 @@ controls content width and centering
     background-color: var(--color-secondary);
 }
 
+/*
+button:focus-visible {
+  outline: var(--color-accent);
+}*/
+
 /* Header */
 .site-header {
     background-color: var(--color-primary);
@@ -114,7 +117,9 @@ controls content width and centering
 .brand-logo {
     width: 65px;
     height: 65px;
+    display: block;
     object-fit: contain;
+        transform: scale(2);
 }
 
 .brand h1 {
@@ -208,7 +213,14 @@ controls content width and centering
     margin-top: 35px;
 }
 
-.about-content > p {
+.about-text {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.about-text p {
+    color: var(--color-muted-text);
     font-size: 1.15rem;
     line-height: 1.8;
 }
@@ -218,6 +230,11 @@ controls content width and centering
     border: 1px solid var(--color-border);
     border-radius: 8px;
     background-color: var(--color-surface);
+}
+.about-details ul {
+    padding-left: 22px;
+    line-height: 2;
+    list-style: disc;
 }
 
 .about-details h3 {
@@ -373,37 +390,112 @@ textarea.form-control {
 }
 
 
-/* footer */
-footer {
+/* Footer */
+.site-footer {
+    padding: 40px 0;
+    color: var(--color-surface);
+    background-color: var(--color-footer);
+}
+
+.footer-content {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     flex-wrap: wrap;
-    gap: 20px;
-    padding: 30px 8%;
-    color: white;
-    background-color: #102f43;
+    gap: 30px;
 }
 
-footer address {
+.footer-brand h2 {
+    margin-bottom: 6px;
+    color: var(--color-secondary);
+}
+
+.footer-brand p {
+    color: var(--color-surface);
+}
+
+.footer-contact {
     font-style: normal;
+    line-height: 1.8;
 }
 
-footer nav {
+.footer-navigation {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
 }
 
-footer a {
-    color: #9ad1d4;
+.site-footer a {
+    color: var(--color-primary);
     text-decoration: none;
 }
 
-footer a:hover,
-footer a:focus {
-    color: white;
+.site-footer a:hover,
+.site-footer a:focus {
+    color: var(--color-accent);
     text-decoration: underline;
+}
+
+.copyright {
+    width: 100%;
+    padding-top: 20px;
+    border-top: 1px solid var(--color-muted-text);
+    color: var(--color-border);
+    text-align: center;
+}
+
+/* Footer */
+.site-footer {
+    padding: 40px 0;
+    color: var(--color-surface);
+    background-color: var(--color-footer);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.footer-brand h2 {
+    margin-bottom: 6px;
+    color: var(--color-secondary);
+}
+
+.footer-brand p {
+    color: var(--color-surface);
+}
+
+.footer-contact {
+    font-style: normal;
+    line-height: 1.8;
+}
+
+.footer-navigation {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.site-footer a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.site-footer a:hover,
+.site-footer a:focus {
+    color: var(--color-accent);
+    text-decoration: underline;
+}
+
+.copyright {
+    width: 100%;
+    padding-top: 20px;
+    border-top: 1px solid var(--color-muted-text);
+    color: var(--color-border);
+    text-align: center;
 }
 /* Tablet layout */
 @media (max-width: 900px) {
@@ -523,7 +615,7 @@ footer a:focus {
         gap: 25px;
     }
 
-    .about-content > p {
+    .about-text p {
         font-size: 1rem;
     }
 
