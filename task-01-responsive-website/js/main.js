@@ -1,3 +1,17 @@
+
+// get the menu button and navigation
+const menuButton = document.querySelector(".menu-button");
+const mainNavigation = document.getElementById("main-navigation");
+
+// open and close the navigation
+menuButton.addEventListener("click", function () {
+    const isOpen = mainNavigation.classList.toggle("is-open");
+
+    menuButton.setAttribute("aria-expanded", isOpen);
+});
+
+
+
 // get the contact form from the page
 const contactForm = document.getElementById("contact-form");
 
@@ -12,6 +26,7 @@ document.getElementById("message-error").textContent = "";
     // بمنع التصرف الافتراضي للمتصفح , عشان الحق اعمل فاليديشن قبل يعمل ريفريش للصفحة او ارسال للرسالة 
     event.preventDefault();
 
+    
 
 
 

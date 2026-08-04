@@ -10,13 +10,14 @@ A responsive website for an independent game studio, created during the Blue Ful
 
 ## Features
 
-- Responsive design for desktop, tablet, and mobile
 - Custom studio logo and color palette
 - About section
 - Game services section
 - Statistics section
 - Contact form with JavaScript validation
-- Responsive navigation and footer
+- Responsive layouts for desktop, tablet, and smaller screens
+- Mobile navigation button that opens and closes the menu
+- Responsive footer
 
 ## How to Run
 
