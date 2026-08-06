@@ -24,7 +24,7 @@ A responsive website for an independent game studio, created during the Blue Ful
 
 ## Testing
 
-The site was checked at  1024px, 768px, and 380px viewport widths for horizontal scrolling, overlapping content, and clipped text. No horizontal overflow was found at any of these widths, including with the mobile menu open.
+The site was checked at  1024px, 768px, and 480px viewport widths for horizontal scrolling, overlapping content, and clipped text. No horizontal overflow was found at any of these widths, including with the mobile menu open.
 
 ## Screenshots
 

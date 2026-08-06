@@ -202,73 +202,98 @@
             <!-- browser validation is disabled because JavaScript handles it -->
             <form id="contact-form" novalidate>
 
-                <!-- Full name is required -->
-                <label for="name">Full Name</label>
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    placeholder="Enter your full name"
-                    autocomplete="name"
-                    required
-                    class ="form-control"
-                >
-                <small id="name-error" class="error-message"></small>
+    <!-- full name is required -->
+    <label for="name">Full Name</label>
+    <input
+        type="text"
+        id="name"
+        name="name"
+        placeholder="Enter your full name"
+        autocomplete="name"
+        required
+        class="form-control"
+        aria-invalid="false"
+        aria-describedby="name-error"
+    >
+    <small id="name-error" class="error-message"></small>
 
-                <!-- email is required and must have a valid format -->
-                <label for="email">Email Address</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="Enter your email address"
-                    autocomplete="email"
-                    required
-                    class ="form-control"
 
-                >
-                <small id="email-error" class="error-message"></small>
+    <!-- email is required and must have a valid format -->
+    <label for="email">Email Address</label>
+    <input
+        type="email"
+        id="email"
+        name="email"
+     placeholder="Enter your email address"
+        autocomplete="email"        required
+        class="form-control"
+    aria-invalid="false"
+     aria-describedby="email-error"
+    >
+    <small id="email-error" class="error-message"></small>
 
-                <!-- phone number is optional -->
-                <label for="phone">Phone Number (Optional)</label>
-                <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    placeholder="Enter your phone number"
-                    autocomplete="tel"
-                    class ="form-control"
 
-                >
+    <!-- phone number is optional -->
+    <label for="phone">Phone Number (Optional)</label>
+    <input
+        type="tel"
+        id="phone"
+        name="phone"
+        placeholder="Enter your phone number"
+      autocomplete="tel"
+        class="form-control"
+        aria-invalid="false"
+        aria-describedby="phone-error"
+    >
+    <small id="phone-error" class="error-message"></small>
 
-                <!-- subject is required -->
-                <label for="subject">Subject</label>
-                <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    placeholder="Enter the message subject"
-                    required
-                    class ="form-control"
 
-                >
-                <small id="subject-error" class="error-message"></small>
+    <!-- subject is required -->
+    <label for="subject">Subject</label>
+    <input
+      type="text"
+        id="subject"
+        name="subject"
+        placeholder="Enter the message subject"
+        required
+        class="form-control"
+        aria-invalid="false"
+     aria-describedby="subject-error"
+    >
+    <small id="subject-error" class="error-message"></small>
 
-                <!-- message is required -->
-                <label for="message">Message</label>
-                <textarea
-                    id="message"
-                    name="message"
-                    rows="5"
-                    placeholder="Write your message here"
-                    required
-                    class ="form-control"
 
-                ></textarea>
-                <small id="message-error" class="error-message"></small>
+    <!--message is required -->
+    <label for="message">Message</label>
+    <textarea
+        id="message"
+        name="message"
+        rows="5"
+     placeholder="Write your message here"
+        required
+        class="form-control"
+        aria-invalid="false"
+        aria-describedby="message-error message-counter"
+    ></textarea>
 
-                <button type="submit" class="button">Send</button>
-            </form>
+    <small id="message-error" class="error-message"></small>
+
+    <small id="message-counter" class="character-counter">
+        0 / 500 characters used
+    </small>
+
+
+    <button type="submit" class="button">Send</button>
+
+    <!--  submission result  -->
+    <p
+        id="form-status"
+        class="form-status"
+        role="status"
+        aria-live="polite"
+    ></p>
+
+</form>
             </div>
         </section>
 
