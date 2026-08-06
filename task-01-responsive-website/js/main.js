@@ -3,13 +3,53 @@
 const menuButton = document.querySelector(".menu-button");
 const mainNavigation = document.getElementById("main-navigation");
 
+// select all links inside the main navigation
+const navigationLinks = mainNavigation.querySelectorAll("a");
+
 // open and close the navigation
 menuButton.addEventListener("click", function () {
     const isOpen = mainNavigation.classList.toggle("is-open");
 
     menuButton.setAttribute("aria-expanded", isOpen);
+    if (isOpen) {
+        menuButton.setAttribute("aria-label", "Close navigation menu");
+    } else {
+        menuButton.setAttribute("aria-label", "Open navigation menu");
+    }
+
+
+
+
 });
 
+// close the mobile menu after clicking any navigation link
+navigationLinks.forEach(function (link) {
+    link.addEventListener("click", function () {
+        mainNavigation.classList.remove("is-open");
+     menuButton.setAttribute("aria-expanded", "false");
+       menuButton.setAttribute("aria-label", "Open navigation menu");
+    });
+});
+
+
+
+//close the menu with Escape and return focus to the menu button
+document.addEventListener("keydown", function (event) {
+    const isMenuOpen =
+        mainNavigation.classList.contains("is-open");
+
+    if (event.key === "Escape" && isMenuOpen) {
+        //close the menu
+    mainNavigation.classList.remove("is-open");
+
+        //update the button state
+          menuButton.setAttribute("aria-expanded", "false");
+           menuButton.setAttribute( "aria-label","Open navigation menu");
+
+        //return focus to the menu button
+        menuButton.focus();
+    }
+});
 
 
 // get the contact form from the page
