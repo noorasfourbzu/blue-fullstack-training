@@ -21,6 +21,7 @@ A responsive website for an independent game studio, created during the Blue Ful
 - Responsive layouts for desktop, tablet, and mobile screens
 - Accessible mobile navigation menu that opens and closes the menu
 - Responsive footer
+-QA Checklist.md file 
 
 ## Screenshots
 
