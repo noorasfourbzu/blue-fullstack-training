@@ -17,10 +17,11 @@
    <!-- Page header with the company logo and navigation links -->
 <header class="site-header">
     <div class="container header-content">
+        <a href="#main" class="skip">Skip to main content</a>
 
         <a href="#home" class="brand">
             <img
-                src="images/final-logo.png"
+                src="images/final-logo.webp"
                 alt="AsfouraBandora company logo"
                 class="brand-logo"
             >
@@ -48,7 +49,7 @@
 
     </div>
 </header>
-    <main>
+    <main id = "main">
 
         <!-- Hero section contains  main introduction and call-to-action -->
       <section id="home">
@@ -214,6 +215,7 @@
         class="form-control"
         aria-invalid="false"
         aria-describedby="name-error"
+        maxlength="60"
     >
     <small id="name-error" class="error-message"></small>
 
@@ -229,6 +231,7 @@
         class="form-control"
     aria-invalid="false"
      aria-describedby="email-error"
+     maxlength="254"
     >
     <small id="email-error" class="error-message"></small>
 
@@ -244,6 +247,7 @@
         class="form-control"
         aria-invalid="false"
         aria-describedby="phone-error"
+        maxlength="20"
     >
     <small id="phone-error" class="error-message"></small>
 
@@ -259,6 +263,8 @@
         class="form-control"
         aria-invalid="false"
      aria-describedby="subject-error"
+             maxlength="100"
+
     >
     <small id="subject-error" class="error-message"></small>
 
@@ -274,6 +280,8 @@
         class="form-control"
         aria-invalid="false"
         aria-describedby="message-error message-counter"
+                maxlength="500"
+
     ></textarea>
 
     <small id="message-error" class="error-message"></small>

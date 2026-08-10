@@ -1,43 +1,71 @@
 # AsfouraBandora
 
-A responsive website for an independent game studio, created during the Blue Full Stack Training Program.
+A responsive website for an independent game studio, built across Tasks 01–05 of the Blue Full Stack Training Program. Started as a static responsive layout and grew into a fully interactive, accessibility tested frontend project.
 
 ## Technologies
 
-- HTML
-- CSS
-- JavaScript
+- HTML5
+- CSS3 (custom properties, Flexbox, Grid, responsive media queries)
+- Vanilla JavaScript (no frameworks, no libraries)
 
 ## Features
 
-- Custom studio logo and color palette
-- About section
-- Game services section
-- Statistics section with animated count-up numbers
-- Contact form with full client-side validation (name, email, phone, subject, and message rules, plus a live character counter)
-- Accessible form feedback: field-level error messages, `aria-invalid` / `aria-describedby` states, and a success/error status banner
-- Back-to-top button that appears after scrolling and returns smoothly to the top
-- Active navigation highlighting that tracks the section currently in view
-- Responsive layouts for desktop, tablet, and mobile screens
-- Accessible mobile navigation menu that opens and closes the menu
-- Responsive footer
--QA Checklist.md file 
+**Layout & navigation**
+- Responsive layout for desktop, tablet, and mobile screens
+- Sticky header that stays visible while scrolling
+- Accessible mobile navigation menu (opens/closes, closes on Escape or on link click, keyboard-operable)
+- Active navigation highlighting that tracks which section is currently in view (built with `IntersectionObserver`)
+- Skip-to-content link for keyboard users, visible on focus
+- Visible keyboard focus states on every interactive element (links, buttons, form fields)
+
+**Contact form**
+- Full client-side validation for name, email, phone, subject, and message, each with its own rules
+- Phone validation counts only digits (ignoring formatting characters like spaces, `+`, `-`, and parentheses), so it works correctly for any country's format
+- Character limits enforced two ways: natively with `maxlength`, and in JavaScript (the phone field specifically blocks extra digits while still allowing formatting characters)
+- Live character counter on the message field
+- Validates a field when it loses focus, then re validates live while the user corrects a mistake
+- On submit it focuses automatically moves to the first invalid field
+- Accessible error handling: `aria-invalid`, `aria-describedby`, and a `role="status"` banner that announces success or error messages
+- Success message clearly states no data is sent to a server (this is a front-end only training project)
+
+**Interactive extras**
+- Back-to-top button that appears after scrolling, keyboard accessible, scrolls smoothly back to the top
+- Statistics section with animated count up numbers that play once when the section first comes into view
+- Both animations respect `prefers-reduced-motion` and skip/shorten themselves accordingly
+- lazy loading is applied, eventhought right now we dont realy need it(since we only have the logo)
+
+**Performance & accessibility**
+- Lighthouse Accessibility score: 100/100
+- Lighthouse Performance score: 100/100
+
+## Setup / How to Run
+
+1. Download or clone the project.
+2. Open the `index.html` file in a web browser — no build step, no installs, no dependencies.
+
+
+## Completed Tasks
+ 
+- **Task 01–03:** Responsive layout, styling, and mobile navigation
+- **Task 04:** Full JavaScript layer — contact form validation, back-to-top button, active navigation state, and statistics counters
+- **Task 05:** Full QA pass — functional regression testing, accessibility audit and fixes, performance optimization, cross-browser and responsive testing, and deployment
+
+
+## Known Limitations
+ 
+- The contact form has no backend — it validates and displays a success message, but no data is actually sent anywhere. 
+- Phone number validation checks digit count only (7–15 digits, based on the international E.164 standard), not whether the number is actually a real, dialable number for a specific country.
+
+
 
 ## Screenshots
 
-- W-1024px view: `screenshots/w1024.png`
-- W-768px view: `screenshots/w768.png`
-- W-480px view: `screenshots/w480.png`
-- Invalid form state: `screenshots/fail message.png`
-- Successful form submission: `screenshots/successful message.png`
-- W-1024px view interactions(back-to-top / active navigation / statistics counters): `screenshots/w1024 interactions.png`
-- W-768px view interactions (back-to-top / active navigation / statistics counters): `screenshots/w768 interactions.png`
-- W-480px view interactions (back-to-top / active navigation / statistics counters): `screenshots/w480 interactions.png`
+- Final desktop view: `screenshots/final desktop view.png`
+- Final mobile view: `screenshots/final mobile view.png`
+- Lighthouse accessibility result: `screenshots/lighthouse-accessibility.png`
+- Lighthouse accessibility result :`screenshots/lighthouse-performance.png`
+- Visible keyboard-focus state: `screenshots/keyboard-focus state.png`
 
-## How to Run
-
-1. Download or clone the project.
-2. Open the `index.html` file in a web browser.
 
 ## Author
 Noor Asfour

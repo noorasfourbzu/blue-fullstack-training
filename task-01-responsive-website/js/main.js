@@ -65,10 +65,25 @@ function clearFieldError(input, errorElement) {
     errorElement.textContent = "";
 }
 
+
+// phone validation without forming characters
 // counts only the digits inside a phone number string
 function countDigits(value) {
     return value.replace(/\D/g, "").length;
 }
+
+function limitPhoneDigitsWhileTyping() {
+    if (!phoneInput) return;
+
+    if (countDigits(phoneInput.value) > PHONE_MAX_DIGITS)
+        phoneInput.value = phoneInput.value.slice(0, -1);
+    
+}
+
+//lazy loading for any img 
+document.querySelectorAll("img").forEach((img) => {
+    img.loading = "lazy";
+});
 
 
 // 2. Contact-form validation
@@ -113,34 +128,39 @@ function validateEmail() {
     return true;
 }
 
+
 // phone validation 
+
 function validatePhone() {
     if (!phoneInput || !phoneError) return false;
 
     const phone = getTrimmedValue(phoneInput);
+
 
     // phone is optional so an empty value is valid
     if (phone === "") {
         clearFieldError(phoneInput, phoneError);
         return true;}
 
+
     if (!PHONE_ALLOWED_CHARACTERS.test(phone)) {
+
         showFieldError(phoneInput, phoneError, "phone number can only contain digits, spaces, +, -,) and( ) ");
+
         return false; }
-
-
 const digitCount = countDigits(phone);
 
-
-
  if (digitCount < PHONE_MIN_DIGITS || digitCount > PHONE_MAX_DIGITS) {
+
     showFieldError(phoneInput, phoneError, `phone number must contain between ${PHONE_MIN_DIGITS} and ${PHONE_MAX_DIGITS} digits`);
         return false;
     }
-
     clearFieldError(phoneInput, phoneError);
     return true;
+
 }
+
+
 
 // subject validation 
 function validateSubject() {
@@ -390,7 +410,7 @@ function runStatisticsAnimation() {
 // 6. Initialization
 
 // sets up the contact form's listeners: blur validation, live
-// re-validation while correcting, the live character counter,
+// re validation while correcting, the live character counter,
 // and the submit handler; also paints the counter's starting text
 function initContactForm() {
     // validate a field after it loses focus (blur)
