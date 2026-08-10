@@ -560,6 +560,27 @@ function initMobileNavigation() {
     });
 }
 
+
+//============== working on task 6==============================
+const Games =[
+    new Game("Helix jump","Hyper","quick fun with simple rules"),
+    new Game("Shadow Legends","RPG","open world exploration"),
+    new Game("Project Phrombus","hyper","Fast Visauls")
+];
+
+
+const gamesContainer = document.querySelector("#games-container");
+ function renderGames(){
+    gamesContainer.innerHTML="";
+    Games.forEach(game=>{
+const gameElement = document.createElement("p");
+   gameElement.textContent = `${game.title} - ${game.category} - ${game.description}`;
+
+        gamesContainer.appendChild(gameElement);
+    });
+ }
+ renderGames();
+
 // run all feature initializers once the DOM references above are ready
 function initApp() {
     initMobileNavigation();
