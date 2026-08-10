@@ -23,8 +23,6 @@ I also double checked for dead links,   duplicate IDs, and duplicate CSS rules a
 |---|---|---|---|---|---|---|
 | QA-03 | Skip link | Whole site | If you only use a keyboard (no mouse), there's no way to skip past the header/nav to jump straight to the main content. You'd have to press Tab like 7 times just to get past the menu | High | Pending | Still need to add a hidden "Skip to main content" link that shows up when you press Tab |
 | QA-04 | Focus outline on buttons | Whole site | In my CSS I wrote `outline: var(--color-accent)` for buttons, but I forgot to add a width and a style (like `solid`), so the outline doesn't actually show up when you tab to a button | High | Pending | Need to rewrite it as a full outline rule with a width and solid style |
-
-
 | QA-05 | Text color contrast | Whole site | My service card and statistic titles use my pink accent color as text, and it's probably too light to read easily against the white/blue backgrounds | High | Pending | Need to pick a darker color for these headings and test the contrast ratio |
 | QA-06 | Keyboard navigation | Whole site | Haven't fully tested tabbing through the entire page yet (Tab, Shift+Tab, Enter, Space, Escape) | Medium | Pending | Need to go through the whole page using only the keyboard and note anything that breaks |
 | QA-07 | 200% zoom | Desktop | Haven't tested what the page looks like zoomed in to 200% yet | Medium | Pending | Need to zoom to 200% and check nothing overlaps or scrolls sideways |
@@ -36,7 +34,6 @@ I also double checked for dead links,   duplicate IDs, and duplicate CSS rules a
 
 | ID | Area | Where I Tested | What I Found | How Bad | Status | What I Did |
 |---|---|---|---|---|---|---|
-
 | QA-9 | Logo file size | Whole site | My logo image is 500x500 pixels and about 55KB, but it only ever shows up on screen at around 40-65 pixels. That's way bigger than it needs to be | Medium | Pending | Need to resize/compress it, maybe convert to WebP |
 | QA-10| Lighthouse performance score | Chrome, incognito | Haven't run the Lighthouse performance audit yet | Medium | Pending | Need to run it in an incognito window and fix what it suggests |
 
