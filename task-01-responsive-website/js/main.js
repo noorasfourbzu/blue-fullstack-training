@@ -44,6 +44,12 @@ const MESSAGE_MAX_LENGTH = 500;
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// games section
+const gamesContainer = document.querySelector(".games-container");
+const categoryButtonContainer = document.querySelector(".category-buttons-container");
+const categoryCapsule = []
+
+
 // trim inputs 
 function getTrimmedValue(input) {
     return input.value.trim();
@@ -562,24 +568,159 @@ function initMobileNavigation() {
 
 
 //============== working on task 6==============================
-const Games =[
-    new Game("Helix jump","Hyper","quick fun with simple rules"),
-    new Game("Shadow Legends","RPG","open world exploration"),
-    new Game("Project Phrombus","hyper","Fast Visauls")
+
+// id for each game 
+function idGenerator(num){
+    const ids = [];
+    for(let i=0; i<num ; i++){
+        ids.push('G${i+1}${Math.random()}');
+    }
+
+    return ids; 
+}
+
+const ids = idGenerator(8);
+
+const games = [
+    new Game(
+        ids[0],
+        "Helix Jump",
+        "Arcade",
+        "A fast-paced arcade game where players guide a bouncing ball through a twisting tower.",
+        2018
+    ),
+
+    new Game(
+        ids[1],
+        "Shadow Legends",
+        "RPG",
+        "A fantasy role-playing game where players explore a dark world, battle enemies, and develop their characters.",
+        2018
+    ),
+
+    new Game(
+        ids[2],
+ "Project Phrombus",
+        "Action",
+        "An experimental action game focused on exploration, challenges, and mysterious environments.",
+        2026
+    ),
+
+    new Game(
+        ids[3],
+        "Hollow Knight",
+        "Metroidvania",
+        "An atmospheric adventure game where players explore a vast underground kingdom filled with enemies and secrets.",
+        2017
+    ),
+
+    new Game(
+        ids[4],
+        "Stardew Valley",
+        "Simulation",
+        "A relaxing farming and life simulation game where players grow crops, build relationships, and explore the world.",
+        2016
+    ),
+
+    new Game(
+        ids[5],
+        "Celeste",
+        "Platformer",
+        "A challenging platform game about climbing a mysterious mountain while overcoming difficult obstacles.",
+        2018
+    ),
+
+    new Game(
+        ids[6],
+        "Mecha Chameleon",
+        "Action",
+        "A fastpaced action game where players control a mechanical chameleon and overcome challenging obstacles.",
+        2026
+    ),
+
+    new Game(
+        ids[7],
+        "The Legend of Zelda: Breath of the Wild",
+        "Adventure",
+        "An open world adventure game where players explore a vast kingdom, solve puzzles, and fight enemies.",
+        2017
+    )
 ];
 
 
-const gamesContainer = document.querySelector("#games-container");
- function renderGames(){
-    gamesContainer.innerHTML="";
-    Games.forEach(game=>{
-const gameElement = document.createElement("p");
-   gameElement.textContent = `${game.title} - ${game.category} - ${game.description}`;
+const categories =[];
+for (let i = 0 ; i < games.length ; i++){
+    if(!categories.includes(games[i].category))
+    categories.push(games[i].category);
+else continue;
+}
+function renderCategoryButton(){
+    categoryButtonContainer.innerHTML = "";
+    categoryCapsule.length = 0; // clear the shared array instead of reassigning it
 
-        gamesContainer.appendChild(gameElement);
+    // "All" option first, so users can clear the filter
+    const allCapsule = document.createElement("button");
+    allCapsule.classList.add("category-capsule");
+    allCapsule.textContent = "All";
+    categoryButtonContainer.appendChild(allCapsule);
+    categoryCapsule.push(allCapsule);
+
+    for (let i = 0; i < categories.length; i++) {
+        const capsuleElement = document.createElement("button");
+        capsuleElement.classList.add("category-capsule");
+        capsuleElement.textContent = categories[i];
+        categoryButtonContainer.appendChild(capsuleElement);
+        categoryCapsule.push(capsuleElement);
+    }
+}
+
+function renderGames(selected) {
+    gamesContainer.innerHTML = "";
+
+    // treat "All" the same as no filter
+    const filterdGames = (selected && selected !== "All")
+        ? games.filter(g => g.category === selected)
+        : games;
+
+    filterdGames.forEach(game => {
+        const gameCardElement = document.createElement("article");
+        gameCardElement.classList.add("card", "game-card");
+        const titleElement = document.createElement("h3");
+        titleElement.textContent = game.title;
+
+        const categoryElement = document.createElement("p");
+        categoryElement.textContent = game.category;
+
+        const descriptionElement = document.createElement("p");
+        descriptionElement.textContent = game.description;
+
+        const yearElement = document.createElement("p");
+        yearElement.textContent = `Released: ${game.releaseYear}`;
+
+        gameCardElement.appendChild(titleElement);
+        gameCardElement.appendChild(categoryElement);
+        gameCardElement.appendChild(descriptionElement);
+        gameCardElement.appendChild(yearElement);
+        gamesContainer.appendChild(gameCardElement);
     });
- }
- renderGames();
+}
+
+renderCategoryButton();
+renderGames();
+
+let selected = "";
+categoryCapsule.forEach(function (button) {
+    button.addEventListener("click", function () {
+        selected = button.textContent;
+        renderGames(selected);
+
+        // optional: visually mark which capsule is active
+        categoryCapsule.forEach(b => b.classList.remove("is-active"));
+        button.classList.add("is-active");
+    });
+});
+
+
 
 // run all feature initializers once the DOM references above are ready
 function initApp() {

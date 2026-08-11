@@ -424,6 +424,101 @@ box-shadow: 0 8px 22px rgba(37, 37, 37, 0.18);
     font-size: 1.05rem;
 }
 
+
+/*Games Section*/
+
+#games{
+        background-color: var(--color-background);
+}
+.games-container{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 25px;
+    margin: 35px;
+}
+
+
+
+.game-card {
+    min-height: 190px;
+    border-top: 5px solid var(--color-secondary);
+    box-shadow: 0 4px 15px rgba(37, 37, 37, 0.1);
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+
+}
+
+
+
+.game-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 22px rgba(37, 37, 37, 0.18);
+}
+
+
+
+.game-card h3 {
+    margin-bottom: 12px;
+    color: var(--color-accent);
+    font-size: 1.25rem;}
+
+
+
+.game-card p {
+    color: var(--color-muted-text);}
+
+ /* category filter buttons container */
+.category-buttons-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin: 35px 35px 0;
+}
+
+/* category filter capsule */
+.category-capsule {
+    padding: 8px 18px;
+    border: 2px solid var(--color-border);
+    border-radius: 999px;
+    color: var(--color-text);
+    background-color: var(--color-surface);
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition:
+        background-color 0.25s ease,
+        border-color 0.25s ease,
+        color 0.25s ease,
+        transform 0.15s ease;
+}
+
+.category-capsule:hover {
+    border-color: var(--color-secondary);
+    background-color: var(--color-secondary);
+    transform: translateY(-2px);
+}
+
+/* currently selected filter */
+.category-capsule.is-active {
+    border-color: var(--color-accent);
+    background-color: var(--color-accent);
+    color: #FFFFFF;
+}
+
+.category-capsule.is-active:hover {
+    border-color: var(--color-accent);
+    background-color: var(--color-accent);
+    transform: none;
+}
+
+.category-capsule:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
 /* contact section */
 #contact {
     background-color: var(--color-surface);}

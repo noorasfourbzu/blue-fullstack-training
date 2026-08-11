@@ -49,13 +49,19 @@ A responsive website for an independent game studio, built across Tasks 01–05 
 - **Task 01–03:** Responsive layout, styling, and mobile navigation
 - **Task 04:** Full JavaScript layer — contact form validation, back-to-top button, active navigation state, and statistics counters
 - **Task 05:** Full QA pass — functional regression testing, accessibility audit and fixes, performance optimization, cross-browser and responsive testing, and deployment
+- **Task 06 (in progress):** Modern JavaScript refactor and dynamic data
+  - Added an "Our Games" section rendered entirely from a local JavaScript array (`Game` objects with id, title, category, description, and release year) instead of hardcoded HTML cards
+  - Cards are generated with a dedicated `renderGames()` function; category filter buttons (All + one per genre in the data) are generated with `renderCategoryButton()`, and clicking a filter updates the visible cards immediately
+  - Uses `filter()`, arrow functions, and template literals as the modern JavaScript techniques applied so far
+  - **Not yet done:** the REST API half of Task 06 (fetching data from a live API, JSON parsing, a search/result-count UI, and loading / success / empty / error states with retry) has not been started yet
+  
 
 
 ## Known Limitations
  
 - The contact form has no backend — it validates and displays a success message, but no data is actually sent anywhere. 
 - Phone number validation checks digit count only (7–15 digits, based on the international E.164 standard), not whether the number is actually a real, dialable number for a specific country.
-
+- The "Our Games" section (Task 06) only covers the local-data half of the requirements. The REST API section — fetching posts from a live API, checking the HTTP status, rendering results, search, a result counter, and loading/success/empty/error states — is still to be built.
 
 
 ## Screenshots
