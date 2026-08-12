@@ -49,6 +49,10 @@ const gamesContainer = document.querySelector(".games-container");
 const categoryButtonContainer = document.querySelector(".category-buttons-container");
 const categoryCapsule = []
 
+// API section elements 
+const postsContainer = document.querySelector(".latest-posts-container");
+const postsStatus = document.querySelector(".posts-status");/* loading,error,empty*/
+const API_URL ="https://jsonplaceholder.typicode.com/posts";
 
 // trim inputs 
 function getTrimmedValue(input) {
@@ -578,9 +582,9 @@ function idGenerator(num){
 
     return ids; 
 }
-
 const ids = idGenerator(8);
 
+// local javascript data
 const games = [
     new Game(
         ids[0],
@@ -648,6 +652,7 @@ const games = [
 ];
 
 
+// make the filter functioning 
 const categories =[];
 for (let i = 0 ; i < games.length ; i++){
     if(!categories.includes(games[i].category))
@@ -674,6 +679,8 @@ function renderCategoryButton(){
     }
 }
 
+
+// render projects and show project crads
 function renderGames(selected) {
     gamesContainer.innerHTML = "";
 
@@ -721,6 +728,83 @@ categoryCapsule.forEach(function (button) {
 });
 
 
+
+
+// ======REST API ========
+
+async function fetchPosts() {
+    showLoadingState();
+
+    try {
+        const response = await fetch(API_URL);
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch posts");
+        }
+
+        const posts = await response.json();
+
+                await new Promise(resolve => setTimeout(resolve, 2000));
+        if (posts.length === 0) {
+            showEmptyState();
+            return;
+        }
+
+        renderPosts(posts);
+
+        // the API finished loading successfully
+        postsStatus.textContent = "";
+
+    } catch (error) {
+        console.error("Fetch posts error:", error);
+        showErrorState();
+    }
+}
+
+//Loading state 
+function showLoadingState(){
+    postsContainer.innerHTML="";
+    postsStatus.textContent = "Loading..."
+}
+function showErrorState(){
+    postsContainer.innerHTML="";
+    postsStatus.textContent = "Error fetching posts, Please try again later.";
+    const refetchButton = document.createElement("button");
+refetchButton.textContent = "Retry";
+refetchButton.type ="button";
+refetchButton.addEventListener("click",fetchposts);
+postsContainer.appendChild(refetchButton);
+}
+
+function showEmptyState(){
+postsContainer.innerHTML="";
+postsStatus.textContent = "No posts available at the moment, come back later";
+
+}
+function createPostCards(post){
+const card = document.createElement("article");
+card.classList.add("card");
+const title = document.createElement("h3");
+const body = document.createElement("p");
+title.textContent = post.title;
+body.textContent = post.body;
+card.append(title,body);
+return card;
+}
+
+
+function renderPosts(posts){
+postsContainer.innerHTML="";
+posts.forEach(post =>{
+const card = createPostCards(post);
+postsContainer.appendChild(card);
+
+});
+
+
+}
+
+fetchPosts();
 
 // run all feature initializers once the DOM references above are ready
 function initApp() {
