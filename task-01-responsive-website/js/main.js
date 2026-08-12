@@ -53,6 +53,14 @@ const categoryCapsule = []
 const postsContainer = document.querySelector(".latest-posts-container");
 const postsStatus = document.querySelector(".posts-status");/* loading,error,empty*/
 const API_URL ="https://jsonplaceholder.typicode.com/posts";
+const searchButton = document.getElementById("search-button");
+const searchInput = document.getElementById("search-word");   
+const clearSearchButton = document.getElementById("clear-search");
+const resultsCount = document.getElementById("results-count");
+let postsArray = []; 
+
+const GAMES_CATEGORY_STORAGE_KEY = "asfoura-selected-game-category";
+
 
 // trim inputs 
 function getTrimmedValue(input) {
@@ -715,20 +723,31 @@ function renderGames(selected) {
 renderCategoryButton();
 renderGames();
 
-let selected = "";
-categoryCapsule.forEach(function (button) {
-    button.addEventListener("click", function () {
-        selected = button.textContent;
-        renderGames(selected);
+let selected = localStorage.getItem(GAMES_CATEGORY_STORAGE_KEY) || "All";
 
-        // optional: visually mark which capsule is active
-        categoryCapsule.forEach(b => b.classList.remove("is-active"));
-        button.classList.add("is-active");
+// function to apply the selected filter and update button active state
+function applyCategoryFilter(category) {
+ selected = category;
+localStorage.setItem(GAMES_CATEGORY_STORAGE_KEY, category);
+renderGames(selected);
+    categoryCapsule.forEach(button => {
+        const isActive = button.textContent === category;
+      button.classList.toggle("is-active", isActive);
+    });
+}
+
+// set initial active state based on saved selection
+categoryCapsule.forEach(button => {
+    if (button.textContent === selected) 
+           button.classList.add("is-active");
+    
+         button.addEventListener("click", function () {
+             applyCategoryFilter(button.textContent);
     });
 });
 
-
-
+// on first load render the saved category
+renderGames(selected);
 
 // ======REST API ========
 
@@ -736,51 +755,73 @@ async function fetchPosts() {
     showLoadingState();
 
     try {
-        const response = await fetch(API_URL);
-
-        if (!response.ok) {
-            throw new Error("Failed to fetch posts");
-        }
-
+     const response = await fetch(API_URL);
+    if (!response.ok) throw new Error("Failed to fetch posts");
         const posts = await response.json();
+        await new Promise(resolve => setTimeout(resolve, 2000)); // simulate delay
 
-                await new Promise(resolve => setTimeout(resolve, 2000));
         if (posts.length === 0) {
             showEmptyState();
-            return;
-        }
+            return;  }
+        postsArray = posts.slice();   // store full list
+        renderPosts(postsArray);       // display all posts
 
-        renderPosts(posts);
-
-        // the API finished loading successfully
-        postsStatus.textContent = "";
+    //searchInput.addEventListener("input", handleSearchInput); 
+    clearSearchButton.addEventListener("click", clearSearch);
+    searchButton.addEventListener("click", handleSearchInput);
 
     } catch (error) {
-        console.error("Fetch posts error:", error);
-        showErrorState();
+    console.error("Fetch posts error:", error);
+showErrorState();
     }
-}
-
-//Loading state 
-function showLoadingState(){
-    postsContainer.innerHTML="";
-    postsStatus.textContent = "Loading..."
-}
-function showErrorState(){
-    postsContainer.innerHTML="";
-    postsStatus.textContent = "Error fetching posts, Please try again later.";
-    const refetchButton = document.createElement("button");
-refetchButton.textContent = "Retry";
-refetchButton.type ="button";
-refetchButton.addEventListener("click",fetchposts);
-postsContainer.appendChild(refetchButton);
-}
-
-function showEmptyState(){
-postsContainer.innerHTML="";
-postsStatus.textContent = "No posts available at the moment, come back later";
 
 }
+// Loading state – only the loading message is visible
+function showLoadingState() {
+    postsContainer.innerHTML = "";
+    postsStatus.textContent = "Loading...";
+    postsStatus.className = "posts-status"; // reset any error/success classes
+    resultsCount.textContent = "";
+}
+
+// Error state – shows error message and a retry button
+function showErrorState() {
+    postsContainer.innerHTML = "";
+    postsStatus.textContent = "Error fetching posts. Please try again later.";
+    postsStatus.className = "posts-status posts-status--error";
+    resultsCount.textContent = "";
+
+
+
+
+    const retryButton = document.createElement("button");
+     retryButton.textContent = "Retry";
+     retryButton.type = "button";
+     retryButton.addEventListener("click", fetchPosts);
+     postsContainer.appendChild(retryButton);
+}
+
+// Empty state (when API returns no posts at all)
+function showEmptyState() {
+    postsContainer.innerHTML = "";
+    postsStatus.textContent = "No posts available at the moment, come back later.";
+    postsStatus.className = "posts-status";
+     resultsCount.textContent = "";
+}
+
+// Render posts into the container
+function renderPosts(posts) {
+postsContainer.innerHTML = "";
+      postsStatus.textContent = "";          // clear any status message
+     postsStatus.className = "posts-status";
+     resultsCount.textContent = `${posts.length} result${posts.length === 1 ? "" : "s"} found`;
+
+    posts.forEach(post => {const card = createPostCards(post);
+    postsContainer.appendChild(card);
+    });
+}
+
+
 function createPostCards(post){
 const card = document.createElement("article");
 card.classList.add("card");
@@ -793,19 +834,59 @@ return card;
 }
 
 
-function renderPosts(posts){
-postsContainer.innerHTML="";
-posts.forEach(post =>{
-const card = createPostCards(post);
-postsContainer.appendChild(card);
 
+fetchPosts();
+//searchInput.addEventListener("input", handleSearchInput); this is live search so it will be ON on every input change
+//clearSearchButton.addEventListener("click", clearSearch);
+
+
+//========= search posts ===============
+
+function searchPosts(query) {
+
+    const filteredPosts = postsArray.filter(post => {
+    return post.title.toLowerCase().includes(query);
 });
+    renderPosts(filteredPosts);
 
 
 }
 
-fetchPosts();
 
+// Filter posts based on title or body (case‑insensitive)
+function filterPosts(query) {
+    const lowerQuery = query.toLowerCase();
+    return postsArray.filter(post => {
+        return post.title.toLowerCase().includes(lowerQuery) ||
+               post.body.toLowerCase().includes(lowerQuery);
+    });
+}
+
+// Live search handler
+function handleSearchInput() {
+    const query = searchInput.value.trim();
+    const filtered = filterPosts(query);
+
+    if (filtered.length === 0) {
+        // No matching results state
+        postsContainer.innerHTML = "";
+        postsStatus.textContent = "No matching results";
+        postsStatus.className = "posts-status posts-status--empty";
+        resultsCount.textContent = "0 results found";
+        return;
+    }
+
+    renderPosts(filtered);
+}
+
+// Clear search: restore full list and empty the input
+function clearSearch() {
+    searchInput.value = "";
+    renderPosts(postsArray);   // postsArray is the full list
+    searchInput.focus();
+}
+
+ 
 // run all feature initializers once the DOM references above are ready
 function initApp() {
     initMobileNavigation();

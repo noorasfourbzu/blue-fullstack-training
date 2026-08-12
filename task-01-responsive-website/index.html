@@ -204,7 +204,23 @@
     <section id="latest-posts" class = "section">
     <div class=" container"> 
     <h2 class = "section-title">Latest Posts</h2>
+    <div class="latest-posts-search-container">
+         
+     <textarea
+        id="search-word"
+        name="search-word"
+        rows="1"
+     placeholder="Search posts..."
+        class="latest-posts-search-container"
+        maxlength="200">
+       </textarea>
+
+<button id="search-button" type="button">Search</button>
+<button id="clear-search" type="button">Clear</button>
+        </div>
+   
     <p class="posts-status"></p>
+<p id="results-count" class="results-count" aria-live="polite"></p>
     <div class ="latest-posts-container">
 
 

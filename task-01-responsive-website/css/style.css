@@ -521,9 +521,8 @@ box-shadow: 0 8px 22px rgba(37, 37, 37, 0.18);
 
 
 
-/*Latest Posts Section*/
 
-
+/* ---------- Posts Section ---------- */
 
 #latest-posts{
         background-color: var(--color-primary);
@@ -557,6 +556,118 @@ box-shadow: 0 8px 22px rgba(37, 37, 37, 0.18);
     grid-template-columns: repeat(3,1fr);
     gap: 25px;
     margin: 35px;
+}
+
+
+.latest-posts-search-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+/* The textarea / input */
+#search-word {
+    flex: 1 1 250px;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--border-color, #ccc);
+    border-radius: 8px;
+    font-size: 1rem;
+    resize: vertical;
+    min-height: 40px;
+    background: var(--card-bg, #fff);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#search-word:focus {
+    outline: none;
+    border-color: var(--accent-color, #6c5ce7);
+    box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15);
+}
+
+/* Buttons */
+#search-button,
+#clear-search {
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--accent-color, #6c5ce7);
+    color: #fff;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+#clear-search {
+    background: var(--muted-color, #888);
+}
+
+#search-button:hover,
+#clear-search:hover {
+    background: var(--accent-dark, #4a3db8);
+}
+
+#clear-search:hover {
+    background: var(--muted-dark, #666);
+}
+
+/* Status message */
+.posts-status {
+    font-size: 0.95rem;
+    margin: 0.75rem 0;
+    color: var(--text-muted, #555);
+}
+
+.posts-status--error {
+    color: var(--error-color, #c0392b);
+    font-weight: 500;
+}
+
+.posts-status--empty {
+    color: var(--muted-color, #888);
+}
+
+/* Results count */
+.results-count {
+    font-size: 0.9rem;
+    color: var(--text-muted, #666);
+    margin-bottom: 0.75rem;
+}
+
+/* Posts cards container */
+.latest-posts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+}
+
+/* Individual post card (already has .card class) */
+.latest-posts-container .card {
+    padding: 1.25rem;
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 12px;
+    background: var(--card-bg, #fff);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.latest-posts-container .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.latest-posts-container .card h3 {
+    margin-top: 0;
+    font-size: 1.1rem;
+    line-height: 1.4;
+    color: var(--heading-color, #222);
+}
+
+.latest-posts-container .card p {
+    font-size: 0.95rem;
+    color: var(--text-color, #444);
+    line-height: 1.6;
 }
 
 
