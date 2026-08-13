@@ -33,10 +33,22 @@ A responsive website for an independent game studio, built across Tasks 01–05 
 - Statistics section with animated count up numbers that play once when the section first comes into view
 - Both animations respect `prefers-reduced-motion` and skip/shorten themselves accordingly
 - lazy loading is applied on images , eventhought right now we dont realy need it(since we only have the logo)
+- lazy loading is applied in posts section
+- posts section can 
 
 **Performance & accessibility**
 - Lighthouse Accessibility score: 100/100
 - Lighthouse Performance score: 100/100
+
+
+
+## API UI States
+
+- Loading: displayed while the request is in progress
+- Empty: when there is nothing found
+- Error: an error message and Retry button are displayed
+- Retry: sends the request again after a failed request
+- Reached limits: shown at the end after loading all available posts
 
 ## Setup / How to Run
 
@@ -49,7 +61,7 @@ A responsive website for an independent game studio, built across Tasks 01–05 
 
 - **Task 01–03:** Responsive layout, styling, and mobile navigation
 - **Task 04:** Full JavaScript layer — contact form validation, back-to-top button, active navigation state, and statistics counters
-- **Task 05:** Full QA pass — functional regression testing, accessibility audit and fixes, performance optimization, cross-browser and responsive testing, and deployment
+- **Task 05:** Full QA pass  functional regression testing, accessibility audit and fixes, performance optimization, cross-browser and responsive testing, and deployment
 
 
 
@@ -63,12 +75,14 @@ A responsive website for an independent game studio, built across Tasks 01–05 
   - The selected category filter is saved to `localStorage` and restored automatically on page reload
   - Uses `filter()`, arrow functions, and template literals as the modern JavaScript techniques applied
 
-  **Part 2 & 3 — REST API integration, search, and UI states**
+  **Part 2 & 3 & 4 — REST API integration, search, and UI states and Final testing **
   - Added a "Latest Posts" section that loads data from the JSONPlaceholder `/posts` endpoint using `fetch()` inside an `async` `fetchPosts()` function
   - `response.ok` is checked before the body is parsed; unsuccessful responses are treated as errors
   - Posts are rendered with a dedicated `renderPosts()` function using `textContent` (not `innerHTML`), so external API text is never injected as raw HTML
   - Implemented loading, success, empty, and error states, each mutually exclusive, plus a Retry button that re-runs `fetchPosts()` without reloading the page
   - Added a search button that filters the loaded posts by title and body (case-insensitive) without issuing a new API request, a live results counter, a "No matching results" state, and a Clear button that restores the full list
+  - Added lazy loading for posts 
+  - Done final checkups: inspected the API request in the browser Network tab, verified the request method, status code, timing, and response payload, tested a failed request and confirmed the error state and Retry action,verified repeated Retry clicks do not duplicate content or event listeners,organized API URLs and reusable selectors/constants in clear variables,and confirmed the browser console is free of JavaScript errors after testing all interactions
 
   
 

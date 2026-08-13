@@ -62,6 +62,12 @@ let postsArray = [];
 const GAMES_CATEGORY_STORAGE_KEY = "asfoura-selected-game-category";
 
 
+// lazy loading elements 
+const CARDS_PER_BATCH = 10;      // how many cards to add each time
+let currentIndex = 0;          // how many cards weve already shown
+let isLoading = false;          // prevents loading twice at the same time
+let scrollObserver = null;     // whatches the track and  triggers loading
+
 // trim inputs 
 function getTrimmedValue(input) {
     return input.value.trim();
@@ -764,8 +770,12 @@ async function fetchPosts() {
             showEmptyState();
             return;  }
         postsArray = posts.slice();   // store full list
-        renderPosts(postsArray);       // display all posts
+       currentIndex = 0; // reset the index for lazy loading
 
+       postsStatus.textContent = "";           // clear "Loading..." message
+       postsStatus.className = "posts-status";
+
+       loadMorePosts(); // render the first batch (also adds the loading indicator + starts the observer)
     //searchInput.addEventListener("input", handleSearchInput); 
     clearSearchButton.addEventListener("click", clearSearch);
     searchButton.addEventListener("click", handleSearchInput);
@@ -782,6 +792,17 @@ function showLoadingState() {
     postsStatus.textContent = "Loading...";
     postsStatus.className = "posts-status"; // reset any error/success classes
     resultsCount.textContent = "";
+}
+function addLoadingIndicator() {
+    // remove any old indicator first
+    removeLoadingIndicator();
+
+    const indicator = document.createElement("div");
+    indicator.id = "loading-indicator";
+    indicator.textContent = "Loading more…";
+    indicator.style.textAlign = "center";
+    indicator.style.padding = "1rem";
+    postsContainer.appendChild(indicator);
 }
 
 // Error state – shows error message and a retry button
@@ -801,7 +822,7 @@ function showErrorState() {
      postsContainer.appendChild(retryButton);
 }
 
-// Empty state (when API returns no posts at all)
+// empty state (when API returns no posts at all)
 function showEmptyState() {
     postsContainer.innerHTML = "";
     postsStatus.textContent = "No posts available at the moment, come back later.";
@@ -809,7 +830,20 @@ function showEmptyState() {
      resultsCount.textContent = "";
 }
 
-// Render posts into the container
+function removeLoadingIndicator() {
+    const existing = document.getElementById("loading-indicator");
+    if (existing) existing.remove();
+}
+
+function showEndMessage() {
+    const endMsg = document.createElement("p");
+    endMsg.textContent = "You've reached the end of the list";
+    endMsg.style.textAlign = "center";
+    endMsg.style.padding = "1rem";
+    postsContainer.appendChild(endMsg);
+}
+
+// render posts into the container
 function renderPosts(posts) {
 postsContainer.innerHTML = "";
       postsStatus.textContent = "";          // clear any status message
@@ -864,11 +898,13 @@ function filterPosts(query) {
 
 // Live search handler
 function handleSearchInput() {
-    const query = searchInput.value.trim();
-    const filtered = filterPosts(query);
-
+    const query = searchInput.value.trim().toLowerCase();
+ const filtered = postsArray.filter(post =>
+    post.title.toLowerCase().includes(query) ||
+        post.body.toLowerCase().includes(query)
+    );
     if (filtered.length === 0) {
-        // No matching results state
+        // no matching results state
         postsContainer.innerHTML = "";
         postsStatus.textContent = "No matching results";
         postsStatus.className = "posts-status posts-status--empty";
@@ -876,14 +912,78 @@ function handleSearchInput() {
         return;
     }
 
-    renderPosts(filtered);
+    // show all filtered posts at once (no lazy loading)
+postsContainer.innerHTML = "";
+    filtered.forEach(post => {
+        const card = createPostCards(post);
+        postsContainer.appendChild(card);
+    });
+    resultsCount.textContent = `${filtered.length} result(s) found`;
 }
 
-// Clear search: restore full list and empty the input
+// clear search: restore full list and empty the input
 function clearSearch() {
     searchInput.value = "";
-    renderPosts(postsArray);   // postsArray is the full list
+    currentIndex = 0 ; 
+    postsContainer.innerHTML = "";
+    removeLoadingIndicator();
+    loadMorePosts(); // load the first batch of posts
+    startWatchingScroll(); 
     searchInput.focus();
+}
+
+
+
+// ==========Lazy Loading=================
+function loadMorePosts(){
+    if(isLoading) return; 
+    if(currentIndex >= postsArray.length){
+
+        showEndMessage();
+        return;
+    } ; // no more posts to load
+
+    isLoading = true; 
+     
+    const nextBatch = postsArray.slice(currentIndex, currentIndex + CARDS_PER_BATCH);
+currentIndex += nextBatch.length;
+
+nextBatch.forEach(post => {
+    const card = createPostCards(post);
+    postsContainer.appendChild(card);
+});
+resultsCount.textContent = `${currentIndex} of ${postsArray.length} posts shown`;
+removeLoadingIndicator();
+if (currentIndex < postsArray.length) 
+        addLoadingIndicator();   // this will trigger the observer again
+    else 
+        showEndMessage();
+
+    startWatchingScroll();
+    isLoading = false;
+}
+
+function startWatchingScroll() {
+    // remove any old observer
+    if (scrollObserver) scrollObserver.disconnect();
+
+    scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            // If the indicator is visible and we're not already loading
+            if (entry.isIntersecting && !isLoading) {
+                loadMorePosts();
+            }
+        });
+    },
+    {
+        root: null,                      
+        rootMargin: "0px 0px 200px 0px", // trigger a bit before it reaches the bottom
+        threshold: 0.1
+    });
+
+    // start watching the indicator
+    const indicator = document.getElementById("loading-indicator");
+    if (indicator) scrollObserver.observe(indicator);
 }
 
  
