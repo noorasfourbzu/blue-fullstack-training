@@ -101,6 +101,7 @@ onMounted(fetchPosts);
 
       <div class="latest-posts-search-container">
         <textarea
+          id="search-word"
           v-model="searchWord"
           name="search-word"
           rows="1"
@@ -109,11 +110,11 @@ onMounted(fetchPosts);
           :disabled="loading || error"
         ></textarea>
 
-        <button type="button" @click="searchWord = searchWord.trim()">
+        <button id = "search-button" type="button" @click="searchWord = searchWord.trim()">
           Search
         </button>
 
-        <button type="button" @click="clearSearch">
+        <button  id = "clear-search" type="button" @click="clearSearch">
           Clear
         </button>
       </div>
