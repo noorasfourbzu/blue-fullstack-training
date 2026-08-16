@@ -12,14 +12,12 @@
     --color-surface: #FFFFFF;
     --color-border: #D9D9D9;
     --color-footer: #252525;
-
-
-    /* how tall the sticky header roughly is so anchor jumps dont hide behind it */
+    
     --header-offset: 90px;
 }
 
 /* every section that a nav link can jump to reserves space above it
-   so it doesn't end up tucked underneath the sticky header */
+   so it doesnt end up tucked underneath the sticky header */
 
 section[id]{
 scroll-margin-top: var(--header-offset);
@@ -244,14 +242,10 @@ controls content width and centering
     border: 10px solid var(--color-accent);
 }
 
-/* Show X when the menu is open */
+/* show X when the menu is open */
 .menu-button[aria-expanded="true"] .close-icon {
     display: inline;
 }
-
-/* the exit button is drawn by just chainging the shape 
-of the menu button - its a better design desition
-to make control easier , also to make  pressing consistence for user */
 
 
 /* general section style */
@@ -391,8 +385,6 @@ box-shadow: 0 8px 22px rgba(37, 37, 37, 0.18);
 .service-card p {
     color: var(--color-muted-text);}
 
-/* "View Details" button rendered inside each ServiceCard,
-   emits view-details back up to ServicesSection */
 .card-details-button {
     margin-top: 16px;
     padding: 8px 16px;
@@ -415,8 +407,6 @@ box-shadow: 0 8px 22px rgba(37, 37, 37, 0.18);
     background-color: var(--color-accent);
 }
 
-/* Panel that shows whichever service card most recently
-   emitted view-details, proving the child -> parent event flow */
 .selected-service-panel {
     display: flex;
     align-items: flex-start;
@@ -464,8 +454,8 @@ box-shadow: 0 8px 22px rgba(37, 37, 37, 0.18);
     background-color: var(--color-accent);
 }
 
-/* Brief highlight when the panel is scrolled into view, so a click on a
-   card lower down the page doesn't silently update state off-screen */
+/* highlight when the panel is scrolled into view so a click on a
+   card lower down the page doesnt silently update state offscreen */
 .selected-service-panel.is-pulsing {
     animation: selected-service-pulse 0.9s ease-out;
 }
@@ -641,7 +631,7 @@ box-shadow: 0 8px 22px rgba(37, 37, 37, 0.18);
   border-radius: 10px;
 }
 
-/* Scrollbar Handle on hover */
+/* scrollbar handle on hover */
 #latest-posts::-webkit-scrollbar-thumb:hover {
   background: #b30000; 
 }
@@ -661,7 +651,7 @@ box-shadow: 0 8px 22px rgba(37, 37, 37, 0.18);
     margin-bottom: 1rem;
 }
 
-/* The textarea / input */
+/* the textarea / input */
 #search-word {
     flex: 1 1 250px;
     padding: 0.6rem 0.8rem;
@@ -722,15 +712,32 @@ box-shadow: 0 8px 22px rgba(37, 37, 37, 0.18);
     color: var(--muted-color, #888);
 }
 
-/* results count */
+/* Results count */
 .results-count {
     font-size: 0.9rem;
     color: var(--text-muted, #666);
     margin-bottom: 0.75rem;
 }
 
+/* Lazy loading sentinel: the IntersectionObserver watches this element
+   and loads the next batch of posts once it scrolls into view */
+.posts-loading-more {
+    padding: 1rem;
+    text-align: center;
+    color: var(--text-muted, #666);
+    font-size: 0.9rem;
+}
 
-/* individual post card (already has .card class) */
+/* Shown once every post has been revealed and the user isn't searching */
+.posts-end-message {
+    padding: 1rem;
+    text-align: center;
+    color: var(--muted-color, #888);
+    font-size: 0.9rem;
+}
+
+
+/* Individual post card (already has .card class) */
 .latest-posts-container .card {
     padding: 1.25rem;
     border: 1px solid var(--border-color, #ddd);
@@ -873,6 +880,7 @@ textarea.form-control {
     color: #ffffff;
     background-color: #c62828;
 }
+
 
 
 
