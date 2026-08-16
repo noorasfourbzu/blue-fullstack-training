@@ -135,7 +135,7 @@ controls content width and centering
     background-color: var(--color-primary);
 }
 
-/* Aligns the brand and navigation inside the container */
+/* aligns the brand and navigation inside the container */
 .header-content {
     min-height: 80px;
     display: flex;
@@ -391,6 +391,100 @@ box-shadow: 0 8px 22px rgba(37, 37, 37, 0.18);
 .service-card p {
     color: var(--color-muted-text);}
 
+/* "View Details" button rendered inside each ServiceCard,
+   emits view-details back up to ServicesSection */
+.card-details-button {
+    margin-top: 16px;
+    padding: 8px 16px;
+    border: 2px solid var(--color-accent);
+    border-radius: 6px;
+    color: var(--color-accent);
+    background-color: transparent;
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition:
+        background-color 0.25s ease,
+        color 0.25s ease;
+}
+
+.card-details-button:hover,
+.card-details-button:focus-visible {
+    color: #FFFFFF;
+    background-color: var(--color-accent);
+}
+
+/* Panel that shows whichever service card most recently
+   emitted view-details, proving the child -> parent event flow */
+.selected-service-panel {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 25px;
+    padding: 20px 25px;
+    border-left: 5px solid var(--color-accent);
+    border-radius: 8px;
+    background-color: var(--color-surface);
+    box-shadow: 0 4px 15px rgba(37, 37, 37, 0.1);
+}
+
+.selected-service-label {
+    margin-bottom: 4px;
+    color: var(--color-muted-text);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.selected-service-panel h3 {
+    margin-bottom: 8px;
+    color: var(--color-accent);
+}
+
+.selected-service-panel p:last-child {
+    color: var(--color-muted-text);
+}
+
+.selected-service-close {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    color: #FFFFFF;
+    background-color: var(--color-text);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.selected-service-close:hover,
+.selected-service-close:focus-visible {
+    background-color: var(--color-accent);
+}
+
+/* Brief highlight when the panel is scrolled into view, so a click on a
+   card lower down the page doesn't silently update state off-screen */
+.selected-service-panel.is-pulsing {
+    animation: selected-service-pulse 0.9s ease-out;
+}
+
+@keyframes selected-service-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(189, 0, 82, 0.55);
+    }
+    100% {
+        box-shadow: 0 0 0 18px rgba(189, 0, 82, 0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .selected-service-panel.is-pulsing {
+        animation: none;
+    }
+}
+
 /* statistics section */
 #statistics {
    color: var(--color-text);
@@ -530,8 +624,8 @@ box-shadow: 0 8px 22px rgba(37, 37, 37, 0.18);
           height: 500px;         
 
 }
-/*scrollbar Width */
-#latest-posts::-webkit-webkit-scrollbar {
+/*scrollbaridth */
+#latest-posts::-webkit-scrollbar {
   width: 20px;
 }
 
@@ -628,21 +722,15 @@ box-shadow: 0 8px 22px rgba(37, 37, 37, 0.18);
     color: var(--muted-color, #888);
 }
 
-/* Results count */
+/* results count */
 .results-count {
     font-size: 0.9rem;
     color: var(--text-muted, #666);
     margin-bottom: 0.75rem;
 }
 
-/* Posts cards container */
-.latest-posts-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1.25rem;
-}
 
-/* Individual post card (already has .card class) */
+/* individual post card (already has .card class) */
 .latest-posts-container .card {
     padding: 1.25rem;
     border: 1px solid var(--border-color, #ddd);
@@ -788,3 +876,194 @@ textarea.form-control {
 
 
 
+
+/* Tablet / small desktop */
+@media (max-width: 1024px) {
+
+    /* header and navigation */
+    .header-content {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .brand-logo {
+        transform: scale(1.3);
+    }
+
+    .menu-button {
+        display: block;
+    }
+
+    .main-navigation {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+        padding: 10px 0;
+    }
+
+    .main-navigation.is-open {
+        display: flex;
+    }
+
+    .main-navigation a {
+        width: 100%;
+        padding: 10px;
+        text-align: center;
+    }
+
+    /* hero */
+    .hero-content {
+        min-height: 600px;
+    }
+
+    #home h2 {
+        max-width: 700px;
+        font-size: 3rem;
+    }
+
+    #home p {
+        max-width: 700px;
+        font-size: 1.25rem;
+    }
+
+    /* services */
+    .services-container {
+        grid-template-columns: repeat(2, 1fr);
+        margin-right: 0;
+        margin-left: 0;
+    }
+
+    /* posts */
+    .latest-posts-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+
+    /* general layout */
+    .container {
+        width: 90%;
+    }
+
+    .section {
+        padding: 50px 0;
+    }
+
+    .section-title {
+        font-size: 1.7rem;
+    }
+
+    /* header */
+    .header-content {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .brand-logo {
+        width: 55px;
+        height: 55px;
+        transform: scale(1.15);
+    }
+
+    .brand h1 {
+        font-size: 1.25rem;
+    }
+
+    .main-navigation a {
+        font-size: 0.9rem;
+    }
+
+    /* hero */
+    .hero-content {
+        min-height: 500px;
+        align-items: center;
+        text-align: center;
+    }
+
+    #home h2 {
+        margin-bottom: 20px;
+        font-size: 2.2rem;
+    }
+
+    #home p {
+        margin-bottom: 28px;
+        font-size: 1rem;
+    }
+
+    /* services and posts */
+    .services-container,
+    .latest-posts-container {
+        grid-template-columns: 1fr;
+    }
+
+    .services-container {
+        gap: 20px;
+        margin: 25px 0 0;
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+
+    :root {
+        --header-offset: 80px;
+    }
+
+    /* general layout */
+    .section {
+        padding: 40px 0;
+    }
+
+    .section-title {
+        margin-bottom: 16px;
+        font-size: 1.5rem;
+    }
+
+    /* header */
+    .header-content {
+        min-height: 70px;
+        gap: 10px;
+    }
+
+    .brand {
+        gap: 6px;
+    }
+
+    .brand-logo {
+        width: 48px;
+        height: 48px;
+        transform: scale(1);
+    }
+
+    .brand h1 {
+        font-size: 1.05rem;
+    }
+
+    /* hero */
+    .hero-content {
+        min-height: 420px;
+    }
+
+    #home h2 {
+        margin-bottom: 16px;
+        font-size: 1.8rem;
+        line-height: 1.2;
+    }
+
+    #home p {
+        margin-bottom: 24px;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    #home .button {
+        width: 100%;
+    }
+}

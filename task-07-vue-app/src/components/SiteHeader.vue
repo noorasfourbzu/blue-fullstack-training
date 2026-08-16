@@ -1,6 +1,17 @@
 
-<script>
-import logo from "../images/final-logo.webp";
+<script setup>
+import { ref } from "vue";
+import logo from "../../public/final-logo.webp";
+
+const isMenuOpen = ref(false);
+
+function toggleMenu() {
+  isMenuOpen.value = !isMenuOpen.value;
+}
+
+function closeMenu() {
+  isMenuOpen.value = false;
+}
 </script>
 <template>
 
@@ -11,7 +22,7 @@ import logo from "../images/final-logo.webp";
         Skip to main content
       </a>
 
-      <a href="#home" class="brand">
+      <a href="#home" class="brand" @click="closeMenu">
      <img
     :src="logo"
     alt="AsfouraBandora company logo"
@@ -24,9 +35,11 @@ import logo from "../images/final-logo.webp";
       <button
         type="button"
         class="menu-button"
-        aria-label="Open navigation menu"
+        :aria-label="isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'"
         aria-controls="main-navigation"
-        aria-expanded="false"
+        :aria-expanded="isMenuOpen"
+        @click="toggleMenu"
+        @keydown.escape="closeMenu"
       >
         <span class="hamburger-icon" aria-hidden="true">☰</span>
         <span class="close-icon" aria-hidden="true">x</span>
@@ -35,13 +48,14 @@ import logo from "../images/final-logo.webp";
       <nav
         id="main-navigation"
         class="main-navigation"
+        :class="{ 'is-open': isMenuOpen }"
         aria-label="Main navigation"
       >
-        <a href="#home">Home</a>
-        <a href="#about">About Us</a>
-        <a href="#services">Services</a>
-        <a href="#statistics">Statistics</a>
-        <a href="#contact">Contact</a>
+        <a href="#home" @click="closeMenu">Home</a>
+        <a href="#about" @click="closeMenu">About Us</a>
+        <a href="#services" @click="closeMenu">Services</a>
+        <a href="#statistics" @click="closeMenu">Statistics</a>
+        <a href="#contact" @click="closeMenu">Contact</a>
       </nav>
 
     </div>

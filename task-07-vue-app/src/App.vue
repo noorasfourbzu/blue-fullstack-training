@@ -1,12 +1,24 @@
 <script setup>
-import Header from "./components/SiteHeader.vue";
-import Hero from "./components/HeroSection.vue";
+import SiteHeader from "./components/SiteHeader.vue";
+import HeroSection from "./components/HeroSection.vue";
+import ServicesSection from "./components/ServicesSection.vue";
+import PostsSection from "./components/PostsSection.vue";
 </script>
 
 <template>
-  <Header />
+
+  <SiteHeader />
 
   <main id="main">
-    <Hero />
+
+    <HeroSection />
+
+    <ServicesSection />
+
+    <PostsSection />
+
+
   </main>
+
+
 </template>
