@@ -208,7 +208,11 @@ controls content width and centering
 }
 
 
-
+.main-navigation a.router-link-active {
+  font-weight: bold;
+  color: var(--accent-color, #ff6b6b); /* pick a color that fits your theme */
+  border-bottom: 2px solid currentColor;
+}
 
 
 /* mobile menu button */

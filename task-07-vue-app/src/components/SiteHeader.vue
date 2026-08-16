@@ -22,7 +22,7 @@ function closeMenu() {
         Skip to main content
       </a>
 
-      <a href="#home" class="brand" @click="closeMenu">
+     <RouterLink to="/" class="brand" @click="closeMenu">
      <img
     :src="logo"
     alt="AsfouraBandora company logo"
@@ -30,7 +30,7 @@ function closeMenu() {
 >
 
         <h1>AsfouraBandora</h1>
-      </a>
+      </RouterLink>
 
       <button
         type="button"
@@ -51,11 +51,11 @@ function closeMenu() {
         :class="{ 'is-open': isMenuOpen }"
         aria-label="Main navigation"
       >
-        <a href="#home" @click="closeMenu">Home</a>
-        <a href="#about" @click="closeMenu">About Us</a>
-        <a href="#services" @click="closeMenu">Services</a>
-        <a href="#statistics" @click="closeMenu">Statistics</a>
-        <a href="#contact" @click="closeMenu">Contact</a>
+      <RouterLink to ="/" @click="closeMenu">Home</RouterLink>
+      <RouterLink to = "/services" @click="closeMenu">Services</RouterLink>
+      <RouterLink to = "/posts" @click="closeMenu">Posts</RouterLink>
+      <RouterLink to = "/contact"@click="closeMenu">Contact</RouterLink>
+    
       </nav>
 
     </div>

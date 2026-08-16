@@ -10,9 +10,9 @@
         after the game ends.
       </p>
 
-      <a href="#contact" class="button">
-        Start Your Project
-      </a>
+     <RouterLink to="/contact" class="button">
+  Start Your Project
+</RouterLink>
 
     </div>
   </section>
