@@ -1,57 +1,69 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch } from "vue";
+import { ref, computed, onUnmounted, watch } from "vue";
 import PostCard from "./PostCard.vue";
+import { useRoute, useRouter } from "vue-router";
 
-const API_URL = "https://jsonplaceholder.typicode.com/posts";
+const props = defineProps({
+  posts: { type: Array, required: true },
+  loading: { type: Boolean, required: true },
+  error: { type: Boolean, required: true },
+  fetchPosts: { type: Function, required: true },
+});
 
 // how many cards get added per batch
 const CARDS_PER_BATCH = 10;
 
-// reactive state 
-const posts = ref([]);
-const searchWord = ref("");
-const loading = ref(false);
-const error = ref(false);
+const route = useRoute();
+const router =  useRouter();
 
+// const searchWord = ref(typeof route.query.q === "string" ? route.query.q : "");
+// // how many posts from the (filtered) list are currently revealed
+// const currentIndex = ref(CARDS_PER_BATCH);
+
+// // template ref for the sentinel element the IntersectionObserver watches
+// const sentinelRef = ref(null);
+// let scrollObserver = null;
+
+
+// // title only search filter derived automatically from posts/searchWord
+// const filteredPosts = computed(() => {
+//   const query = searchWord.value.trim().toLowerCase();
+//   if (!query) return props.posts;
+//   return props.posts.filter((post) => post.title.toLowerCase().includes(query));
+// });
+
+// const isSearching = computed(() => searchWord.value.trim().length > 0);
+
+// what the user is currently typing
+const searchInput = ref(typeof route.query.q === "string" ? route.query.q : "");
+// the term that has actually been searched - only this drives filtering,
+// the URL query, and highlighting in PostCard
+const appliedSearch = ref(searchInput.value);
 // how many posts from the (filtered) list are currently revealed
 const currentIndex = ref(CARDS_PER_BATCH);
+
+
+
+
 
 // template ref for the sentinel element the IntersectionObserver watches
 const sentinelRef = ref(null);
 let scrollObserver = null;
 
-async function fetchPosts() {
-  loading.value = true;
-  error.value = false;
-
-  try {
-    const response = await fetch(API_URL);
-    if (!response.ok) throw new Error("Failed to fetch posts");
-    posts.value = await response.json();
-    currentIndex.value = CARDS_PER_BATCH; // start lazy loading from the first batch
-  } catch (err) {
-    error.value = true;
-    posts.value = [];
-  } finally {
-    loading.value = false;
-  }
-}
-
-// title only search filter derived automatically from posts/searchWord
+// title only search filter derived from posts/appliedSearch
 const filteredPosts = computed(() => {
-  const query = searchWord.value.trim().toLowerCase();
-  if (!query) return posts.value;
-  return posts.value.filter((post) => post.title.toLowerCase().includes(query));
+  const query = appliedSearch.value.trim().toLowerCase();
+  if (!query) return props.posts;
+  return props.posts.filter((post) => post.title.toLowerCase().includes(query));
 });
-
-const isSearching = computed(() => searchWord.value.trim().length > 0);
-
 // while searching show every match at once 
 // while browsing normally only reveal posts up to currentIndex 
 const visiblePosts = computed(() => {
   if (isSearching.value) return filteredPosts.value;
   return filteredPosts.value.slice(0, currentIndex.value);
 });
+
+const isSearching = computed(() => appliedSearch.value.trim().length > 0);
 
 const hasMore = computed(
   () => !isSearching.value && currentIndex.value < filteredPosts.value.length
@@ -86,12 +98,85 @@ onUnmounted(() => {
   if (scrollObserver) scrollObserver.disconnect();
 });
 
+// function clearSearch() {
+//   searchWord.value = "";
+//   currentIndex.value = CARDS_PER_BATCH; // restart lazy loading from the first batch
+// }
+
+// watch(() => props.posts, () => {
+//   currentIndex.value = CARDS_PER_BATCH; 
+// });
+
+// // user types -> push the new value into the URL query string
+// // (router.replace = no extra history entry per keystroke)
+// watch(searchWord, (newValue) => {
+//   const trimmed = newValue.trim();
+//   const currentQ = typeof route.query.q === "string" ? route.query.q : "";
+//   if (trimmed === currentQ) return;
+
+//   const nextQuery = { ...route.query };
+//   if (trimmed) nextQuery.q = trimmed;
+//   else delete nextQuery.q;
+
+//   router.replace({ query: nextQuery });
+// });
+
+// // URL query changes from outside typing (Back/Forward, shared link)
+// // -> update the search box to match
+// watch(
+//   () => route.query.q,
+//   (newQ) => {
+//     const value = typeof newQ === "string" ? newQ : "";
+//     if (value !== searchWord.value) {
+//       searchWord.value = value;
+//     }
+//   }
+// );
+
+// runs the search: only called when the Search button is clicked
+function runSearch() {
+  appliedSearch.value = searchInput.value.trim();
+  currentIndex.value = CARDS_PER_BATCH;
+}
+
 function clearSearch() {
-  searchWord.value = "";
+  searchInput.value = "";
+  appliedSearch.value = "";
   currentIndex.value = CARDS_PER_BATCH; // restart lazy loading from the first batch
 }
 
-onMounted(fetchPosts);
+
+watch(() => props.posts, () => {
+  currentIndex.value = CARDS_PER_BATCH; 
+});
+
+// search is applied (button clicked / cleared) -> push it into the URL query string
+watch(appliedSearch, (newValue) => {
+  const trimmed = newValue.trim();
+  const currentQ = typeof route.query.q === "string" ? route.query.q : "";
+  if (trimmed === currentQ) return;
+
+  const nextQuery = { ...route.query };
+  if (trimmed) nextQuery.q = trimmed;
+  else delete nextQuery.q;
+
+  router.replace({ query: nextQuery });
+});
+
+
+
+// URL query changes from outside the search box 
+watch(
+  () => route.query.q,
+  (newQ) => {
+    const value = typeof newQ === "string" ? newQ : "";
+    if (value !== appliedSearch.value) {
+      searchInput.value = value;
+      appliedSearch.value = value;
+    }
+  }
+);
+
 </script>
 
 <template>
@@ -102,15 +187,16 @@ onMounted(fetchPosts);
       <div class="latest-posts-search-container">
         <textarea
           id="search-word"
-          v-model="searchWord"
+          v-model="searchInput"
           name="search-word"
           rows="1"
           placeholder="Search posts by title..."
           maxlength="200"
           :disabled="loading || error"
+          @keydown.enter.prevent="runSearch"
         ></textarea>
 
-        <button id = "search-button" type="button" @click="searchWord = searchWord.trim()">
+        <button id = "search-button" type="button" @click="runSearch">
           Search
         </button>
 
@@ -139,7 +225,7 @@ onMounted(fetchPosts);
 
       <!-- Success: posts loaded, but the search matched nothing -->
       <div v-else-if="filteredPosts.length === 0" class="posts-status posts-status--empty">
-        <p>No posts match "{{ searchWord }}".</p>
+        <p>No posts match "{{ searchInput }}".</p>
         <button type="button" @click="clearSearch">
           Clear search
         </button>
@@ -161,6 +247,7 @@ onMounted(fetchPosts);
             v-for="post in visiblePosts"
             :key="post.id"
             :post="post"
+            :search-term="appliedSearch"
           />
         </div>
 
