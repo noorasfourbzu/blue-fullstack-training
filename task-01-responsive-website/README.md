@@ -118,7 +118,9 @@ A responsive website for an independent game studio, built across Tasks 01–05 
 - Task07 components : `screenshots/task 07 components.png`
 - Category filter with discribtion view : `screenshots/Category filter with discribtion view .png`
 - API Error state : `API error.png`
-
+- Task 08 route navigation and active state: screenshots/task08-route-navigation.png
+- Task 08 dynamic post details route: screenshots/task08-dynamic-post-route.png
+- Task 08 post search with query string: screenshots/task08-post-search-query.png
 
 ## Author
 Noor Asfour
