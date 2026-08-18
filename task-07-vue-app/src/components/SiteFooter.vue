@@ -6,11 +6,11 @@
                 <p> Strange games for crious minds </p>
                 </div>
 
-                <adress class  = "footer-contact">
+                <address class  = "footer-contact">
                     Ramallah, Palestine <br />
         <a href="mailto:hello@asfourabandora.com">hello@asfourabandora.com</a>
         
-        </adress>
+        </address>
 
         <nav class = "footer-navigation" aria-label = "Footer navigation">
             <RouterLink to = "/">Home</RouterLink>

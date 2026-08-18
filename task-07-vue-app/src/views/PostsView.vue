@@ -1,17 +1,21 @@
 <script setup>
-import { usePosts } from "../composables/usePosts";
 import { onMounted } from "vue";
 import PostsSection from "../components/PostsSection.vue";
-const { posts, loading, error, fetchPosts } = usePosts();
+import { usePostsStore } from "../stores/posts.js";
 
-onMounted(fetchPosts);
+
+const store = usePostsStore();
+onMounted(()=>{
+  store.fetchPosts();
+  
+});
 </script>
 
 <template>
  <PostsSection
-    :posts="posts"
-    :loading="loading"
-    :error="error"
-    :fetch-posts="fetchPosts"
+    :posts="store.posts"
+    :loading="store.loading"
+    :error="store.error"
+    :fetch-posts="store.fetchPosts"
   />
   </template>

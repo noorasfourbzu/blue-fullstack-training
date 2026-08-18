@@ -1,5 +1,8 @@
 <script setup>
 import BaseCard from "./BaseCard.vue";
+import {usePostsStore} from "../stores/posts";
+import heartOutline from "../assets/heart-outline.png";
+import heartFilled from "../assets/heart-filled.png";
 
 const props = defineProps({
   post: {
@@ -12,6 +15,8 @@ const props = defineProps({
     default: ""
   }
 });
+
+const store = usePostsStore();
 
 
 function highlightParts(text) {
@@ -61,5 +66,19 @@ function highlightParts(text) {
 
 <RouterLink :to="`/posts/${post.id}`" class="read-more-link">      Read More
       </RouterLink>
+
+      <button
+      type = "button"
+      class = "favorite-heart"
+      :class = "{'is-favorite': store.favoriteIds.includes(post.id)}"
+      :aria-label = "store.favoriteIds.includes(post.id) ? 'Remove from Favorite': 'Add to Favorite'"
+      @click="store.toggleFavorite(post.id)">
+      <img
+    :src="store.favoriteIds.includes(post.id) ? heartFilled : heartOutline"
+    :alt="store.favoriteIds.includes(post.id) ? 'Favorited' : 'Not favorited'"
+    class="heart-icon"
+  />
+          
+      </button>
   </BaseCard>
 </template>

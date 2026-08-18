@@ -2,9 +2,9 @@
 <script setup>
 import { ref } from "vue";
 import logo from "../../public/final-logo.webp";
-
+import { usePostsStore } from "../stores/posts";
 const isMenuOpen = ref(false);
-
+const postsStore = usePostsStore();
 function toggleMenu() {
   isMenuOpen.value = !isMenuOpen.value;
 }
@@ -55,6 +55,10 @@ function closeMenu() {
       <RouterLink to = "/services" @click="closeMenu">Services</RouterLink>
       <RouterLink to = "/posts" @click="closeMenu">Posts</RouterLink>
       <RouterLink to = "/contact"@click="closeMenu">Contact</RouterLink>
+      <RouterLink to="/favorites" @click="closeMenu" class="favorites-link">
+       Favorites
+       <span class="favorite-badge">{{ postsStore.favoriteCount }}</span>
+      </RouterLink>
     
       </nav>
 

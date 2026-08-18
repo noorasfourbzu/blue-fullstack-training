@@ -2,8 +2,13 @@
 import{ref, watch, onMounted} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import {usePost} from "../composables/usePost";
+import { usePostsStore } from "../stores/posts";
+import heartOutline from "../assets/heart-outline.png";
+import heartFilled from "../assets/heart-filled.png";
+
 const route = useRoute();
 const router = useRouter();
+const postsStore = usePostsStore();
 
 const {post, loading , error , notFound , fetchPost} = usePost();
 
@@ -58,12 +63,26 @@ watch(() => route.params.id,
        <!-- Success: post loaded -->
       <article v-else-if="post" class="post-details-content">
         <p class="post-details-id">Post #{{ post.id }}</p>
+
+        <button
+      type="button"
+    class="favorite-heart favorite-heart--details"
+     :aria-label="postsStore.favoriteIds.includes(post.id) ? 'Remove from favorites' : 'Add to favorites'"
+      @click="postsStore.toggleFavorite(post.id)"
+>
+  <img
+    :src="postsStore.favoriteIds.includes(post.id) ? heartFilled : heartOutline"
+     :alt="postsStore.favoriteIds.includes(post.id) ? 'Favorited' : 'Not favorited'"
+    class="heart-icon"
+  />
+</button>
         <h2 class="post-details-title">{{ post.title }}</h2>
         <p class="post-details-body">{{ post.body }}</p>
 
         <button type="button" class="back-to-posts" @click="goBackToPosts">
           &larr; Back to Posts
         </button>
+
       </article>
 
     </div>

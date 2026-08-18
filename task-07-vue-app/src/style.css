@@ -215,6 +215,27 @@ controls content width and centering
 }
 
 
+.favorites-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.favorite-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background-color: var(--color-accent);
+  color: #FFFFFF;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
 /* mobile menu button */
 .menu-button {
     display: none;
@@ -408,6 +429,49 @@ box-shadow: 0 8px 22px rgba(37, 37, 37, 0.18);
 .card-details-button:focus-visible {
     color: #FFFFFF;
     background-color: var(--color-accent);
+}
+
+/*favorite heart button*/
+.post-card{
+    position: relative;
+}
+
+.favorite-heart {
+  position: absolute;
+  top: 4%;
+  right: 4%;
+  width: clamp(40px, 12%, 52px);
+  height: clamp(40px, 12%, 52px);
+  padding: clamp(6px, 2%, 10px);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.favorite-heart .heart-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.15s ease;
+}
+
+.favorite-heart:hover .heart-icon {
+  transform: scale(1.1);
+}
+.favorite-heart.is-favorite  .heart-icon{
+fill: var(--color-accent);
+stroke: var(--color-accent);
+}
+
+.favorite-heart--details {
+  position: static;
+  width: clamp(32px, 6vw, 44px);
+  height: clamp(32px, 6vw, 44px);
+  margin: 8px 0;
 }
 
 .selected-service-panel {

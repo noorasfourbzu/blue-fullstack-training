@@ -4,6 +4,13 @@ import SiteHeader from "./components/SiteHeader.vue";
 //import ServicesSection from "./components/ServicesSection.vue";
 //import PostsSection from "./components/PostsSection.vue";
 import SiteFooter from "./components/SiteFooter.vue";
+import { onMounted } from "vue";
+import { usePostsStore } from "./stores/posts";
+const postsStore = usePostsStore();
+
+onMounted(() => {
+  postsStore.restoreFavorites();
+});
 </script>
 
 <template>
