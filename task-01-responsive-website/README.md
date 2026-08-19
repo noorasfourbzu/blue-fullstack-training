@@ -1,13 +1,16 @@
 # AsfouraBandora
 
-A responsive website for an independent game studio, built across Tasks 01–05 of the Blue Full Stack Training Program. Started as a static responsive layout and grew into a fully interactive, accessibility tested frontend project.
+A responsive website for an independent game studio, built across Tasks 01–06 of the Blue Full Stack Training Program. Started as a static responsive layout and grew into a fully interactive, accessibility tested frontend project.
+
+This README covers the vanilla HTML/CSS/JS project only (Tasks 01–06). The Vue
+version of this project (Tasks 07–09) lives in a separate folder,
+`task-07-vue-app`, with its own README.
 
 ## Technologies
 
 - HTML5
 - CSS3 (custom properties, Flexbox, Grid, responsive media queries)
 - Vanilla JavaScript (no frameworks, no libraries)
-- Vue 3 + Vite (starting task 07 inside seperate file 'task-07-vue-app')
 
 ## Features
 
@@ -42,19 +45,6 @@ A responsive website for an independent game studio, built across Tasks 01–05 
 - Images use lazy loading
 - Posts use lazy loading when they are loaded
 
-### SPA Navigation — Task 08
-- Single Page Application navigation using Vue Router
-- Navigation between pages without reloading the website
-- Services and Posts pages are loaded only when needed
-- Post details can be opened using a dynamic URL such as `/posts/1`
-- Nested routes are supported
-- A Not Found page is shown for invalid routes
-- Active navigation links show the current page
-- Post details show loading, error, and not-found states
-- Post search is saved in the URL
-- Search results are restored after refreshing or opening a shared link
-- Browser Back and Forward buttons work correctly
-
 ### Performance & Accessibility
 - Lighthouse Accessibility score: 100/100
 - Lighthouse Performance score: 100/100
@@ -75,9 +65,7 @@ A responsive website for an independent game studio, built across Tasks 01–05 
 1. Download or clone the project.
 2. Open the `index.html` file in a web browser — no build step, no installs, no dependencies.
 
-**Vue app (task-07-vue-app file ):**
-1.Download or clone the project
-2.Open terminal , write 'npm run dev', and follow the link
+For the Vue version of this project (Tasks 07–09), see `task-07-vue-app/README.md`.
 
 
 ## Completed Tasks
@@ -86,25 +74,14 @@ A responsive website for an independent game studio, built across Tasks 01–05 
 - **Task 04:** JavaScript functionality including form validation, back-to-top, active navigation, and statistics counters.
 - **Task 05:** QA testing, accessibility and performance improvements, responsive/cross-browser testing, and deployment.
 - **Task 06:** Modern JavaScript refactor, local game data with category filtering and localStorage, JSONPlaceholder API integration, search, UI states, and lazy loading.
-- **Task 07:** Vue 3 + Vite fundamentals, reusable components, props/events, reactive filtering, REST API integration, search, UI states, and lazy loading.
 
-- **Task 08:** Vue Router & SPA Navigation
-  - Converted the Vue app into a Single Page Application using Vue Router with nested/dynamic routes, lazy-loaded views, and a catch-all 404 page.
-  - Implemented `RouterLink` navigation, active route styling, dynamic `/posts/:id` details with loading/error/not-found states, and reusable API composables.
-  - Added `usePosts`, `usePost`, and a centralized API URL to keep data-fetching logic reusable and organized.
-  - Preserved post search in the URL using query parameters, with `router.replace()` and automatic restoration after refresh/shared links.
-  - Tested navigation, dynamic routes, query strings, refresh behavior, responsive layouts, and console warnings/errors; documented the GitHub Pages history-mode limitation.
-
-
-
+Tasks 07–09 (Vue 3, Vue Router, Pinia) continue inside `task-07-vue-app` — see that
+project's own README for details.
 
 ## Known Limitations
- 
-- The contact form has no backend — it validates and displays a success message, but no data is actually sent anywhere. 
-- Phone number validation checks digit count only (7–15 digits, based on the international E.164 standard), not whether the number is actually a real, dialable number for a specific country.
-- The GitHub Pages deployment currently has an issue that still needs to be resolved.
 
-  - GitHub Pages does not support `createWebHistory()` refresh out of the box; a `404.html` redirect trick (or switching to `createWebHashHistory()`) is still needed for the deployed version
+- The contact form has no backend  it validates and displays a success message, but no data is actually sent anywhere.
+- Phone number validation checks digit count only (7–15 digits, based on the international E.164 standard), not whether the number is actually a real, dialable number for a specific country.
 
 
 
@@ -115,12 +92,10 @@ A responsive website for an independent game studio, built across Tasks 01–05 
 - Lighthouse accessibility result: `screenshots/lighthouse-accessibility.png`
 - Lighthouse accessibility result :`screenshots/lighthouse-performance.png`
 - Visible keyboard-focus state: `screenshots/keyboard-focus state.png`
-- Task07 components : `screenshots/task 07 components.png`
 - Category filter with discribtion view : `screenshots/Category filter with discribtion view .png`
 - API Error state : `API error.png`
-- Task 08 route navigation and active state: screenshots/task08-route-navigation.png
-- Task 08 dynamic post details route: screenshots/task08-dynamic-post-route.png
-- Task 08 post search with query string: screenshots/task08-post-search-query.png
+
+Screenshots for Tasks 07–09 (Vue app) are documented in `task-07-vue-app/README.md`.
 
 ## Author
 Noor Asfour
