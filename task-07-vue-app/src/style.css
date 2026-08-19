@@ -915,7 +915,26 @@ textarea.form-control {
     resize: vertical;
 }
 
+.form-control.is-invalid {
+    border-color: #c62828;
+}
 
+.form-control.is-invalid:focus {
+    outline-color: rgba(198, 40, 40, 0.35);
+}
+
+
+.character-counter {
+    display: block;
+    margin-top: 4px;
+    color: var(--color-muted-text);
+    font-size: 0.8rem;
+}
+
+.character-counter.counter-warning {
+    color: #c62828;
+    font-weight: bold;
+}
 
 
 /* validation error messages */

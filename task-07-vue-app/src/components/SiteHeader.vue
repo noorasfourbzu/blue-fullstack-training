@@ -59,6 +59,7 @@ function closeMenu() {
        Favorites
        <span class="favorite-badge">{{ postsStore.favoriteCount }}</span>
       </RouterLink>
+      <router-link to="/posts/create">Create Post</router-link>
     
       </nav>
 

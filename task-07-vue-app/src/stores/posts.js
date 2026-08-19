@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 import {ref , computed} from 'vue'
-import {getPosts} from '../services/postsApi'
+import {getPosts, createPost as createPostRequest} from '../services/postsApi'
 export const usePostsStore = defineStore('posts', () =>{
 
 // state  
@@ -12,6 +12,9 @@ const error = ref(false)
 const notFound  = ref(null)
 const favoriteIds = ref([])
 const savedIds = ref([])
+const submitting = ref(false)
+const submitError = ref(false)
+const lastCreatedPost = ref(null)
 
 
 // getters
@@ -64,10 +67,25 @@ function restoreFavorites(){
 }
 
 async function createPost(newPost){
+submitting.value = true
+  submitError.value = false
+
+  try {
+    const created = await createPostRequest(newPost)
+    lastCreatedPost.value = created
+    return created
+  } catch (err) {
+    submitError.value = true
+    throw err
+  } finally {
+    submitting.value = false
+  }
+
 }
 
 return {
   posts, loading, error, favoriteIds,
+  submitting,submitError,lastCreatedPost,
   favoritePosts, favoriteCount,
   fetchPosts, retryFetch, toggleFavorite,
   persistFavorites, restoreFavorites, createPost

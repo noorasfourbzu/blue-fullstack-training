@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import CreatePostView from '../views/CreatePostView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -15,6 +16,10 @@ const router = createRouter({
 
  { path: '/posts/:id', name: 'post-details', 
     component: () => import('../views/PostDetailsView.vue') },
+    {path: '/posts/create',
+      name: 'create-post',
+      component: CreatePostView
+    },
 { path: '/favorites', name: 'favorites',
     component: () => import('../views/FavoritesView.vue') },
 
