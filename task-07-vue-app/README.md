@@ -134,5 +134,10 @@ Used across Posts, Post Details, and Create Post:
   box. A `404.html` redirect trick (or switching to `createWebHashHistory()`) is
   needed for the deployed version.
 
+## ScreenShots
+- Favorites view/section after selecting posts :`screenshots/favorite_posts.png`
+- Create Post form validation for an invalid submission:`screenshots/fail - create post.png`
+- successful POST submission/result:`screenshots/success - create post.png`
+
 ## Author
 Noor Asfour
