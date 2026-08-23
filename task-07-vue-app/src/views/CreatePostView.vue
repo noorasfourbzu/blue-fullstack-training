@@ -1,6 +1,8 @@
 <script setup>
 import {reactive,computed, ref} from 'vue'
 import { usePostsStore } from '../stores/posts'
+import FormStatusBanner from '../components/FormStatusBanner.vue'
+
 //  form state 
 const form =  reactive({
 title: '',
@@ -27,7 +29,7 @@ touched[field] = true
 
 const MIN_TITLE_LENGTH = 5
 const MIN_BODY_LENGTH = 10 
-const MAX_TITLE_LENGHT = 100 
+const MAX_TITLE_LENGTH = 100 
 const MAX_BODY_LENGTH = 500   
 
 const titleError = computed(() => {
@@ -67,7 +69,7 @@ const userIdError = computed(() => {
 
 
 // character counters 
- const titleRemaining = computed(()=> MAX_TITLE_LENGHT - form.title.length)
+ //const titleRemaining = computed(()=> MAX_TITLE_LENGTH - form.title.length)
  
  const bodyRemaining = computed(() => MAX_BODY_LENGTH - form.body.length)
  const bodyCount = computed(() => form.body.length)
@@ -85,6 +87,25 @@ const isSubmitting = computed(() => postsStore.submitting)
 const formStatus = ref('')
 const createdPostId = ref(null)
 
+
+const bannerVariant = computed(() => {
+  if (formStatus.value === 'success') return 'success'
+  if (formStatus.value === 'validation-error' || formStatus.value === 'submit-error') return 'error'
+  return ''
+})
+
+const statusMessage = computed(() => {
+  if (formStatus.value === 'success') {
+    return `Post created successfully. Returned ID: ${createdPostId.value}`
+  }
+  if (formStatus.value === 'validation-error') {
+    return 'Please check the highlighted fields above and make sure they match the required rules.'
+  }
+  if (formStatus.value === 'submit-error') {
+    return 'Something went wrong. Please check your connection and try again.'
+  }
+  return ''
+})
 async function handleSubmit() {
   // mark all fields touched so all errors show if user tries to submit early
   touched.title = true
@@ -92,7 +113,7 @@ async function handleSubmit() {
   touched.userId = true
 
   if (!isFormValid.value) {
-    formStatus.value = 'error'
+    formStatus.value = 'validation-error'
     return
 }
 
@@ -116,7 +137,7 @@ try {
     touched.userId = false
   } catch (err) {
     // keep form values on failure do not reset here
-    formStatus.value = 'error'
+    formStatus.value = 'submit-error'
   }
 
 
@@ -140,28 +161,27 @@ function recheckIfInvalid(field) {
       <!-- title field -->
       
         <label for="title">Title</label>
-       <input
-          id="title"
-          v-model="form.title"
-          type="text"
-          name="title"
-          placeholder="Enter the post title"
-          required
-          class="form-control"
-          :class="{ 'is-invalid': touched.title && titleError }"
-          :aria-invalid="touched.title && titleError ? 'true' : 'false'"
-          aria-describedby="title-error"
-          maxlength="100"
-          @input="recheckIfInvalid('title')"
-          @blur="markTouched('title')"
-        />
- 
+  <input
+  id="title"
+  v-model="form.title"
+  type="text"
+  name="title"
+  placeholder="Enter the post title"
+  required
+  class="form-control"
+  :class="{ 'is-invalid': touched.title && titleError }"
+  :aria-invalid="touched.title && titleError ? 'true' : 'false'"
+  aria-describedby="title-error title-counter"
+  :maxlength="MAX_TITLE_LENGTH"
+  @input="recheckIfInvalid('title')"
+  @blur="markTouched('title')"
+/>
 
  <small id="title-error" class="error-message">
           {{ touched.title ? titleError : '' }}
         </small>
-        <small class="character-counter">
-          {{ titleRemaining }} characters remaining
+        <small id ="title-counter" class="character-counter">
+  {{ form.title.length }} / {{ MAX_TITLE_LENGTH }} characters used
         </small>
 
 
@@ -178,7 +198,7 @@ function recheckIfInvalid(field) {
           :class="{ 'is-invalid': touched.body && bodyError }"
           :aria-invalid="touched.body && bodyError ? 'true' : 'false'"
           aria-describedby="body-error body-counter"
-          maxlength="500"
+:maxlength="MAX_BODY_LENGTH"
           @input="recheckIfInvalid('body')"
           @blur="markTouched('body')"
         ></textarea>
@@ -214,22 +234,9 @@ function recheckIfInvalid(field) {
         </small>
 
   <button type="submit" class="button" :disabled="isSubmitting">
-          {{ isSubmitting ? 'Submitting...' : 'Create Post' }}
+          {{ isSubmitting ? 'Submitting...' : (formStatus === 'submit-error' ? 'Retry' : 'Create Post') }}
         </button>
-
-        <p
-          id="form-status"
-          class="form-status"
-          :class="{
-            'form-status--success': formStatus === 'success',
-            'form-status--error': formStatus === 'error'
-          }"
-          role="status"
-          aria-live="polite"
-        >
-          <span v-if="formStatus === 'success'">    Post created successfully. Returned ID: {{ createdPostId }}</span>
-          <span v-else-if="formStatus === 'error'">    Something went wrong submitting your post. Please check your connection and try again.</span>
-        </p>
+<FormStatusBanner :status="bannerVariant" :message="statusMessage" />
         <button
   v-if="formStatus === 'error'"
   type="button"

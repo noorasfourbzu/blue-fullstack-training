@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import CreatePostView from '../views/CreatePostView.vue'
+import {ref} from 'vue'
+
+export const previousRouteName = ref(null)
 
 const router = createRouter({
   history: createWebHistory(),
@@ -30,5 +33,9 @@ const router = createRouter({
      component: () => import('../views/NotFoundView.vue') }
   ]
 })
+router.beforeEach((to, from) => {
+  previousRouteName.value = from.name
+})
+
 
 export default router

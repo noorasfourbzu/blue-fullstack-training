@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from "vue";
+import FormStatusBanner from "../components/FormStatusBanner.vue";
 
 // validation rules (same as Task 01)
 const NAME_MIN_LENGTH = 2;
@@ -31,6 +32,16 @@ const errors = ref({
 
 // submit result banner: "success" | "error" | ""
 const formStatus = ref("");
+
+const statusMessage = computed(() => {
+  if (formStatus.value === "success") {
+    return "Your message has been sent. We'll get back to you soon.";
+  }
+  if (formStatus.value === "error") {
+    return "Please fix the highlighted fields and try again.";
+  }
+  return "";
+});
 
 const messageCount = computed(() => message.value.length);
 const isOverMessageLimit = computed(() => messageCount.value > MESSAGE_MAX_LENGTH);
@@ -256,19 +267,7 @@ function handleSubmit() {
 
         <button type="submit" class="button">Send</button>
 
-        <p
-          id="form-status"
-          class="form-status"
-          :class="{
-            'form-status--success': formStatus === 'success',
-            'form-status--error': formStatus === 'error',
-          }"
-          role="status"
-          aria-live="polite"
-        >
-          <span v-if="formStatus === 'success'">Your message has been sent. We'll get back to you soon.</span>
-          <span v-else-if="formStatus === 'error'">Please fix the highlighted fields and try again.</span>
-        </p>
+       <FormStatusBanner :status="formStatus" :message="statusMessage" />
       </form>
     </div>
   </section>

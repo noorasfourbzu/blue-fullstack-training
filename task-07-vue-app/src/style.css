@@ -13,6 +13,9 @@
     --color-border: #D9D9D9;
     --color-footer: #252525;
     --header-offset: 90px;
+
+
+   
 }
 
 /* every section that a nav link can jump to reserves space above it
@@ -102,7 +105,7 @@ controls content width and centering
 */
 .container {
     width: 90%;
-    max-width: 1200px;
+    max-width: var(--container-max-width);
     margin: 0 auto;
 }
 
@@ -419,7 +422,12 @@ box-shadow: 0 8px 22px rgba(37, 37, 37, 0.18);
 }
 
 .service-card p {
-    color: var(--color-muted-text);}
+    color: var(--color-muted-text);
+margin-top: 100%;
+margin-bottom: 100%;
+
+}
+    
 
 .card-details-button {
     margin-top: 16px;
@@ -446,15 +454,34 @@ box-shadow: 0 8px 22px rgba(37, 37, 37, 0.18);
 /*favorite heart button*/
 .post-card{
     position: relative;
+    padding-top: clamp(54px, 12vw, 64px);
+}
+
+
+.post-card h3 {
+    margin: 0 0 10px;
+    color: var(--color-text);
+    padding-right: clamp(48px, 12vw, 60px);
+    overflow-wrap: break-word;
+
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    line-height: 1.4;
+    font-weight: 700;
+}
+.post-card p {
+    margin: 0;
+    color: var(--color-muted-text);
+    font-size: clamp(0.9rem, 1.5vw, 0.95rem);
+    line-height: 1.65;
 }
 
 .favorite-heart {
   position: absolute;
-  top: 4%;
-  right: 4%;
-  width: clamp(40px, 12%, 52px);
-  height: clamp(40px, 12%, 52px);
-  padding: clamp(6px, 2%, 10px);
+  top: 16px;
+  right: 16px;
+  width: clamp(38px, 10vw, 46px);
+  height: clamp(38px, 10vw, 46px);
+  padding: clamp(5px, 1.5vw, 7px);
   border: none;
   background: transparent;
   cursor: pointer;
@@ -462,6 +489,8 @@ box-shadow: 0 8px 22px rgba(37, 37, 37, 0.18);
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
+  z-index: 2;
+
 }
 
 .favorite-heart .heart-icon {
@@ -469,6 +498,8 @@ box-shadow: 0 8px 22px rgba(37, 37, 37, 0.18);
   height: 100%;
   object-fit: contain;
   transition: transform 0.15s ease;
+
+
 }
 
 .favorite-heart:hover .heart-icon {
@@ -707,12 +738,12 @@ stroke: var(--color-accent);
 #search-word {
     flex: 1 1 250px;
     padding: 0.6rem 0.8rem;
-    border: 1px solid var(--border-color, #ccc);
+     border: 1px solid var(--color-border);
+      background: var(--color-surface); 
     border-radius: 8px;
     font-size: 1rem;
     resize: vertical;
     min-height: 40px;
-    background: var(--card-bg, #fff);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -725,28 +756,9 @@ stroke: var(--color-accent);
 /* Buttons */
 #search-button,
 #clear-search {
-    padding: 0.6rem 1rem;
-    border: none;
-    border-radius: 8px;
-    background: var(--accent-color, #6c5ce7);
-    color: #fff;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.1s ease;
+      font-size: 0.95rem;
 }
 
-#clear-search {
-    background: var(--muted-color, #888);
-}
-
-#search-button:hover,
-#clear-search:hover {
-    background: var(--accent-dark, #4a3db8);
-}
-
-#clear-search:hover {
-    background: var(--muted-dark, #666);
-}
 
 /* Status message */
 .posts-status {
@@ -891,7 +903,39 @@ stroke: var(--color-accent);
     text-align: center;
 }
 
-/* contact form */
+
+
+
+/*create posts section*/
+
+#create-post {
+    background-color: var(--color-surface);
+}
+
+#create-post-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 15px;
+    background-color: var(--color-background);
+}
+
+#create-post-form label {
+    margin: 14px 0 6px;
+    color: var(--color-text);
+    font-weight: bold;
+}
+
+
+
+#create-post-form .form-status + .button {
+    margin-top: 20PX;
+}
+
+
+/* contact form  section */
 #contact-form {
     display: flex;
     flex-direction: column;
@@ -1125,6 +1169,7 @@ textarea.form-control {
     }
 
     /* services */
+
     .services-container {
         grid-template-columns: repeat(2, 1fr);
         margin-right: 0;
@@ -1296,5 +1341,21 @@ textarea.form-control {
 
     .copyright {
         font-size: 0.9rem;
+    }
+
+        /* search bar: stack instead of wrapping mid-row on narrow screens */
+    .latest-posts-search-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #search-word {
+        flex: 1 1 auto;
+        width: 100%;
+    }
+
+    #search-button,
+    #clear-search {
+        flex: 1 1 auto;
     }
 }

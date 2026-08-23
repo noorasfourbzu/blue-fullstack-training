@@ -196,11 +196,11 @@ watch(
           @keydown.enter.prevent="runSearch"
         ></textarea>
 
-        <button id = "search-button" type="button" @click="runSearch">
+        <button id = "search-button"  class ="button" type="button" @click="runSearch">
           Search
         </button>
 
-        <button  id = "clear-search" type="button" @click="clearSearch">
+        <button  id = "clear-search" class = "button" type="button" @click="clearSearch">
           Clear
         </button>
       </div>
@@ -226,9 +226,7 @@ watch(
       <!-- Success: posts loaded, but the search matched nothing -->
       <div v-else-if="filteredPosts.length === 0" class="posts-status posts-status--empty">
         <p>No posts match "{{ searchInput }}".</p>
-        <button type="button" @click="clearSearch">
-          Clear search
-        </button>
+       
       </div>
 
       <!-- Success: posts to show -->

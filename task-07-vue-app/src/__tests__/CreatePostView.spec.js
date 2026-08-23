@@ -23,8 +23,7 @@ describe ('CreatePostView - validation',() =>{
     expect(wrapper.find('#userId-error').text()).toBe('User ID is required.')
     // overall form status flips to error
     expect(wrapper.find('#form-status').text()).toContain(
-      'Something went wrong submitting your post'
-    )
+      'Please check the highlighted fields above'    )
 
     // and no attempt was made to actually create the post
     expect(createPostSpy).not.toHaveBeenCalled()

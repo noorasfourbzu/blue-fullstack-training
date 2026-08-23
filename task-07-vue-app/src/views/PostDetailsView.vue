@@ -1,10 +1,11 @@
 <script setup>
-import{ref, watch, onMounted} from "vue";
+import{ref,computed,watch, onMounted} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import {usePost} from "../composables/usePost";
 import { usePostsStore } from "../stores/posts";
 import heartOutline from "../assets/heart-outline.png";
 import heartFilled from "../assets/heart-filled.png";
+import { previousRouteName } from "../router";
 
 const route = useRoute();
 const router = useRouter();
@@ -12,8 +13,16 @@ const postsStore = usePostsStore();
 
 const {post, loading , error , notFound , fetchPost} = usePost();
 
+
+const backTarget = computed(() =>
+  previousRouteName.value === "favorites" ? "/favorites" : "/posts"
+);
+const backLabel = computed(() =>
+  previousRouteName.value === "favorites" ? "Back to Favorites" : "Back to Posts"
+);
+
 function goBackToPosts(){
-  router.push("/posts");
+  router.push(backTarget.value);
 }
 
 // load the post for the current id as soon as the view mounts
@@ -57,7 +66,7 @@ watch(() => route.params.id,
     <!-- Invalid  or Not found ID -->
      <div  v-else-if = "notFound" class ="posts-status posts-status--empty">
       <p> we couldnt find a post with id "{{ route.params.id}} "</p>
-      <button type = "button" @click = "goBackToPosts" >  Back to Posts</button>
+      <button type = "button" @click = "goBackToPosts" >  {{ backLabel }}</button>
       </div>
 
        <!-- Success: post loaded -->
@@ -80,7 +89,7 @@ watch(() => route.params.id,
         <p class="post-details-body">{{ post.body }}</p>
 
         <button type="button" class="back-to-posts" @click="goBackToPosts">
-          &larr; Back to Posts
+          &larr; {{ backLabel }}
         </button>
 
       </article>
