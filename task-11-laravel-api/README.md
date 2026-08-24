@@ -1,5 +1,37 @@
 # Task 11 - Laravel API
 
+
+# Task 11 - Laravel API
+
+## Project Objective
+This project is Task 11 of the Blue IT Full-Stack Training Program.
+It is my first backend task, where I built a Laravel application, understood
+the project structure, and created JSON API endpoints using routes and
+controllers, including a dynamic route and a validated POST endpoint.
+
+## Versions Used
+- PHP: 8.3
+- Laravel Framework: ^13.17
+
+## Installation & How to Run Locally
+1. Clone the repository and go into the project folder:
+cd task-11-laravel-api
+
+2. Install dependencies:
+composer install
+
+3. Copy the example environment file:
+cp .env.example .env
+
+4. Generate the application key:
+php artisan key:generate
+
+5. Run the local server:
+php artisan serve
+
+6. The app runs at: http://127.0.0.1:8000
+
+
 ## Part 2 - Laravel Project Structure
 
 This section explains the main parts of the Laravel project and their purpose in my own words.
@@ -80,3 +112,39 @@ Composer is the package manager of PHP (like when we use npm for Vue). Both Comp
 Main config file 
 Composer: composer.json
 Artisan: .env and configuration file in /config
+
+
+## Implemented Endpoints
+
+| Method | Endpoint                     | Description                          |
+|--------|-------------------------------|---------------------------------------|
+| GET    | /api/health                   | Returns app status and message        |
+| GET    | /api/profile                  | Returns a sample trainee profile      |
+| GET    | /api/skills                   | Returns a list of technical skills    |
+| GET    | /api/training/tasks           | Returns all sample training tasks     |
+| GET    | /api/training/tasks/{id}      | Returns one task by ID, or 404        |
+| POST   | /api/contact                  | Validates and accepts a contact form  |
+
+## Example Responses
+
+**Success example — GET /api/health**
+```json
+{
+    "status": "ok",
+    "application": "Training API",
+    "message": "API is running successfully"
+}
+```
+
+**Error example — GET /api/training/tasks/99 (non-existing ID)**
+```json
+{
+    "message": "Training task was not found"
+}
+```
+
+## What I Learned
+In Laravel routing i got to know how API get connected to its Controller instead of stuffing everything in the route closure.I also learned how dynamic parameters can be used for searching a specific item and give error message if not found(404). i also learned how to do validation in laravel and how it would be catched, i though i need to build every validation method but i found already built in  methods. Finally ive learned how to use postman for the first time. 
+
+## Challenges / Blockers / Questions
+none for today. 
