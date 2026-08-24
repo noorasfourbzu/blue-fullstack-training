@@ -1,58 +1,82 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Task 11 - Laravel API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Part 2 - Laravel Project Structure
 
-## About Laravel
+This section explains the main parts of the Laravel project and their purpose in my own words.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### 1. app/
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+It contains the core code of the app and the backend logic; it contains  HTTP , Models, and providers directories.Additional files can be added later in here as we use Artisan commands to generate classes.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 2. app/Http/Controllers/
 
-## Learning Laravel
+This directory controls requests that come to the web server; it is a middle space between the web browser (where the view is displayed) and the database that contains requested data by the user
+Controllers can handle the requests related to the following operations, for example: 
+- CRUD operations 
+- user authentication 
+- api requests
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 3. routes/
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Simply, it routes and connects visitors with their wanted destination based on the URL they give
+it contains two files as well, console.php and web.php .
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+- console.php: handles quick command scripts for background work.
+- web.php: handles normal web pages that normal users visit.
 
-## Agentic Development
+---
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 4. config/
 
-```bash
-composer require laravel/boost --dev
+Contains all the application configuration files , it can be a good information source so you know what you are able to do with the applications you have .
 
-php artisan boost:install
-```
+---
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 5. database/
 
-## Contributing
+It controls the database of my project instead of directly using full apps to control data base such as MySQL, only setting connection with it and then manage the whole database from this directory.
+It contains other subdirectories; each does a specific work:
+- factories: factory that creates fake data for testing instead of doing this one by one
+- migrations: acts as a map for our database, contains schemas of the project
+- seeders: contains default data for instance usage
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 6. public/
 
-## Code of Conduct
+contains the index.php file; it's the entry point for all requests entering your application and configures autoloading. It also contains all your assets such as images, JavaScript, and CSS.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 7. storage/
 
-## Security Vulnerabilities
+contains compiled versions of the views , and is also used for caching and logs.
+It contains 3 other directories :
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. app: stores files generated or saved by the application,such as user uploaded files.
+2. framework :stores files and caches generated by the Laravel framework
+3. logs:contains the application log files, such as errors, warnings, and other events recorded while the application is running
+---
 
-## License
+### 8. tests/
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+contains unit tests and feature tests.
+Classes inside this directory must be suffixed with ‘Test’ word.
+to run files : there are three different ways, but to get  more detailed result and a beautifully presented result, use ‘php artisan test which is an artisan command.
+
+---
+
+### 9. .env and .env.example
+
+.env
+
+explains the behaviour of the application on a specific environment or machine with specifications.
+contains secret credentials such as app_key and the database password (DB_PASSWORD) THUS IT SHOULD NEVER BE COMMITED TO GITHUB.
+
+.env.example
+
+Works side by side with the env file but doesn't contain any sensitive data, so it can be commited into github and it works as a blueprint for the environment configuration.
+
+### 10. Artisan and Composer
+
+Composer is the package manager of PHP (like when we use npm for Vue). Both Composer and Artisan are important command line tools, but what makes one different from the other is that Composer manages external PHP packages and libraries, while Artisan manages internal tasks (such as database migrations)
+
+Main config file 
+Composer: composer.json
+Artisan: .env and configuration file in /config
