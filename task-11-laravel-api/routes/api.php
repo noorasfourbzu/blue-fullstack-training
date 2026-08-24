@@ -15,4 +15,6 @@ Route::get('/skills',[TrainingController::class,'skills']);
 
 
 Route::get('/training/tasks', [TrainingController::class,'tasks']);
+Route::get('/training/tasks/{id}', [TrainingController::class,'getTask']);
+
 

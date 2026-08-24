@@ -7,35 +7,10 @@ use Illuminate\Http\Request;
 class TrainingController extends Controller
 {
 
-public function profile(){
-     return response()->json([
-      'id' => 1,
-        'name' => 'Noor Asfour',
-        'training_track' => 'Full Stack Development',
-        'current_task' => 'Laravel API'
-    ]);
-}
-   
-
-public function skills(){
-    return response()->json([
-
-'Laravel',
-'PHP',
-'JavaScript',
-'API',
-'Git',
-'MySql'
-
-]);
-}
-
-
-public function tasks(){
-
- return response() ->json([
+private $trainingArray= 
 [
-    'id' => 1,
+    [
+    'id' =>1,
     'status' => 'done',
     'title' => 'HTML and CSS basics',
     'estimated_hours' => 8
@@ -72,8 +47,48 @@ public function tasks(){
 ]
 
 
-
+];
+public function profile(){
+     return response()->json([
+      'id' => 1,
+        'name' => 'Noor Asfour',
+        'training_track' => 'Full Stack Development',
+        'current_task' => 'Laravel API'
     ]);
+}
+   
+
+public function skills(){
+    return response()->json([
+
+'Laravel',
+'PHP',
+'JavaScript',
+'API',
+'Git',
+'MySql'
+
+]);
+}
+
+
+public function getTask($id){
+foreach($this->trainingArray as $task){
+    if($task['id'] == $id){
+        return response() ->json($task);
+    }
+
+   
+}
+
+ return response() ->json([
+        'message' => 'Training task was not found'
+    ],404);
+}
+
+public function tasks(){
+
+ return response() ->json($this->trainingArray);
 
 }
 }
