@@ -76,9 +76,7 @@ public function getTask($id){
 foreach($this->trainingArray as $task){
     if($task['id'] == $id){
         return response() ->json($task);
-    }
-
-   
+    } 
 }
 
  return response() ->json([

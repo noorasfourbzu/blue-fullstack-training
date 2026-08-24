@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\TrainingController;
+
 
 Route::get('/health', [HealthController::class, 'health']);
 
@@ -17,4 +19,4 @@ Route::get('/skills',[TrainingController::class,'skills']);
 Route::get('/training/tasks', [TrainingController::class,'tasks']);
 Route::get('/training/tasks/{id}', [TrainingController::class,'getTask']);
 
-
+Route:: post('/contact', [ContactController::class,'fillContactForm'] );
