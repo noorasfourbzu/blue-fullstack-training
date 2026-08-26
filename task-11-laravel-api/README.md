@@ -8,7 +8,11 @@ This project is the Backend Development part of  Blue  Full-Stack Training Progr
 
 the project structure, and created JSON API endpoints using routes and
 controllers, including a dynamic route and a validated POST endpoint.(Task 11).
-Also works on dealing with Laravel Database,Migrations , Eloquent Models and CRUD REST APIs
+
+(Task 12 )Continue the same project and converts it into a database-driven REST API using
+MySQL, Laravel migrations, Eloquent models, a seeder, and full CRUD endpoints with
+server side validation for the `posts` resource.
+
 
 
 
@@ -30,18 +34,33 @@ cp .env.example .env
 php artisan key:generate
 
 5. Set up the database:
-This project uses Mysql
+This project uses MySQL. Create a local MySQL database 
+
+
+Then update your local `.env` file (never commit this file) with your own values:
+ 
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=task11_laravel_api
+DB_USERNAME=[FILL: your local MySQL username]
+DB_PASSWORD=[FILL: your local MySQL password]
+```
+ 
+Confirm the connection works before migrating, e.g. by running `php artisan migrate:status` or by opening `php artisan tinker` and running `DB::connection()->getPdo();`.
+
 
 6. Run migrations:
-'php artisan migrate' , this creates the required database tabels
-note : 'php artisan migrate:fresh' is to Reset the database and run migrations again
+`php artisan migrate` , this creates the required database tabels
+note : `php artisan migrate:fresh` is to Reset the database and run migrations again
 
 7. Seed the database with sample posts(currently only 8 are available):
-'php artisan db:seed --class=PostSeeder', The PostSeeder creates several sample technology and science posts with different statuses such as draft and published.
+`php artisan db:seed --class=PostSeeder`, The PostSeeder creates several sample technology and science posts with different statuses such as draft and published.
 
 note: 
-'php artisan migrate:fresh'
-'php artisan db:seed --class=PostSeeder'
+`php artisan migrate:fresh`
+`php artisan db:seed --class=PostSeeder`
 this is to Reset the database and seed sample data
 
 8. Run the local server:
@@ -148,9 +167,21 @@ Artisan: .env and configuration file in /config
 | PUT   | /api/posts/{id}                | Update an existing post |
 | DELETE | /api/posts{id}                |  Delete an existing post|
 
+
+## Request Validation Rules (POST /api/posts, PUT /api/posts/{id})
+ 
+| Field  | Create (POST)                             | Update (PUT)                                          |
+|--------|---------------------------------------------|----------------------------------------------------------|
+| title  | required, string, max 200 chars              | sometimes, required if present, string, max 200 chars     |
+| body   | required, string, max 500 chars              | sometimes, required if present, string, max 500 chars     |
+| status | required, must be `draft` or `published`     | sometimes, required if present, must be `draft` or `published` |
+ 
+If validation fails, Laravel automatically returns a `422 Unprocessable Entity` response with an `errors` object (see example below) instead of saving the record.
+ 
+
 ## Example Responses
 
-**Success example — GET /api/health**
+**Success example : GET /api/health**
 ```json
 {
     "status": "ok",
@@ -159,7 +190,7 @@ Artisan: .env and configuration file in /config
 }
 ```
 
-**Error example — GET /api/training/tasks/99 (non-existing ID)**
+**Error example : GET /api/training/tasks/99 (non-existing ID)**
 ```json
 {
     "message": "Training task was not found"
@@ -167,8 +198,58 @@ Artisan: .env and configuration file in /config
 ```
 
 
+**Success example : POST /api/posts**
+```json
+{
+    "title": "New Advances in Artificial Intelligence",
+    "body": "Researchers are exploring new AI techniques that could improve how computers understand language, images, and complex data.",
+    "status": "published",
+    "updated_at": "2026-08-26T12:00:00.000000Z",
+    "created_at": "2026-08-26T12:00:00.000000Z",
+    "id": 9
+}
+```
+ 
+**Validation error example : POST /api/posts (missing/invalid fields)**
+```json
+{
+    "message": "The title field is required. (and 2 more errors)",
+    "errors": {
+        "title": ["The title field is required."],
+        "body": ["The body field is required."],
+        "status": ["The selected status is invalid."]
+    }
+}
+```
+ 
+**Not found example : GET /api/posts/999**
+```json
+{
+    "message": "Post was not found"
+}
+```
+ 
 
-## What I Learned
+
+
+## Testing the API
+ 
+All CRUD endpoints were tested using Postman
+covering:
+- Listing all posts
+- Viewing a single post
+- Creating a valid post
+- Attempting to create an invalid post and confirming a 422 validation error is returned
+- Updating a post
+- Deleting a post
+- Requesting a non-existing post and confirming a 404 response
+
+
+
+Database state was verified after create, update, and delete operations by checking the table directly in MySQL App 
+
+
+## What I Learned (for Task 11)
 In Laravel routing i got to know how API get connected to its Controller instead of stuffing everything in the route closure.I also learned how dynamic parameters can be used for searching a specific item and give error message if not found(404). i also learned how to do validation in laravel and how it would be catched, i though i need to build every validation method but i found already built in  methods. Finally ive learned how to use postman for the first time. 
 
 ## Challenges / Blockers / Questions
