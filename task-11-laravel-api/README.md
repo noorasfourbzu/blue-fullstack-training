@@ -4,10 +4,13 @@
 # Task 11 - Laravel API
 
 ## Project Objective
-This project is Task 11 of the Blue IT Full-Stack Training Program.
-It is my first backend task, where I built a Laravel application, understood
+This project is the Backend Development part of  Blue  Full-Stack Training Program.
+
 the project structure, and created JSON API endpoints using routes and
-controllers, including a dynamic route and a validated POST endpoint.
+controllers, including a dynamic route and a validated POST endpoint.(Task 11).
+Also works on dealing with Laravel Database,Migrations , Eloquent Models and CRUD REST APIs
+
+
 
 ## Versions Used
 - PHP: 8.3
@@ -26,7 +29,22 @@ cp .env.example .env
 4. Generate the application key:
 php artisan key:generate
 
-5. Run the local server:
+5. Set up the database:
+This project uses Mysql
+
+6. Run migrations:
+'php artisan migrate' , this creates the required database tabels
+note : 'php artisan migrate:fresh' is to Reset the database and run migrations again
+
+7. Seed the database with sample posts(currently only 8 are available):
+'php artisan db:seed --class=PostSeeder', The PostSeeder creates several sample technology and science posts with different statuses such as draft and published.
+
+note: 
+'php artisan migrate:fresh'
+'php artisan db:seed --class=PostSeeder'
+this is to Reset the database and seed sample data
+
+8. Run the local server:
 php artisan serve
 
 6. The app runs at: http://127.0.0.1:8000
@@ -124,6 +142,11 @@ Artisan: .env and configuration file in /config
 | GET    | /api/training/tasks           | Returns all sample training tasks     |
 | GET    | /api/training/tasks/{id}      | Returns one task by ID, or 404        |
 | POST   | /api/contact                  | Validates and accepts a contact form  |
+| GET   |  /api/posts                    |  Returns all posts |
+| GET   |  /api/posts/{id}               |  Returns one post by id |
+| POST  | /api/posts                     | Create a new post |
+| PUT   | /api/posts/{id}                | Update an existing post |
+| DELETE | /api/posts{id}                |  Delete an existing post|
 
 ## Example Responses
 
@@ -142,6 +165,8 @@ Artisan: .env and configuration file in /config
     "message": "Training task was not found"
 }
 ```
+
+
 
 ## What I Learned
 In Laravel routing i got to know how API get connected to its Controller instead of stuffing everything in the route closure.I also learned how dynamic parameters can be used for searching a specific item and give error message if not found(404). i also learned how to do validation in laravel and how it would be catched, i though i need to build every validation method but i found already built in  methods. Finally ive learned how to use postman for the first time. 

@@ -4,7 +4,7 @@ use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\TrainingController;
-use App\Http\Controllers\ PostController;
+use App\Http\Controllers\PostController;
 
 
 Route::get('/health', [HealthController::class, 'health']);
@@ -24,8 +24,8 @@ Route:: post('/contact', [ContactController::class,'fillContactForm'] );
 
 
 
-Route::get('/posts',[PostController::class,'']);
-Route::get('/posts/{id}',[PostController::class,'']);
-Route::post('/posts',[PostController::class,'']);
-Route::put('/posts/{id}',[PostController::class,'']);
-Route::delete('/posts/{id}',[PostController::class,'']);
+Route::get('/posts',[PostController::class,'getPosts']);
+Route::get('/posts/{id}',[PostController::class,'getPost']);
+Route::post('/posts',[PostController::class,'createPost']);
+Route::put('/posts/{id}',[PostController::class,'updatePost']);
+Route::delete('/posts/{id}',[PostController::class,'deletePost']);
