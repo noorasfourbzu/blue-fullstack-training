@@ -3,28 +3,59 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\post;
+use App\Models\Post;
+use App\Models\Category;
+use App\Http\Resources\PostResource;
 
 class PostController extends Controller
 {
     // Get /api/posts
-  public function getPosts(){
+  public function getPosts(Request $request){
 
-  $posts = post::all();
-  return response()->json($posts, 200);
+  //$posts = Post::with('category')->get();
+  $query = Post::with('category');  // no get here yet becuase we want to get the filters 
+
+
+
+  $allowedSortFields = ['created_at', 'title'];
+  $allowedSortDirections = ['asc', 'desc'];
+  $sortBy = $request->query('sort_by', 'created_at');
+$sortDirection = $request->query('sort_direction', 'desc');
+
+
+if (in_array($sortBy, $allowedSortFields) && in_array($sortDirection, $allowedSortDirections)) {
+    $query->orderBy($sortBy, $sortDirection);
+}
+
+ if($request ->filled('search')){
+  $query ->where('title','like','%' . $request ->search .'%');  // allows to do this GET /api/posts?search=  and search inside the title 
+ }
+
+ if ($request->filled('status')) {
+    $query->where('status', $request->status); // GET /api/posts?status=published
+}
+// if ($request->filled('category_id')) {
+//     $query->where('category_id', $request->category_id);
+// }
+
+
+
+$posts = $query -> get();
+ return PostResource::collection($posts);
+
   }
 
   // GET /api/posts/{id}
   public function getPost($id){
 
-  $post = post::find($id);
+  $post = Post::with('category')->find($id);
 
   if(!$post ){
     return response()->json(['message' => 'Post was not found'],404);
   }
 
 
-   return response() -> json($post,200);
+   return new PostResource($post);
   }
 
 
@@ -38,10 +69,11 @@ $validated = $request->validate([
     'title' => 'required|string|max:200',
     'body' => 'required|string|max:500',
     'status'=> 'required|in:draft,published',
+    'category_id' => 'required|exists:categories,id',
 ]);
 
 
-$post = post::create($validated);
+$post = Post::create($validated);
 
 return response()->json($post,201);
   }
@@ -50,7 +82,7 @@ return response()->json($post,201);
   // PUT /api/posts/{id}
  public function updatePost(Request $request, $id){
 
-    $wantedPost = post::find($id);
+    $wantedPost = Post::find($id);
 
 
 
@@ -64,6 +96,7 @@ return response()->json($post,201);
   'title' => 'sometimes|required|string|max:200',
     'body' => 'sometimes|required|string|max:500',
     'status'=> 'sometimes|required|in:draft,published',
+    'category_id' => 'sometimes|required|exists:categories,id',
 
     ]);
 
@@ -77,7 +110,7 @@ return response()->json($post,201);
 // Delete /api/posts/{id}
   public function deletePost($id){
 
-  $wantedPost = post::find($id);
+  $wantedPost = Post::find($id);
 
   if(!$wantedPost){
     return response() ->json([
