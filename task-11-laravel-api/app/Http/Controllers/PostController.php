@@ -81,6 +81,7 @@ $validated = $request->validate([
 $post = Post::create($validated);
 
 return response()->json($post,201);
+
   }
 
 

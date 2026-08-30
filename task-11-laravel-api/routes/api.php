@@ -6,6 +6,7 @@ use App\Http\Controllers\HealthController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CategoryController;
+use App\http\Controllers\RegisterController;
 
 
 Route::get('/health', [HealthController::class, 'health']);
@@ -34,3 +35,8 @@ Route::delete('/posts/{id}',[PostController::class,'deletePost']);
 
 Route::get('/categories',[CategoryController::class,'getCategories']);
 Route::get('/categories/{id}',[CategoryController::class,'getCategory']);
+
+Route::get('/me',);
+Route::post('/register',[RegisterController::class,'register']);
+Route::post('/logout',[]);
+Route::post('/login',[]);

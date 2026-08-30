@@ -15,8 +15,9 @@ class ContactController extends Controller
  'subject' => 'nullable',
  'message' =>'required|min:10|max:100',
 
-
  ]);
+
+ 
  return response() -> json([
     'success' => true,
     'message' => 'done sending contact message successfully',

@@ -11,11 +11,8 @@ class PostSeeder extends Seeder
     /**
      * Run the database seeds.
      * 
-     * 'Technology',
-        'Business',
-        'Education',
-        'Science',
-     */
+     ***/
+    
     public function run(): void
     {
 
