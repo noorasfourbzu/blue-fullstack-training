@@ -6,7 +6,12 @@ use App\Http\Controllers\HealthController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CategoryController;
-use App\http\Controllers\RegisterController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\MeController;
+use Illuminate\Support\Facades\Request;
+
 
 
 Route::get('/health', [HealthController::class, 'health']);
@@ -36,7 +41,13 @@ Route::delete('/posts/{id}',[PostController::class,'deletePost']);
 Route::get('/categories',[CategoryController::class,'getCategories']);
 Route::get('/categories/{id}',[CategoryController::class,'getCategory']);
 
-Route::get('/me',);
+Route::middleware('auth:sanctum')->get(
+    '/me',
+    [MeController::class, 'me']
+);
 Route::post('/register',[RegisterController::class,'register']);
-Route::post('/logout',[]);
-Route::post('/login',[]);
+Route::middleware('auth:sanctum')->post(
+    '/logout',
+    [LogoutController::class, 'logout']
+);
+Route::post('/login',[LoginController::class, 'login']);
