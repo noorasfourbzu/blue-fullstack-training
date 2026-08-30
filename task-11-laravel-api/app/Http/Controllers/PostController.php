@@ -16,6 +16,9 @@ class PostController extends Controller
   $query = Post::with('category');  // no get here yet becuase we want to get the filters 
 
 
+  $request -> validate([
+  'per_page' => 'sometimes|integer|min:1|max:50',
+]);
 
   $allowedSortFields = ['created_at', 'title'];
   $allowedSortDirections = ['asc', 'desc'];
@@ -34,13 +37,15 @@ if (in_array($sortBy, $allowedSortFields) && in_array($sortDirection, $allowedSo
  if ($request->filled('status')) {
     $query->where('status', $request->status); // GET /api/posts?status=published
 }
-// if ($request->filled('category_id')) {
-//     $query->where('category_id', $request->category_id);
-// }
+if ($request->filled('category_id')) {
+     $query->where('category_id', $request-> category_id);
+}
 
 
 
-$posts = $query -> get();
+
+$perPage = $request -> query('per_page',3);
+$posts = $query -> paginate($perPage);
  return PostResource::collection($posts);
 
   }

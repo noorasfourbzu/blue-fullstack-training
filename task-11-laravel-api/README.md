@@ -13,6 +13,8 @@ controllers, including a dynamic route and a validated POST endpoint.(Task 11).
 MySQL, Laravel migrations, Eloquent models, a seeder, and full CRUD endpoints with
 server side validation for the `posts` resource.
 
+(Task 13) The API was extended by adding category table(categories in db), relation between Category and Post, Resources classes for consistence responses (in JSON), sorting, filtering and finaly Pagination on the list of posts. 
+
 
 
 
@@ -151,6 +153,22 @@ Composer: composer.json
 Artisan: .env and configuration file in /config
 
 
+
+## Categories 
+
+Added categories table(id , name , slug , created_at, updated_at).
+Each post will be part of just one category , and we achieve this by having the posts table have a category_id as a forieng key to the categories table
+
+**Relationships:**
+- `Category::posts()` → a category `hasMany` posts
+- `Post::category()` → a post `belongsTo` a category
+
+
+
+
+
+
+
 ## Implemented Endpoints
 
 | Method | Endpoint                     | Description                          |
@@ -166,6 +184,8 @@ Artisan: .env and configuration file in /config
 | POST  | /api/posts                     | Create a new post |
 | PUT   | /api/posts/{id}                | Update an existing post |
 | DELETE | /api/posts{id}                |  Delete an existing post|
+| GET    | /api/categories             | return all categories                                     |
+| GET    | /api/categories/{id}        | returns one category by id, or 404 
 
 
 ## Request Validation Rules (POST /api/posts, PUT /api/posts/{id})
@@ -176,8 +196,48 @@ Artisan: .env and configuration file in /config
 | body   | required, string, max 500 chars              | sometimes, required if present, string, max 500 chars     |
 | status | required, must be `draft` or `published`     | sometimes, required if present, must be `draft` or `published` |
  
-If validation fails, Laravel automatically returns a `422 Unprocessable Entity` response with an `errors` object (see example below) instead of saving the record.
+If validation fails, Laravel automatically returns a `422 Unprocessable Entity` response with an `errors` object (see example below) instead of saving the record. This is also applied for the `category_id`
  
+
+## Posts Filtering, Sorting & Pagination
+
+
+| Parameter       | Example                          | What it does                                              |
+|-----------------|-----------------------------------|--------------------------------------------------------------|
+| search          | `http://127.0.0.1:8000/api/posts?search=laravel`                 | Searches posts with titles that containes the searched word          |
+| status          | `http://127.0.0.1:8000/api/posts?status=published`               | Filters posts by it status (published or draft)     |
+| category_id     | `http://127.0.0.1:8000/api/posts?category_id=2`                  | Filters posts based on a spcesif category               |
+| sort_by         | `http://127.0.0.1:8000/api/posts?sort_by=title`                  | Sorts by `created_at` (default) or by`title`                    |
+| sort_direction  | `http://127.0.0.1:8000/api/posts?sort_direction=asc`             | `asc` or `desc` (`desc` is default )                            |
+| per_page        | `http://127.0.0.1:8000/api/posts?per_page=5`                     | Number of posts per page (max:50 , min:1, default :3)        |
+| page            | `http://127.0.0.1:8000/api/posts?page=2`                         | Returns specific page of the results pages  |
+
+
+`sort_by` and `sort_direction` are checked by the whitelist before using them inorder to avoid arbitrary columns.
+
+
+
+
+
+## API Resources
+Resources classes for both Posts and Categories are used to formate the returning message instead of returning raw Eloquent models.
+
+
+
+**PostResource** returns:
+- id
+- title
+- body
+- status
+- category(nested)
+- created_at
+- updated_at
+
+
+**CategoryResource** returns:
+- id
+- name
+
 
 ## Example Responses
 
@@ -197,18 +257,24 @@ If validation fails, Laravel automatically returns a `422 Unprocessable Entity` 
 }
 ```
 
-
-**Success example : POST /api/posts**
+**Success example: GET /api/posts/1**
 ```json
 {
-    "title": "New Advances in Artificial Intelligence",
-    "body": "Researchers are exploring new AI techniques that could improve how computers understand language, images, and complex data.",
-    "status": "published",
-    "updated_at": "2026-08-26T12:00:00.000000Z",
-    "created_at": "2026-08-26T12:00:00.000000Z",
-    "id": 9
+    "data": {
+        "id": 1,
+        "title": "New Advances in Artificial Intelligence",
+        "body": "Researchers are exploring new artificial intelligence techniques...",
+        "status": "published",
+        "category": {
+            "id": 1,
+            "name": "Technology"
+        },
+        "created_at": "2026-08-26T12:00:00.000000Z",
+        "updated_at": "2026-08-26T12:00:00.000000Z"
+    }
 }
 ```
+
  
 **Validation error example : POST /api/posts (missing/invalid fields)**
 ```json
@@ -221,6 +287,17 @@ If validation fails, Laravel automatically returns a `422 Unprocessable Entity` 
     }
 }
 ```
+
+**Validation error example: POST /api/posts (invalid category_id)**
+```json
+{
+    "message": "The selected category id is invalid.",
+    "errors": {
+        "category_id": ["The selected category id is invalid."]
+    }
+}
+```
+
  
 **Not found example : GET /api/posts/999**
 ```json
@@ -236,13 +313,19 @@ If validation fails, Laravel automatically returns a `422 Unprocessable Entity` 
  
 All CRUD endpoints were tested using Postman
 covering:
-- Listing all posts
+- Listing all posts (with category information)
 - Viewing a single post
-- Creating a valid post
-- Attempting to create an invalid post and confirming a 422 validation error is returned
-- Updating a post
+- Creating a valid post (with a valid category_id)
+- Attempting to create an invalid post(with unvalid category_id) and confirming a 422 validation error is returned
+- Searching using post title 
+- Filterung using post status 
+- Combine Filtering (status+ category_id)
+- Sorting using the post created_at , title, oreder(asc and desc)
+- Seperating results into multible pages using Pagination 
+- Updating a post 
 - Deleting a post
 - Requesting a non-existing post and confirming a 404 response
+- Requesting a non-existing post/category and confirming a 404 response
 
 
 
