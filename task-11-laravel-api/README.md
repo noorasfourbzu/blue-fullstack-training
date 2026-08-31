@@ -51,7 +51,7 @@ DB_USERNAME=[FILL: your local MySQL username]
 DB_PASSWORD=[FILL: your local MySQL password]
 ```
  
-Confirm the connection works before migrating, e.g. by running `php artisan migrate:status` or by opening `php artisan tinker` and running `DB::connection()->getPdo();`.
+Confirm the connection works before migrating, e.g. by running `php artisan migrate:stastus` or by opening `php artisan tinker` and running `DB::connection()->getPdo();`.
 
 
 6. Run migrations:
@@ -65,6 +65,13 @@ note:
 `php artisan migrate:fresh`
 `php artisan db:seed --class=PostSeeder`
 this is to Reset the database and seed sample data
+
+`php artisan db:seed --class=UserSeeder`
+seeds test users, and without any personal or secret info 
+
+`php artisan migrate:fresh --seed`
+seeds everything together (seeders listed in `DatabaseSeeder.php`)
+
 
 8. Run the local server:
 php artisan serve
@@ -185,8 +192,12 @@ Each post will be part of just one category , and we achieve this by having the 
 | POST  | /api/posts                     | Create a new post |
 | PUT   | /api/posts/{id}                | Update an existing post |
 | DELETE | /api/posts{id}                |  Delete an existing post|
-| GET    | /api/categories             | return all categories                                     |
-| GET    | /api/categories/{id}        | returns one category by id, or 404 
+| GET    | /api/categories             | return all categories|
+| GET    | /api/categories/{id}        | returns one category by id, or 404 |
+| POST   | /api/register            | Register a new user | 
+| POST   | /api/login               | Login, returns a token | 
+| POST   | /api/logout         | Logout, deletes the current token | 
+| GET    | /api/me               | Returns the logged in user info  | 
 
 
 ## Request Validation Rules (POST /api/posts, PUT /api/posts/{id})
@@ -227,6 +238,7 @@ Resources classes for both Posts and Categories are used to formate the returnin
 
 **PostResource** returns:
 - id
+- user(nested id and name only)
 - title
 - body
 - status
@@ -238,6 +250,98 @@ Resources classes for both Posts and Categories are used to formate the returnin
 **CategoryResource** returns:
 - id
 - name
+
+
+
+
+
+## Authentication & Authorization
+
+This section explains how login/tokens work and who is allowed to do what.
+
+### Setup
+- Authentication uses Laravel Sanctum for token-based authentication.
+- Sanctum stores access tokens in the personal_access_tokens table.
+- Authenticated requests use the generated Bearer token.
+
+
+### Register, Login, Logout, /api/me
+| Method | Endpoint       | Auth required? | What it does                                  |
+|--------|----------------|-----------------|------------------------------------------------|
+| POST   | /api/register  | No              | Creates a new user (password is hashed)        |
+| POST   | /api/login     | No              | Checks email/password, returns a token if correct |
+| POST   | /api/logout    | Yes             | Deletes the current token (logs the user out)   |
+| GET    | /api/me        | Yes             | Returns the logged-in user's basic info         |
+ 
+
+
+ ### Hoe to send the Bearer Token in Postman
+
+ 1. call `POST/api/login`  with valid email and password 
+ 2. Copy the token value from the response 
+ 3. Go to **Authorization** in post man and tab **Bearer Token** and paste the token
+ 
+
+
+### Which Posts Endpoints Are Protected 
+
+
+
+| Method | Endpoint             | Protected? | 
+|--------|------------------------|:----------:| 
+| GET    | /api/posts             | Public | 
+| GET    | /api/posts/{id}        | Public | 
+| POST   | /api/posts             | Yes | 
+| PUT    | /api/posts/{id}        | Yes | 
+| DELETE | /api/posts/{id}        | Yes | 
+
+Notes:
+- Register does **not** log the user in automatically. You still need to call `/api/login` after registering to get a token.
+- Passwords are never sent back in any response
+
+
+
+If you call a protected endpoint without a valid token, you get a `401 Unauthenticated` response
+
+### Post Ownership
+ 
+- `posts` table has a `user_id` column (foreign key to `users`).
+- `User hasMany Posts`, `Post belongsTo User`.
+- When a logged-in user creates a post, `user_id` is set automatically from their token — the client can **not** send their own `user_id` to claim a post.
+### Authorization Rules
+ 
+- Authorization is handled by `PostPolicy`
+- A user can only `update` or `delete` a post **if that post's `user_id` matches their own id**.
+
+
+### Authorization Rules 
+- PostPolicy controls authorization 
+- Users can only update\delete their own posts
+- Unauthorize actions return `403 Forbidden`
+- GET posts are public 
+
+
+
+### Example: Unauthenticated Response
+ 
+Calling a protected route with no token or an invalid token:
+```json
+{
+    "message": "Unauthenticated."
+}
+```
+Status code: `401`
+ 
+### Example: Forbidden Response
+ 
+Trying to update/delete another user's post ( User B tries to edit User A's post):
+```json
+{
+    "message": "This action is unauthorized."
+}
+```
+Status code: `403`
+
 
 
 ## Example Responses
