@@ -6,14 +6,19 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Category;
 use App\Http\Resources\PostResource;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 
 class PostController extends Controller
 {
+
+use AuthorizesRequests;
+
     // Get /api/posts
   public function getPosts(Request $request){
-
   //$posts = Post::with('category')->get();
-  $query = Post::with('category');  // no get here yet becuase we want to get the filters 
+  $query = Post::with(['category', 'user']);  
+  
 
 
   $request -> validate([
@@ -78,7 +83,18 @@ $validated = $request->validate([
 ]);
 
 
-$post = Post::create($validated);
+//1
+$post = new Post($validated);
+$post->user_id = auth()->user()->id; 
+$post -> save();
+
+// 
+// $user_id ["user_id"] = request()-> user() -> id;
+// foreach($validated as $key => $value){
+// echo $key ."=>" .$value . "\n";
+
+// }
+// $post = Post::create($validated );
 
 return response()->json($post,201);
 
@@ -97,6 +113,8 @@ return response()->json($post,201);
                 'message' => 'Post not found'
             ], 404);
     }
+
+    $this -> authorize('update', '$wantedPost');
 
     $validated = $request ->validate([
   'title' => 'sometimes|required|string|max:200',
@@ -123,6 +141,9 @@ return response()->json($post,201);
         'message'=>'Post was not found'
     ],404);
   }
+
+      $this -> authorize('update', '$wantedPost');
+
 
   $result = $wantedPost -> delete();
 

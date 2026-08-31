@@ -10,7 +10,6 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\MeController;
-use Illuminate\Support\Facades\Request;
 
 
 
@@ -33,21 +32,25 @@ Route:: post('/contact', [ContactController::class,'fillContactForm'] );
 
 Route::get('/posts',[PostController::class,'getPosts']);
 Route::get('/posts/{id}',[PostController::class,'getPost']);
-Route::post('/posts',[PostController::class,'createPost']);
-Route::put('/posts/{id}',[PostController::class,'updatePost']);
-Route::delete('/posts/{id}',[PostController::class,'deletePost']);
 
 
 Route::get('/categories',[CategoryController::class,'getCategories']);
 Route::get('/categories/{id}',[CategoryController::class,'getCategory']);
 
-Route::middleware('auth:sanctum')->get(
-    '/me',
-    [MeController::class, 'me']
-);
+
+
 Route::post('/register',[RegisterController::class,'register']);
-Route::middleware('auth:sanctum')->post(
-    '/logout',
-    [LogoutController::class, 'logout']
-);
 Route::post('/login',[LoginController::class, 'login']);
+
+
+Route::middleware('auth:sanctum')->group(function(){
+    Route::get('/me',  [MeController::class, 'me']);
+    Route::post('/logout',   [LogoutController::class, 'logout']);
+    Route::post('/posts',[PostController::class,'createPost']);
+
+    Route::put('/posts/{id}',[PostController::class,'updatePost']);
+    Route::delete('/posts/{id}',[PostController::class,'deletePost']);
+
+
+
+});

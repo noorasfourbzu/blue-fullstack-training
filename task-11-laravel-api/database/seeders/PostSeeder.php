@@ -6,6 +6,8 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Post;
 use App\Models\Category;
+use App\Models\User;
+use Illuminate\Support\Facades\Log;
 class PostSeeder extends Seeder
 {
     /**
@@ -15,6 +17,13 @@ class PostSeeder extends Seeder
     
     public function run(): void
     {
+
+
+    // debug point  
+    $user  = User::first();
+    if(! $user ){
+   Log::debug('user isnt found');
+    }
 
 
     $technology = Category::where('slug', 'technology')->first();
@@ -27,6 +36,7 @@ class PostSeeder extends Seeder
             'body' => 'Researchers are exploring new artificial intelligence techniques that could improve how computers understand language, images, and complex data.',
             'status' => 'published',
             'category_id'=> $technology -> id,
+            'user_id' => 1
 
         ]);
 
@@ -35,6 +45,8 @@ class PostSeeder extends Seeder
             'body' => 'Scientists are working on new solar technologies designed to improve energy efficiency and make renewable energy systems more practical.',
             'status' => 'published',
                         'category_id'=> $business -> id,
+                                    'user_id' => 1
+
 
         ]);
 
@@ -43,6 +55,8 @@ class PostSeeder extends Seeder
             'body' => 'The open source community continues to release new tools and libraries that make it easier for developers to experiment with artificial intelligence applications.',
             'status' => 'published',
             'category_id'=> $education -> id,
+                        'user_id' => 1
+
 
         ]);
 
@@ -51,6 +65,8 @@ class PostSeeder extends Seeder
             'body' => 'Astronomers are studying observations from powerful telescopes to better understand the atmosphere and conditions of planets outside our solar system.',
             'status' => 'draft',
                         'category_id'=> $science -> id,
+                                    'user_id' => 1
+
 
         ]);
 
@@ -59,6 +75,8 @@ class PostSeeder extends Seeder
             'body' => 'Computer scientists and engineers are investigating new chip designs that could improve computing performance while reducing energy consumption.',
             'status' => 'published',
                         'category_id'=> $technology -> id,
+                                    'user_id' => 1
+
 
         ]);
 
@@ -67,6 +85,8 @@ class PostSeeder extends Seeder
             'body' => 'Researchers continue to investigate quantum computing methods that could eventually help solve certain problems that are difficult for traditional computers.',
             'status' => 'draft',
                         'category_id'=> $business -> id,
+                                    'user_id' => 1
+
 
         ]);
 
@@ -75,6 +95,8 @@ class PostSeeder extends Seeder
             'body' => 'Security researchers continue to monitor emerging online threats and recommend stronger security practices for users and organizations.',
             'status' => 'published',
                         'category_id'=> $education -> id,
+                                    'user_id' => 1
+
 
         ]);
 
@@ -83,6 +105,8 @@ class PostSeeder extends Seeder
             'body' => 'New scientific studies are helping researchers understand how changing temperatures and environmental conditions affect ecosystems around the world.',
             'status' => 'draft',
                         'category_id'=> $science -> id,
+                                    'user_id' => 1
+
 
         ]);
     }
