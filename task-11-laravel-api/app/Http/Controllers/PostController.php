@@ -58,7 +58,7 @@ $posts = $query -> paginate($perPage);
   // GET /api/posts/{id}
   public function getPost($id){
 
-  $post = Post::with('category')->find($id);
+  $post = Post::with(['category','user'])->find($id);
 
   if(!$post ){
     return response()->json(['message' => 'Post was not found'],404);
@@ -85,9 +85,9 @@ $validated = $request->validate([
 
 //1
 $post = new Post($validated);
-$post->user_id = auth()->user()->id; 
+$post->user_id = $request->user()->id; 
 $post -> save();
-
+$post->load(['user', 'category']);
 // 
 // $user_id ["user_id"] = request()-> user() -> id;
 // foreach($validated as $key => $value){
@@ -96,7 +96,7 @@ $post -> save();
 // }
 // $post = Post::create($validated );
 
-return response()->json($post,201);
+return new PostResource($post);
 
   }
 
@@ -114,7 +114,13 @@ return response()->json($post,201);
             ], 404);
     }
 
-    $this -> authorize('update', '$wantedPost');
+   
+// return response()->json([
+//     'authenticated_user_id' => auth()->id(),
+//     'post_owner_id' => $wantedPost->user_id,
+// ]);
+  $this -> authorize('update', $wantedPost);
+
 
     $validated = $request ->validate([
   'title' => 'sometimes|required|string|max:200',
@@ -125,8 +131,10 @@ return response()->json($post,201);
     ]);
 
     $wantedPost -> update($validated);
+      $wantedPost->load(['user', 'category']);
 
-    return response() -> json($wantedPost,200);
+
+    return new PostResource( $wantedPost );
 
 
 
@@ -142,9 +150,13 @@ return response()->json($post,201);
     ],404);
   }
 
-      $this -> authorize('update', '$wantedPost');
+// return response()->json([
+//     'authenticated_user_id' => auth()->id(),
+//     'post_owner_id' => $wantedPost->user_id,
+//     'delete_policy_result' => auth()->user()->can('delete', $wantedPost),
+// ]);
 
-
+      $this -> authorize('delete', $wantedPost);
   $result = $wantedPost -> delete();
 
   if($result){

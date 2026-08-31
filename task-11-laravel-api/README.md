@@ -15,6 +15,7 @@ server side validation for the `posts` resource.
 
 (Task 13) The API was extended by adding category table(categories in db), relation between Category and Post, Resources classes for consistence responses (in JSON), sorting, filtering and finaly Pagination on the list of posts. 
 
+(Task 14 ) Authentication(register, login\out , me route with user info) and Authorization were added in this task.So now the app only let authenticated users in , and each user can add/update/delete his own posts only while every one can see all the posts loaded.
 
 
 
