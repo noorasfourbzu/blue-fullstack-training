@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onUnmounted, watch } from "vue";
+import { ref, computed, watch } from "vue";
 import PostCard from "./PostCard.vue";
 import { useRoute, useRouter } from "vue-router";
 
@@ -8,10 +8,12 @@ const props = defineProps({
   loading: { type: Boolean, required: true },
   error: { type: Boolean, required: true },
   fetchPosts: { type: Function, required: true },
+  pagination: {type: Object, required:  true},
+  goToPage: {type: Function,  required:true}
 });
 
-// how many cards get added per batch
-const CARDS_PER_BATCH = 10;
+//  how many cards get added per batch
+// const CARDS_PER_BATCH = 10;
 
 const route = useRoute();
 const router =  useRouter();
@@ -40,63 +42,71 @@ const searchInput = ref(typeof route.query.q === "string" ? route.query.q : "");
 // the URL query, and highlighting in PostCard
 const appliedSearch = ref(searchInput.value);
 // how many posts from the (filtered) list are currently revealed
-const currentIndex = ref(CARDS_PER_BATCH);
+//const currentIndex = ref(CARDS_PER_BATCH);
 
 
 
 
 
-// template ref for the sentinel element the IntersectionObserver watches
-const sentinelRef = ref(null);
-let scrollObserver = null;
+// // template ref for the sentinel element the IntersectionObserver watches
+// const sentinelRef = ref(null);
+// let scrollObserver = null;
 
+
+
+//******* come to fix it later: this only filters the current page not all pages together */
 // title only search filter derived from posts/appliedSearch
 const filteredPosts = computed(() => {
   const query = appliedSearch.value.trim().toLowerCase();
   if (!query) return props.posts;
   return props.posts.filter((post) => post.title.toLowerCase().includes(query));
 });
+
+
 // while searching show every match at once 
 // while browsing normally only reveal posts up to currentIndex 
+
 const visiblePosts = computed(() => {
-  if (isSearching.value) return filteredPosts.value;
-  return filteredPosts.value.slice(0, currentIndex.value);
+ return filteredPosts.value;
+
+  // if (isSearching.value) return filteredPosts.value;
+  // return filteredPosts.value.slice(0, currentIndex.value);
 });
 
 const isSearching = computed(() => appliedSearch.value.trim().length > 0);
 
-const hasMore = computed(
-  () => !isSearching.value && currentIndex.value < filteredPosts.value.length
-);
+// const hasMore = computed(
+//   () => !isSearching.value && currentIndex.value < filteredPosts.value.length
+// );
 
-function loadMore() {
-  if (!hasMore.value) return;
-  currentIndex.value = Math.min(
-    currentIndex.value + CARDS_PER_BATCH,
-    filteredPosts.value.length
-  );
-}
+// function loadMore() {
+//   if (!hasMore.value) return;
+//   currentIndex.value = Math.min(
+//     currentIndex.value + CARDS_PER_BATCH,
+//     filteredPosts.value.length
+//   );
+// }
 
-// re create the observer whenever the sentinel element mounts/unmounts.
-// the sentinel only exists in the DOM while hasMore is true so this runs again automatically once more posts are revealed
-watch(sentinelRef, (el) => {
-  if (scrollObserver) scrollObserver.disconnect();
-  if (!el) return;
+// // re create the observer whenever the sentinel element mounts/unmounts.
+// // the sentinel only exists in the DOM while hasMore is true so this runs again automatically once more posts are revealed
+// watch(sentinelRef, (el) => {
+//   if (scrollObserver) scrollObserver.disconnect();
+//   if (!el) return;
 
-  scrollObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) loadMore();
-      });
-    },
-    { rootMargin: "0px 0px 200px 0px", threshold: 0.1 }
-  );
-  scrollObserver.observe(el);
-});
+//   scrollObserver = new IntersectionObserver(
+//     (entries) => {
+//       entries.forEach((entry) => {
+//         if (entry.isIntersecting) loadMore();
+//       });
+//     },
+//     { rootMargin: "0px 0px 200px 0px", threshold: 0.1 }
+//   );
+//   scrollObserver.observe(el);
+// });
 
-onUnmounted(() => {
-  if (scrollObserver) scrollObserver.disconnect();
-});
+// onUnmounted(() => {
+//   if (scrollObserver) scrollObserver.disconnect();
+// });
 
 // function clearSearch() {
 //   searchWord.value = "";
@@ -136,19 +146,15 @@ onUnmounted(() => {
 // runs the search: only called when the Search button is clicked
 function runSearch() {
   appliedSearch.value = searchInput.value.trim();
-  currentIndex.value = CARDS_PER_BATCH;
 }
 
 function clearSearch() {
   searchInput.value = "";
   appliedSearch.value = "";
-  currentIndex.value = CARDS_PER_BATCH; // restart lazy loading from the first batch
 }
 
 
-watch(() => props.posts, () => {
-  currentIndex.value = CARDS_PER_BATCH; 
-});
+
 
 // search is applied (button clicked / cleared) -> push it into the URL query string
 watch(appliedSearch, (newValue) => {
@@ -236,8 +242,8 @@ watch(
             {{ filteredPosts.length }} result{{ filteredPosts.length === 1 ? "" : "s" }}
           </span>
           <span v-else>
-            {{ visiblePosts.length }} of {{ filteredPosts.length }} posts shown
-          </span>
+ Page {{ pagination.currentPage }} of {{ pagination.lastPage }}
+ --- {{ pagination.total }} posts total          </span>
         </p>
 
         <div class="latest-posts-container">
@@ -249,17 +255,41 @@ watch(
           />
         </div>
 
-        <!-- Sentinel the IntersectionObserver watches to trigger the next batch -->
-        <div
-          v-if="hasMore"
-          ref="sentinelRef"
-          class="posts-loading-more"
-        >
-          Loading more…
-        </div>
-        <p v-else-if="!isSearching" class="posts-end-message">
-          You've reached the end of the list
-        </p>
+
+
+
+        <div v-if="pagination.lastPage > 1" class="pagination">
+
+  <button
+    type="button"
+    :disabled="pagination.currentPage === 1 || loading"
+    @click="goToPage(pagination.currentPage - 1)"
+  >
+    Previous
+  </button>
+
+  <button
+    v-for="page in pagination.lastPage"
+    :key="page"
+    type="button"
+  
+   :class="{ active: page === pagination.currentPage }"
+    :disabled="loading"
+    @click="goToPage(page)"
+  >
+    {{ page }}
+  </button>
+
+  <button
+    type="button"
+    :disabled="pagination.currentPage === pagination.lastPage || loading"
+    @click="goToPage(pagination.currentPage + 1)"
+  >
+    Next
+  </button>
+
+</div>
+  
       </template>
     </div>
   </section>

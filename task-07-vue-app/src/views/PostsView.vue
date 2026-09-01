@@ -17,5 +17,7 @@ onMounted(()=>{
     :loading="store.loading"
     :error="store.error"
     :fetch-posts="store.fetchPosts"
+    :pagination="store.pagination"
+    :go-to-page="store.goToPage"
   />
   </template>

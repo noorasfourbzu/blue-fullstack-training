@@ -9,6 +9,13 @@ export const usePostsStore = defineStore('posts', () =>{
 const posts = ref([])
 const loading = ref(false)
 const error = ref(false)
+
+const pagination = ref({
+  currentPage:1,
+  lastPage: 1,
+  perPage: 0,
+  total: 0
+})
 const notFound  = ref(null)
 const favoriteIds = ref([])
 const savedIds = ref([])
@@ -28,14 +35,23 @@ const favoriteCount = computed(() => favoriteIds.value.length)
 
 
  // actions
-async function fetchPosts(){
+async function fetchPosts(page = 1){
+  
   loading.value = true
   error.value = false
 
   try{
-    posts.value = await getPosts()
+    const response = await getPosts(page)
+    posts.value = response.data
+    pagination.value = {
+      currentPage: response.meta.current_page,
+      lastPage: response.meta.last_page,
+      perPage: response.meta.per_page,
+      total: response.meta.total
+    }
   }
   catch(err){
+    console.error('failed to fetch posts', err)
     error.value = true
     posts.value = []
   }
@@ -48,6 +64,10 @@ function retryFetch(){
     fetchPosts()
 }
 
+
+function goToPage(page){
+  fetchPosts(page)
+}
 function toggleFavorite(postId){
   if(favoriteIds.value.includes(postId))
     favoriteIds.value = favoriteIds.value.filter(id => id !== postId)
@@ -84,10 +104,10 @@ submitting.value = true
 }
 
 return {
-  posts, loading, error, favoriteIds,
+  posts, loading, error, pagination, favoriteIds,
   submitting,submitError,lastCreatedPost,
   favoritePosts, favoriteCount,
-  fetchPosts, retryFetch, toggleFavorite,
+  fetchPosts, retryFetch, goToPage, toggleFavorite,
   persistFavorites, restoreFavorites, createPost
 }
 
