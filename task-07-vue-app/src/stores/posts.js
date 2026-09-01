@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 import {ref , computed} from 'vue'
-import {getPosts, createPost as createPostRequest} from '../services/postsApi'
+import {getPosts, createPost as createPostRequest} from '../services/apiClient'
 export const usePostsStore = defineStore('posts', () =>{
 
 // state  

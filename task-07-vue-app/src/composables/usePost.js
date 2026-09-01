@@ -1,7 +1,6 @@
-import{ref, watch, onMounted} from "vue";
-import { useRoute, useRouter } from "vue-router";
-import {POSTS_API_URL } from "./api";
+import{ref} from "vue";
 
+import { getPost, ApiError } from "../services/apiClient";
 
 const post = ref(null);
 const loading = ref(false);
@@ -15,31 +14,24 @@ async function fetchPost(id){
   notFound.value = false; 
   post.value = null; 
 try{
-  const response = await fetch(`${POSTS_API_URL}/${id}`);
 
-  if(!response.ok){
+  const data = await getPost(id);
 
-    if(response.status == 404)
-    notFound.value = true; 
-  else error.value = true; 
-  return ; 
+    if (!data || !data.id) {
+      notFound.value = true;
+      return;
+    }
 
-  }
-
-  const data = await response.json();
-
-// incase an empty object with 200 code instead of 400
-  if(!data || !data.id){
-    notFound.value = true; 
-    return ; 
-  }
 
   post.value = data; 
 }
 
 catch(err){
-  error.value = true;
-  
+if (err instanceof ApiError && err.status === 404) {
+      notFound.value = true;
+    } else {
+      error.value = true;
+    }  
 }
 finally{
   loading.value = false; 
