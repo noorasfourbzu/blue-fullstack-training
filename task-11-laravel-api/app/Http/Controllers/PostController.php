@@ -16,6 +16,8 @@ use AuthorizesRequests;
 
     // Get /api/posts
   public function getPosts(Request $request){
+
+
   //$posts = Post::with('category')->get();
   $query = Post::with(['category', 'user']);  
   
@@ -49,7 +51,7 @@ if ($request->filled('category_id')) {
 
 
 
-$perPage = $request -> query('per_page',3);
+$perPage = $request -> query('per_page',7);
 $posts = $query -> paginate($perPage);
  return PostResource::collection($posts);
 
