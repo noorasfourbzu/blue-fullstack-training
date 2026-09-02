@@ -15,15 +15,15 @@ async function fetchPost(id){
   post.value = null; 
 try{
 
-  const data = await getPost(id);
+  const response = await getPost(id);
 
-    if (!data || !data.id) {
+    if (!response || !response.data || !response.data.id) {
       notFound.value = true;
       return;
     }
 
 
-  post.value = data; 
+  post.value = response.data; 
 }
 
 catch(err){

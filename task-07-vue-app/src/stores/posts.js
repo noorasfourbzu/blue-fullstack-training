@@ -1,12 +1,16 @@
 import {defineStore} from 'pinia'
 import {ref , computed} from 'vue'
-import {getPosts, createPost as createPostRequest} from '../services/apiClient'
+import {getPosts,getCategories, createPost as createPostRequest} from '../services/apiClient'
 export const usePostsStore = defineStore('posts', () =>{
 
 // state  
 // this is composition api style 
 // i could also use the option api style 
 const posts = ref([])
+
+const categories = ref([])
+const selectedCategory = ref(null)
+
 const loading = ref(false)
 const error = ref(false)
 
@@ -34,14 +38,36 @@ const favoriteCount = computed(() => favoriteIds.value.length)
 
 
 
+
+
  // actions
+
+
+ 
+async function fetchCategories(){
+   try {
+    const response = await getCategories()
+    categories.value = response.data
+  } catch (err) {
+    console.error('failed to fetch categories', err)
+  }
+}
+
+async function selectCategory(categoryId) {
+  selectedCategory.value = categoryId
+
+  await fetchPosts(1)
+}
+
+
+
 async function fetchPosts(page = 1){
   
   loading.value = true
   error.value = false
 
   try{
-    const response = await getPosts(page)
+    const response = await getPosts(page, selectedCategory.value)
     posts.value = response.data
     pagination.value = {
       currentPage: response.meta.current_page,
@@ -105,6 +131,7 @@ submitting.value = true
 
 return {
   posts, loading, error, pagination, favoriteIds,
+  categories, selectedCategory, 
   submitting,submitError,lastCreatedPost,
   favoritePosts, favoriteCount,
   fetchPosts, retryFetch, goToPage, toggleFavorite,
@@ -113,5 +140,4 @@ return {
 
 
 })
-
 

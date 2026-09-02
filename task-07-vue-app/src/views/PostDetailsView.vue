@@ -87,6 +87,11 @@ watch(() => route.params.id,
 </button>
         <h2 class="post-details-title">{{ post.title }}</h2>
         <p class="post-details-body">{{ post.body }}</p>
+        <div class = "post-meta">
+          <p> Status: {{ post.status }} </p>
+          <p> Category: {{ post.category?.name || "Unknown" }} </p>
+          <p> Author: {{post.user?.name || "Unknown" }} </p>
+          </div>
 
         <button type="button" class="back-to-posts" @click="goBackToPosts">
           &larr; {{ backLabel }}

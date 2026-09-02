@@ -39,8 +39,14 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 
 
-export function getPosts(page = 1) {
-  return request(`/posts?page=${page}`)
+export function getPosts(page = 1 , categoryId = null) {
+  let url = `/posts?page=${page}`
+
+  if (categoryId) {
+    url += `&category_id=${categoryId}`
+  }
+
+  return request(url)
 }
 
 
@@ -72,3 +78,9 @@ export function logout() {
     method: 'POST'
   })
 }
+
+
+export function getCategories() {
+  return request('/categories')
+}
+

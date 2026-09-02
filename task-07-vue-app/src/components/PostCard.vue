@@ -64,6 +64,24 @@ function highlightParts(text) {
       </template>
     </p>
 
+
+    <div class = "post-meta">
+      <span>
+        Status: {{post.status }}
+        </span>
+        <br/>
+        <span>
+          Category: {{post.category?.name || "Unknown"}}
+
+        </span>
+
+        <br/>
+        <span>
+          Author: {{post.user?.name || "Unknown"}}
+        </span>
+
+
+        </div>
 <RouterLink :to="`/posts/${post.id}`" class="read-more-link">      Read More
       </RouterLink>
 

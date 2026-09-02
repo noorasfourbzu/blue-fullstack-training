@@ -2,6 +2,7 @@
 import { ref, computed, watch } from "vue";
 import PostCard from "./PostCard.vue";
 import { useRoute, useRouter } from "vue-router";
+import  CategoryFilter from "./CategoryFilter.vue";
 
 const props = defineProps({
   posts: { type: Array, required: true },
@@ -9,9 +10,17 @@ const props = defineProps({
   error: { type: Boolean, required: true },
   fetchPosts: { type: Function, required: true },
   pagination: {type: Object, required:  true},
-  goToPage: {type: Function,  required:true}
+  goToPage: {type: Function,  required:true},
+  categories: {type: Array,default: () => []},
+selectedCategory: {type: [String, Number],default: null},
+selectCategory: {type: Function,required: true}
 });
 
+
+const postCategories = computed(() => [
+  {id: null , name: "All"},
+  ...props.categories
+]);
 //  how many cards get added per batch
 // const CARDS_PER_BATCH = 10;
 
@@ -190,6 +199,12 @@ watch(
     <div class="container">
       <h2 class="section-title">Latest Posts</h2>
 
+
+      <CategoryFilter
+  :categories="postCategories"
+  :selected="selectedCategory"
+  @filter-change="selectCategory"
+/>
       <div class="latest-posts-search-container">
         <textarea
           id="search-word"
