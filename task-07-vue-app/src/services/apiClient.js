@@ -1,4 +1,5 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+
  export class ApiError  extends Error {
     constructor(message,status){
         super(message)
@@ -9,7 +10,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 
  async function request(path, options ={}){
-    const token = localStorage.getItem(`authToken`)
+    const token = sessionStorage.getItem(`authToken`)
 
     const headers = {
     'Content-Type': 'application/json',

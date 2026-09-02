@@ -11,7 +11,7 @@ import {
 export const useAuthStore = defineStore('auth', () => {
 
     // state 
-      const token = ref(localStorage.getItem('authToken'))
+      const token = ref(sessionStorage.getItem('authToken'))
       const user = ref(null)
       const loading = ref(false)
       const error = ref(null)
@@ -30,7 +30,7 @@ export const useAuthStore = defineStore('auth', () => {
 
       const response = await loginRequest(credentials)
       token.value = response.token
-      localStorage.setItem('authToken', response.token)
+      sessionStorage.setItem('authToken', response.token)
       user.value = response.user
       return response
       } catch (err) {
@@ -59,7 +59,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   // restore session after refresh 
   async function restoreSession(){
-    const savedToken = localStorage.getItem('authToken')
+    const savedToken = sessionStorage.getItem('authToken')
     if (!savedToken) return
     token.value = savedToken
     try{
@@ -87,10 +87,11 @@ export const useAuthStore = defineStore('auth', () => {
     function clearSession(){
         token.value = null
         user.value = null
-        localStorage.removeItem('authToken')
+        sessionStorage.removeItem('authToken')
     }
 
     return {
         token, user, loading, error, isAuthenticated,
         login, fetchUser, restoreSession, logout, clearSession
-    }})
+    }}
+)

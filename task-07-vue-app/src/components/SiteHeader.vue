@@ -55,11 +55,13 @@ function closeMenu() {
       <RouterLink to = "/services" @click="closeMenu">Services</RouterLink>
       <RouterLink to = "/posts" @click="closeMenu">Posts</RouterLink>
       <RouterLink to = "/contact"@click="closeMenu">Contact</RouterLink>
+      <RouterLink to="/login" @click="closeMenu">Login</RouterLink>   
       <RouterLink to="/favorites" @click="closeMenu" class="favorites-link">
        Favorites
        <span class="favorite-badge">{{ postsStore.favoriteCount }}</span>
       </RouterLink>
-<router-link to="/posts/create" @click="closeMenu">Create Post</router-link>    
+<router-link to="/posts/create" @click="closeMenu">Create Post</router-link>
+  
       </nav>
 
     </div>
