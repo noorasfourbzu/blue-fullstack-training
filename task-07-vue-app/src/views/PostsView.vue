@@ -6,7 +6,7 @@ import { usePostsStore } from "../stores/posts.js";
 
 const store = usePostsStore();
 onMounted(()=>{
-  store.fetchCategories();
+   store.fetchCategories();
   store.fetchPosts();
   
 });

@@ -30,7 +30,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
     if (!response.ok) {
 
-        consterrorData = await response.json().catch(() => null)
+        const errorData = await response.json().catch(() => null)
         throw new ApiError(errorData?.message || `Request to ${path} failed`, response.status)
       }
 

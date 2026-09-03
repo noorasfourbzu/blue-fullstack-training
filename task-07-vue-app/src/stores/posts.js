@@ -43,13 +43,13 @@ const favoriteCount = computed(() => favoriteIds.value.length)
  // actions
 
 
- 
-async function fetchCategories(){
-   try {
+async function fetchCategories() {
+  try {
     const response = await getCategories()
     categories.value = response.data
   } catch (err) {
     console.error('failed to fetch categories', err)
+    categories.value = []
   }
 }
 
@@ -134,7 +134,8 @@ return {
   categories, selectedCategory, 
   submitting,submitError,lastCreatedPost,
   favoritePosts, favoriteCount,
-  fetchPosts, retryFetch, goToPage, toggleFavorite,
+  fetchPosts, fetchCategories,
+  selectCategory, retryFetch, goToPage, toggleFavorite,
   persistFavorites, restoreFavorites, createPost
 }
 

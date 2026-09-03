@@ -3,8 +3,11 @@
 import { ref } from "vue";
 import logo from "../../public/final-logo.webp";
 import { usePostsStore } from "../stores/posts";
+import { useAuthStore } from "../stores/auth";  
+
 const isMenuOpen = ref(false);
 const postsStore = usePostsStore();
+const authStore = useAuthStore(); 
 function toggleMenu() {
   isMenuOpen.value = !isMenuOpen.value;
 }
@@ -55,12 +58,15 @@ function closeMenu() {
       <RouterLink to = "/services" @click="closeMenu">Services</RouterLink>
       <RouterLink to = "/posts" @click="closeMenu">Posts</RouterLink>
       <RouterLink to = "/contact"@click="closeMenu">Contact</RouterLink>
-      <RouterLink to="/login" @click="closeMenu">Login</RouterLink>   
+      <RouterLink v-if = "!authStore.isAuthenticated" to="/login" @click="closeMenu">Login</RouterLink>  
+      <RouterLink v-else to="/account" @click="closeMenu">Account</RouterLink>
+<RouterLink v-if="authStore.isAuthenticated" to="/posts/create" @click="closeMenu">
+  Create Post
+</RouterLink>
       <RouterLink to="/favorites" @click="closeMenu" class="favorites-link">
        Favorites
        <span class="favorite-badge">{{ postsStore.favoriteCount }}</span>
       </RouterLink>
-<router-link to="/posts/create" @click="closeMenu">Create Post</router-link>
   
       </nav>
 

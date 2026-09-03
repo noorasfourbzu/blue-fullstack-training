@@ -6,10 +6,14 @@ import SiteHeader from "./components/SiteHeader.vue";
 import SiteFooter from "./components/SiteFooter.vue";
 import { onMounted } from "vue";
 import { usePostsStore } from "./stores/posts";
+import {useAuthStore} from "./stores/auth";
+
 const postsStore = usePostsStore();
+const authStore = useAuthStore();
 
 onMounted(() => {
   postsStore.restoreFavorites();
+  authStore.restoreSession();
 });
 </script>
 

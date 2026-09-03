@@ -1,5 +1,5 @@
 <script setup>
-import {reactive,computed, ref} from 'vue'
+import {reactive,computed,onMounted, ref} from 'vue'
 import { usePostsStore } from '../stores/posts'
 import FormStatusBanner from '../components/FormStatusBanner.vue'
 
@@ -7,7 +7,8 @@ import FormStatusBanner from '../components/FormStatusBanner.vue'
 const form =  reactive({
 title: '',
 body: '',
-userId:''
+category_id: '',
+status: 'draft'
 })
 
 
@@ -16,7 +17,12 @@ userId:''
 const touched = reactive({
     title: false,
     body: false,
-    userId:false
+  category: false,
+  status: false
+})
+
+onMounted(() => {
+  if (!postsStore.categories.length) postsStore.fetchCategories()
 })
 
 const postsStore = usePostsStore()
@@ -56,16 +62,24 @@ const bodyError = computed(() => {
 })
 
 
-
-const userIdError = computed(() => {
-  const value = form.userId
-  if (value === '' || value === null) return 'User ID is required.'
-  const numericValue = Number(value)
-  if (!Number.isInteger(numericValue) || numericValue <= 0) {
-    return 'User ID must be a positive whole number'
-  }
+const categoryError = computed(() => {
+  if (!form.category_id) {
+ return 'Please select a category'}
   return ''
 })
+
+
+const statusError = computed(() => {
+  if (!form.status) {
+    return 'Please select how you want to save the post'}
+      if (!['draft', 'published'].includes(form.status)) {
+    return 'Please select a valid status'}
+    return ''
+})
+
+
+
+
 
 
 // character counters 
@@ -77,7 +91,7 @@ const isOverBodyLimit = computed(() => bodyCount.value > MAX_BODY_LENGTH)
 
 // ---- overall form validity ----
 const isFormValid = computed(() => {
-  return !titleError.value && !bodyError.value && !userIdError.value
+  return !titleError.value && !bodyError.value && !categoryError.value && !statusError.value
 })
 
 
@@ -110,7 +124,8 @@ async function handleSubmit() {
   // mark all fields touched so all errors show if user tries to submit early
   touched.title = true
   touched.body = true
-  touched.userId = true
+  touched.category_id = true
+  touched.status = true
 
   if (!isFormValid.value) {
     formStatus.value = 'validation-error'
@@ -122,7 +137,8 @@ try {
     const created = await postsStore.createPost({
       title: form.title.trim(),
       body: form.body.trim(),
-      userId: Number(form.userId)
+       category_id: Number(form.category_id),
+       status: form.status
     })
 
     formStatus.value = 'success'
@@ -131,13 +147,16 @@ try {
     // reset the form only after success
     form.title = ''
     form.body = ''
-    form.userId = ''
     touched.title = false
     touched.body = false
-    touched.userId = false
   } catch (err) {
-    // keep form values on failure do not reset here
+console.log(err)
+ if (err.status === 422) {
+    formStatus.value = 'validation-error'
+  } else {
     formStatus.value = 'submit-error'
+  }
+
   }
 
 
@@ -213,26 +232,38 @@ function recheckIfInvalid(field) {
           {{ bodyCount }} / {{ MAX_BODY_LENGTH }} characters used
         </small>
 
-        <label for="userId">User ID</label>
-        <input
-          id="userId"
-          v-model="form.userId"
-          type="number"
-          name="userId"
-          placeholder="Enter your user ID"
-          min="1"
-          required
-          class="form-control"
-          :class="{ 'is-invalid': touched.userId && userIdError }"
-          :aria-invalid="touched.userId && userIdError ? 'true' : 'false'"
-          aria-describedby="userId-error"
-          @input="recheckIfInvalid('userId')"
-          @blur="markTouched('userId')"
-        />
-        <small id="userId-error" class="error-message">
-          {{ touched.userId ? userIdError : '' }}
-        </small>
+        <label for="category">Category</label>
+<select id="category" 
+v-model="form.category_id" 
+required 
+class="form-control"
+:class="{ 'is-invalid': touched.category && categoryError }"
+  :aria-invalid="touched.category && categoryError ? 'true' : 'false'"
+  aria-describedby="category-error"
+  @change="touched.category = true"
+  @blur="touched.category = true"
 
+>
+  <option value="" disabled>Select a category</option>
+  <option v-for="c in postsStore.categories" :key="c.id" :value="c.id">{{ c.name }}</option>
+</select>
+
+
+<small id="category-error" class="error-message">
+  {{ touched.category ? categoryError : '' }}
+</small>
+
+<fieldset>
+  <legend>Save as</legend>
+  <label>
+    <input type="radio" value="draft" v-model="form.status"  @change="touched.status = true" /> Draft</label>
+  <label>
+    <input type="radio" value="published" v-model="form.status"  @change="touched.status = true" /> Publish</label>
+</fieldset>
+       
+<small class="error-message">
+  {{ touched.status ? statusError : '' }}
+</small>
   <button type="submit" class="button" :disabled="isSubmitting">
           {{ isSubmitting ? 'Submitting...' : (formStatus === 'submit-error' ? 'Retry' : 'Create Post') }}
         </button>
@@ -251,3 +282,4 @@ function recheckIfInvalid(field) {
 </template>
 
 
+>

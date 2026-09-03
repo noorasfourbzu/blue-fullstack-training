@@ -78,14 +78,24 @@ async function handleLogin(){
 <template>
   <section id="login" class="section">
     <div class="container">
-      <h2 class="section-title">Login</h2>
-      <form @submit.prevent="handleLogin" novalidate>
-        <div class="form-group">
+      <div id="login-card" class ="auth-card">
+        <header class="auth-card-header">
+          <h2 class="section-title">Login</h2>
+            <p class="auth-subtitle">Welcome, Please enter your details</p>
+        </header>
+ 
+
+      <form id="login-form" class ="auth-form" novalidate  @submit.prevent="handleLogin">
+        <div class="form-group"> 
           <label for="email">Email:</label>
           <input
+          id="email"
+            v-model ="email"
             type="email"
-            id="email"
-            v-model="email"
+            class="form-control"
+            :class ="{ 'is-invalid': errors.email }"
+            autocomplete="email"
+            :aria-invalid ="Boolean(errors.email)"
             @blur="recheckIfInvalid('email', validateEmail)"
             required
           />
@@ -98,18 +108,24 @@ async function handleLogin(){
             type="password"
             id="password"
             v-model="password"
+            :class="{ 'is-invalid': errors.password }"
+              autocomplete="current-password"
+                  class="form-control"
+              :aria-invalid="Boolean(errors.password)"
+
             @blur="recheckIfInvalid('password', validatePassword)"
             required
           />
           <span v-if="errors.password" class="error-message">{{ errors.password }}</span>
         </div>
 
-        <button type="submit">Login</button>
+        <button type="submit" class ="auth-submit">Login</button>
 
         <p v-if="formStatus === 'error'" class="form-status form-status--error">
           Please recheck your credentials and try again
         </p>
       </form>
+    </div>
     </div>
   </section>
   </template>

@@ -20,9 +20,10 @@ const emit = defineEmits(["filter-change"]);
 function getCategoryId(category) {
 
 if(typeof category === "string"){
-  return category.id; 
-}
+  return category;
 
+}
+ return category.id;
 
 }
 
