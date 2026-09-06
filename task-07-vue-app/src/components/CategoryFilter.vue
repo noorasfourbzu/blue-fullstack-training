@@ -5,26 +5,21 @@
 const props = defineProps({
   categories: {
     type: Array,
-    required: true
+    required: true,
   },
   selected: {
     type: [String, Number],
-    required: true
-  }
+    required: true,
+  },
 });
-
-
 
 const emit = defineEmits(["filter-change"]);
 
 function getCategoryId(category) {
-
-if(typeof category === "string"){
-  return category;
-
-}
- return category.id;
-
+  if (typeof category === "string") {
+    return category;
+  }
+  return category.id;
 }
 
 function getCategoryName(category) {
@@ -35,13 +30,9 @@ function getCategoryName(category) {
   return category.name;
 }
 
-function selectCategory(category){
-  
+function selectCategory(category) {
   emit("filter-change", getCategoryId(category));
 }
-
-
-
 </script>
 
 <template>
@@ -54,8 +45,8 @@ function selectCategory(category){
       :class="{ 'is-active': getCategoryId(category) === selected }"
       :aria-pressed="getCategoryId(category) === selected"
       @click="selectCategory(category)"
-    >      
-      {{ getCategoryName(category) }} 
+    >
+      {{ getCategoryName(category) }}
     </button>
   </div>
 </template>

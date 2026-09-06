@@ -1,86 +1,101 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
- export class ApiError  extends Error {
-    constructor(message,status){
-        super(message)
-        this.status = status
-        this.name = 'ApiError'
-    }
- }
-
-
- async function request(path, options ={}){
-    const token = sessionStorage.getItem(`authToken`)
-
-    const headers = {
-    'Content-Type': 'application/json',
-    ...options.headers
+export class ApiError extends Error {
+  constructor(message, status) {
+    super(message);
+    this.status = status;
+    this.name = "ApiError";
   }
-
-  if (token) {
-    headers.Authorization = `Bearer ${token}`
-  }
-
-
-    const response = await fetch (`${API_BASE_URL}${path}`, {
-     ...options,
-     headers
-    })
-
-
-    if (!response.ok) {
-
-        const errorData = await response.json().catch(() => null)
-        throw new ApiError(errorData?.message || `Request to ${path} failed`, response.status)
-      }
-
-  return response.json()
- }
-
-
-
-export function getPosts(page = 1 , categoryId = null) {
-  let url = `/posts?page=${page}`
-
-  if (categoryId) {
-    url += `&category_id=${categoryId}`
-  }
-
-  return request(url)
 }
 
+async function request(path, options = {}) {
+  const token = sessionStorage.getItem(`authToken`);
+
+  const headers = {
+    "Content-Type": "application/json",
+    ...options.headers,
+  };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    ...options,
+    headers,
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    throw new ApiError(
+      errorData?.message || `Request to ${path} failed`,
+      response.status,
+    );
+  }
+
+  return response.json();
+}
+
+export function getPosts(page = 1, categoryId = null) {
+  let url = `/posts?page=${page}`;
+
+  if (categoryId) {
+    url += `&category_id=${categoryId}`;
+  }
+
+  return request(url);
+}
+
+export function getMyPosts(page = 1, categoryId = null) {
+  let url = `/posts/my?page=${page}`;
+
+  if (categoryId) {
+    url += `&category_id=${categoryId}`;
+  }
+
+  return request(url);
+}
 
 export function getPost(id) {
-  return request(`/posts/${id}`)
+  return request(`/posts/${id}`);
 }
 
 export function createPost(newPost) {
-  return request('/posts', {
-    method: 'POST',
-    body: JSON.stringify(newPost)
-  })
+  return request("/posts", {
+    method: "POST",
+    body: JSON.stringify(newPost),
+  });
 }
 
+export function updatePost(id, updatedPost) {
+  return request(`/posts/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(updatedPost),
+  });
+}
 
+export function deletePost(id) {
+  return request(`/posts/${id}`, {
+    method: "DELETE",
+  });
+}
 export function login(credentials) {
-  return request('/login', {
-    method: 'POST',
-    body: JSON.stringify(credentials)
-  })
+  return request("/login", {
+    method: "POST",
+    body: JSON.stringify(credentials),
+  });
 }
 
 export function getAuthenticatedUser() {
-  return request('/me')
+  return request("/me");
 }
 
 export function logout() {
-  return request('/logout', {
-    method: 'POST'
-  })
+  return request("/logout", {
+    method: "POST",
+  });
 }
-
 
 export function getCategories() {
-  return request('/categories')
+  return request("/categories");
 }
-

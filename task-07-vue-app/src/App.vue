@@ -6,7 +6,7 @@ import SiteHeader from "./components/SiteHeader.vue";
 import SiteFooter from "./components/SiteFooter.vue";
 import { onMounted } from "vue";
 import { usePostsStore } from "./stores/posts";
-import {useAuthStore} from "./stores/auth";
+import { useAuthStore } from "./stores/auth";
 
 const postsStore = usePostsStore();
 const authStore = useAuthStore();
@@ -18,7 +18,6 @@ onMounted(() => {
 </script>
 
 <template>
-
   <SiteHeader />
 
   <main id="main">
@@ -29,9 +28,7 @@ onMounted(() => {
     <!-- <ServicesSection /> -->
 
     <!-- <PostsSection /> -->
-
   </main>
 
-     <SiteFooter/>
-
+  <SiteFooter />
 </template>

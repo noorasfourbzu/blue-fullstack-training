@@ -1,23 +1,22 @@
 <script setup>
 import BaseCard from "./BaseCard.vue";
-import {usePostsStore} from "../stores/posts";
+import { usePostsStore } from "../stores/posts";
 import heartOutline from "../assets/heart-outline.png";
 import heartFilled from "../assets/heart-filled.png";
 
 const props = defineProps({
   post: {
     type: Object,
-    required: true
+    required: true,
   },
   // the applied search term ,empty string = no highlighting
   searchTerm: {
     type: String,
-    default: ""
-  }
+    default: "",
+  },
 });
 
 const store = usePostsStore();
-
 
 function highlightParts(text) {
   const query = props.searchTerm.trim();
@@ -36,7 +35,10 @@ function highlightParts(text) {
     if (index > start) {
       parts.push({ text: text.slice(start, index), matched: false });
     }
-    parts.push({ text: text.slice(index, index + query.length), matched: true });
+    parts.push({
+      text: text.slice(index, index + query.length),
+      matched: true,
+    });
     start = index + query.length;
     index = lowerText.indexOf(lowerQuery, start);
   }
@@ -53,50 +55,51 @@ function highlightParts(text) {
   <BaseCard variant="post-card">
     <h3>
       <template v-for="(part, i) in highlightParts(post.title)" :key="i">
-        <mark v-if="part.matched" class="search-highlight">{{ part.text }}</mark>
+        <mark v-if="part.matched" class="search-highlight">{{
+          part.text
+        }}</mark>
         <template v-else>{{ part.text }}</template>
       </template>
     </h3>
     <p>
       <template v-for="(part, i) in highlightParts(post.body)" :key="i">
-        <mark v-if="part.matched" class="search-highlight">{{ part.text }}</mark>
+        <mark v-if="part.matched" class="search-highlight">{{
+          part.text
+        }}</mark>
         <template v-else>{{ part.text }}</template>
       </template>
     </p>
 
+    <div class="post-meta">
+      <span> Status: {{ post.status }} </span>
+      <br />
+      <span> Category: {{ post.category?.name || "Unknown" }} </span>
 
-    <div class = "post-meta">
-      <span>
-        Status: {{post.status }}
-        </span>
-        <br/>
-        <span>
-          Category: {{post.category?.name || "Unknown"}}
+      <br />
+      <span> Author: {{ post.user?.name || "Unknown" }} </span>
+    </div>
+    <RouterLink :to="`/posts/${post.id}`" class="read-more-link">
+      Read More
+    </RouterLink>
 
-        </span>
-
-        <br/>
-        <span>
-          Author: {{post.user?.name || "Unknown"}}
-        </span>
-
-
-        </div>
-<RouterLink :to="`/posts/${post.id}`" class="read-more-link">      Read More
-      </RouterLink>
-
-      <button
-      type = "button"
-      class = "favorite-heart"
-      :class = "{'is-favorite': store.favoriteIds.includes(post.id)}"
-      :aria-label = "store.favoriteIds.includes(post.id) ? 'Remove from Favorite': 'Add to Favorite'"
-      @click="store.toggleFavorite(post.id)">
+    <button
+      type="button"
+      class="favorite-heart"
+      :class="{ 'is-favorite': store.favoriteIds.includes(post.id) }"
+      :aria-label="
+        store.favoriteIds.includes(post.id)
+          ? 'Remove from Favorite'
+          : 'Add to Favorite'
+      "
+      @click="store.toggleFavorite(post.id)"
+    >
       <img
-    :src="store.favoriteIds.includes(post.id) ? heartFilled : heartOutline"
-    :alt="store.favoriteIds.includes(post.id) ? 'Favorited' : 'Not favorited'"
-    class="heart-icon"
-  />
-          
-      </button>
+        :src="store.favoriteIds.includes(post.id) ? heartFilled : heartOutline"
+        :alt="
+          store.favoriteIds.includes(post.id) ? 'Favorited' : 'Not favorited'
+        "
+        class="heart-icon"
+      />
+    </button>
   </BaseCard>
 </template>

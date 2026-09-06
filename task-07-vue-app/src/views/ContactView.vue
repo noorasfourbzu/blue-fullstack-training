@@ -44,7 +44,9 @@ const statusMessage = computed(() => {
 });
 
 const messageCount = computed(() => message.value.length);
-const isOverMessageLimit = computed(() => messageCount.value > MESSAGE_MAX_LENGTH);
+const isOverMessageLimit = computed(
+  () => messageCount.value > MESSAGE_MAX_LENGTH,
+);
 
 function countDigits(value) {
   return value.replace(/\D/g, "").length;
@@ -69,7 +71,8 @@ function validateEmail() {
   if (value === "") {
     errors.value.email = "Please enter your email address";
   } else if (!EMAIL_PATTERN.test(value)) {
-    errors.value.email = "Please enter a valid email address like: name@example.com";
+    errors.value.email =
+      "Please enter a valid email address like: name@example.com";
   } else {
     errors.value.email = "";
   }
@@ -82,9 +85,10 @@ function validatePhone() {
   if (value === "") {
     errors.value.phone = "";
     return true;
-   }
-    if (!PHONE_ALLOWED_CHARACTERS.test(value)) {
- errors.value.phone = "Phone number can only contain digits, spaces, +, -, ( and )";
+  }
+  if (!PHONE_ALLOWED_CHARACTERS.test(value)) {
+    errors.value.phone =
+      "Phone number can only contain digits, spaces, +, -, ( and )";
     return false;
   }
   const digitCount = countDigits(value);
@@ -102,12 +106,12 @@ function validateSubject() {
     errors.value.subject = "Please enter the subject";
   } else if (value.length < SUBJECT_MIN_LENGTH) {
     errors.value.subject = `Subject must contain at least ${SUBJECT_MIN_LENGTH} characters`;
-    } else if (value.length > SUBJECT_MAX_LENGTH) {
-         errors.value.subject = `Subject must not exceed ${SUBJECT_MAX_LENGTH} characters`;
- } else {
+  } else if (value.length > SUBJECT_MAX_LENGTH) {
+    errors.value.subject = `Subject must not exceed ${SUBJECT_MAX_LENGTH} characters`;
+  } else {
     errors.value.subject = "";
-     }
-return errors.value.subject === "";
+  }
+  return errors.value.subject === "";
 }
 
 function validateMessage() {
@@ -117,11 +121,9 @@ function validateMessage() {
   } else if (value.length < MESSAGE_MIN_LENGTH) {
     errors.value.message = `Message must contain at least ${MESSAGE_MIN_LENGTH} characters`;
   } else if (value.length > MESSAGE_MAX_LENGTH) {
-    
     errors.value.message = `Message must not exceed ${MESSAGE_MAX_LENGTH} characters`;
-  } else 
-    errors.value.message = "";
-  
+  } else errors.value.message = "";
+
   return errors.value.message === "";
 }
 
@@ -137,7 +139,12 @@ function handleSubmit() {
   const isSubjectValid = validateSubject();
   const isMessageValid = validateMessage();
 
-  const isValid = isNameValid && isEmailValid && isPhoneValid && isSubjectValid && isMessageValid;
+  const isValid =
+    isNameValid &&
+    isEmailValid &&
+    isPhoneValid &&
+    isSubjectValid &&
+    isMessageValid;
 
   if (!isValid) {
     formStatus.value = "error";
@@ -161,8 +168,8 @@ function handleSubmit() {
       <h2 class="section-title">Contact</h2>
 
       <p>
-        Have a question, a strange game idea, or a project you want
-        to build with us? Send us a message and tell us about it.
+        Have a question, a strange game idea, or a project you want to build
+        with us? Send us a message and tell us about it.
       </p>
 
       <form id="contact-form" novalidate @submit.prevent="handleSubmit">
@@ -238,7 +245,9 @@ function handleSubmit() {
           @input="recheckIfInvalid('subject', validateSubject)"
           @blur="validateSubject"
         />
-        <small id="subject-error" class="error-message">{{ errors.subject }}</small>
+        <small id="subject-error" class="error-message">{{
+          errors.subject
+        }}</small>
 
         <label for="message">Message</label>
         <textarea
@@ -256,7 +265,9 @@ function handleSubmit() {
           @input="recheckIfInvalid('message', validateMessage)"
           @blur="validateMessage"
         ></textarea>
-        <small id="message-error" class="error-message">{{ errors.message }}</small>
+        <small id="message-error" class="error-message">{{
+          errors.message
+        }}</small>
         <small
           id="message-counter"
           class="character-counter"
@@ -267,7 +278,7 @@ function handleSubmit() {
 
         <button type="submit" class="button">Send</button>
 
-       <FormStatusBanner :status="formStatus" :message="statusMessage" />
+        <FormStatusBanner :status="formStatus" :message="statusMessage" />
       </form>
     </div>
   </section>

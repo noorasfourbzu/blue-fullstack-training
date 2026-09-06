@@ -51,9 +51,15 @@ async function handleLogout() {
           </div>
         </dl>
 
-        <p class="account-message">You are successfully logged in to your account.</p>
+        <p class="account-message">
+          You are successfully logged in to your account.
+        </p>
 
-        <button type="button" class="button account-logout" @click="handleLogout">
+        <button
+          type="button"
+          class="button account-logout"
+          @click="handleLogout"
+        >
           Logout
         </button>
       </div>

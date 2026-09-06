@@ -6,8 +6,8 @@ import BaseCard from "./BaseCard.vue";
 const props = defineProps({
   service: {
     type: Object,
-    required: true
-  }
+    required: true,
+  },
 });
 
 // Child to parent event : clicking the button doesnt change anything inside this component it just reports the action upward
@@ -22,7 +22,6 @@ function handleViewDetails() {
   <BaseCard variant="service-card">
     <h3>{{ service.title }}</h3>
 
-    
     <button
       type="button"
       class="card-details-button"

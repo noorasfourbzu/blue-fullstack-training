@@ -16,41 +16,41 @@ use App\Http\Controllers\MeController;
 Route::get('/health', [HealthController::class, 'health']);
 
 
-Route::get('/profile',[TrainingController::class,'profile']);
+Route::get('/profile', [TrainingController::class, 'profile']);
 
 
-Route::get('/skills',[TrainingController::class,'skills']);
-
-
-
-Route::get('/training/tasks', [TrainingController::class,'tasks']);
-Route::get('/training/tasks/{id}', [TrainingController::class,'getTask']);
-
-Route:: post('/contact', [ContactController::class,'fillContactForm'] );
+Route::get('/skills', [TrainingController::class, 'skills']);
 
 
 
-Route::get('/posts',[PostController::class,'getPosts']);
-Route::get('/posts/{id}',[PostController::class,'getPost']);
+Route::get('/training/tasks', [TrainingController::class, 'tasks']);
+Route::get('/training/tasks/{id}', [TrainingController::class, 'getTask']);
 
-
-Route::get('/categories',[CategoryController::class,'getCategories']);
-Route::get('/categories/{id}',[CategoryController::class,'getCategory']);
+Route::post('/contact', [ContactController::class, 'fillContactForm']);
 
 
 
-Route::post('/register',[RegisterController::class,'register']);
-Route::post('/login',[LoginController::class, 'login']);
+Route::get('/posts', [PostController::class, 'getPosts']);
 
 
-Route::middleware('auth:sanctum')->group(function(){
-    Route::get('/me',  [MeController::class, 'me']);
-    Route::post('/logout',   [LogoutController::class, 'logout']);
-    Route::post('/posts',[PostController::class,'createPost']);
+Route::get('/categories', [CategoryController::class, 'getCategories']);
+Route::get('/categories/{id}', [CategoryController::class, 'getCategory']);
 
-    Route::put('/posts/{id}',[PostController::class,'updatePost']);
-    Route::delete('/posts/{id}',[PostController::class,'deletePost']);
 
+
+Route::post('/register', [RegisterController::class, 'register']);
+Route::post('/login', [LoginController::class, 'login']);
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/me', [MeController::class, 'me']);
+    Route::post('/logout', [LogoutController::class, 'logout']);
+    Route::post('/posts', [PostController::class, 'createPost']);
+    Route::get('/posts/my', [PostController::class, 'getMyPosts']);
+    Route::put('/posts/{id}', [PostController::class, 'updatePost'])->whereNumber('id');
+    Route::delete('/posts/{id}', [PostController::class, 'deletePost'])->whereNumber('id');
 
 
 });
+Route::get('/posts/{id}', [PostController::class, 'getPost'])->whereNumber('id');
+

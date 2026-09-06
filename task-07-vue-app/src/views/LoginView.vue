@@ -1,11 +1,11 @@
 <script setup>
-import {ref} from "vue";
+import { ref } from "vue";
 import FormStatusBanner from "../components/FormStatusBanner.vue";
-import {useRouter} from "vue-router";
-import {useAuthStore} from "../stores/auth";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "../stores/auth";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const MAX_PASSWORD_LENGTH = 20; 
+const MAX_PASSWORD_LENGTH = 20;
 const MIN_PASSWORD_LENGTH = 8;
 
 const email = ref("");
@@ -14,8 +14,8 @@ const authStore = useAuthStore();
 const router = useRouter();
 
 const errors = ref({
-    email: "",
-    password: "",
+  email: "",
+  password: "",
 });
 
 const formStatus = ref("");
@@ -25,14 +25,15 @@ function validateEmail() {
   if (value === "") {
     errors.value.email = "Please enter your email address";
   } else if (!EMAIL_PATTERN.test(value)) {
-    errors.value.email = "Please enter a valid email address like: name@example.com";
+    errors.value.email =
+      "Please enter a valid email address like: name@example.com";
   } else {
     errors.value.email = "";
   }
   return errors.value.email === "";
 }
 
-// validate password 
+// validate password
 function validatePassword() {
   const value = password.value.trim();
   if (value === "") {
@@ -51,81 +52,87 @@ function recheckIfInvalid(field, validateFn) {
   if (errors.value[field]) validateFn();
 }
 
-
-async function handleLogin(){
-     const isEmailValid = validateEmail();
+async function handleLogin() {
+  const isEmailValid = validateEmail();
   const isPasswordValid = validatePassword();
 
-  const isValid = isPasswordValid && isEmailValid ;
-
+  const isValid = isPasswordValid && isEmailValid;
 
   if (!isValid) {
     formStatus.value = "error";
     return;
   }
 
-  try{
-    await authStore.login({email: email.value, password: password.value});
-    router.push({name: 'account'});
+  try {
+    await authStore.login({ email: email.value, password: password.value });
+    router.push({ name: "account" });
   } catch (error) {
     formStatus.value = "error";
   }
-
-
 }
 </script>
 
 <template>
   <section id="login" class="section">
     <div class="container">
-      <div id="login-card" class ="auth-card">
+      <div id="login-card" class="auth-card">
         <header class="auth-card-header">
           <h2 class="section-title">Login</h2>
-            <p class="auth-subtitle">Welcome, Please enter your details</p>
+          <p class="auth-subtitle">Welcome, Please enter your details</p>
         </header>
- 
 
-      <form id="login-form" class ="auth-form" novalidate  @submit.prevent="handleLogin">
-        <div class="form-group"> 
-          <label for="email">Email:</label>
-          <input
-          id="email"
-            v-model ="email"
-            type="email"
-            class="form-control"
-            :class ="{ 'is-invalid': errors.email }"
-            autocomplete="email"
-            :aria-invalid ="Boolean(errors.email)"
-            @blur="recheckIfInvalid('email', validateEmail)"
-            required
-          />
-          <span v-if="errors.email" class="error-message">{{ errors.email }}</span>
-        </div>
+        <form
+          id="login-form"
+          class="auth-form"
+          novalidate
+          @submit.prevent="handleLogin"
+        >
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input
+              id="email"
+              v-model="email"
+              type="email"
+              class="form-control"
+              :class="{ 'is-invalid': errors.email }"
+              autocomplete="email"
+              :aria-invalid="Boolean(errors.email)"
+              @blur="recheckIfInvalid('email', validateEmail)"
+              required
+            />
+            <span v-if="errors.email" class="error-message">{{
+              errors.email
+            }}</span>
+          </div>
 
-        <div class="form-group">
-          <label for="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            v-model="password"
-            :class="{ 'is-invalid': errors.password }"
+          <div class="form-group">
+            <label for="password">Password:</label>
+            <input
+              type="password"
+              id="password"
+              v-model="password"
+              :class="{ 'is-invalid': errors.password }"
               autocomplete="current-password"
-                  class="form-control"
+              class="form-control"
               :aria-invalid="Boolean(errors.password)"
+              @blur="recheckIfInvalid('password', validatePassword)"
+              required
+            />
+            <span v-if="errors.password" class="error-message">{{
+              errors.password
+            }}</span>
+          </div>
 
-            @blur="recheckIfInvalid('password', validatePassword)"
-            required
-          />
-          <span v-if="errors.password" class="error-message">{{ errors.password }}</span>
-        </div>
+          <button type="submit" class="auth-submit">Login</button>
 
-        <button type="submit" class ="auth-submit">Login</button>
-
-        <p v-if="formStatus === 'error'" class="form-status form-status--error">
-          Please recheck your credentials and try again
-        </p>
-      </form>
-    </div>
+          <p
+            v-if="formStatus === 'error'"
+            class="form-status form-status--error"
+          >
+            Please recheck your credentials and try again
+          </p>
+        </form>
+      </div>
     </div>
   </section>
-  </template>
+</template>

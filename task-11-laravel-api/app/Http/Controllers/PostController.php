@@ -71,7 +71,51 @@ $posts = $query -> paginate($perPage);
   }
 
 
+// GET /api/posts/my
+public function getMyPosts(Request $request)
+{
+    $request->validate([
+        'per_page' => 'sometimes|integer|min:1|max:50',
+    ]);
 
+    $query = Post::with(['category', 'user'])
+        ->where('user_id', $request->user()->id);
+
+    $allowedSortFields = ['created_at', 'title'];
+    $allowedSortDirections = ['asc', 'desc'];
+
+    $sortBy = $request->query('sort_by', 'created_at');
+    $sortDirection = $request->query('sort_direction', 'desc');
+
+    if (
+        in_array($sortBy, $allowedSortFields) &&
+        in_array($sortDirection, $allowedSortDirections)
+    ) {
+        $query->orderBy($sortBy, $sortDirection);
+    }
+
+    if ($request->filled('search')) {
+        $query->where(
+            'title',
+            'like',
+            '%' . $request->search . '%'
+        );
+    }
+
+    if ($request->filled('status')) {
+        $query->where('status', $request->status);
+    }
+
+    if ($request->filled('category_id')) {
+        $query->where('category_id', $request->category_id);
+    }
+
+    $perPage = $request->query('per_page', 7);
+
+    $posts = $query->paginate($perPage);
+
+    return PostResource::collection($posts);
+}
 
   // POST /api/posts
   public function createPost(Request $request){
@@ -175,5 +219,9 @@ return response()->json([
 
 
   }
+
+
+
+
 
 }
