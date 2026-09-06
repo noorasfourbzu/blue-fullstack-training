@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch, onMounted } from "vue";
+import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 import PostCard from "./PostCard.vue";
 import { useRoute, useRouter } from "vue-router";
 import CategoryFilter from "./CategoryFilter.vue";
@@ -71,6 +71,44 @@ function goToMyPosts() {
 function goToAllPosts() {
   router.push({ name: "posts" });
 }
+
+// drives the My Posts / All Posts slider switch; same navigation as before,
+// just triggered from a toggle input instead of two separate buttons
+function toggleMyPosts(event) {
+  if (event.target.checked) {
+    goToMyPosts();
+  } else {
+    goToAllPosts();
+  }
+}
+
+// Filters panel: expanded by default on desktop, collapsed by default on
+// tablet/mobile. Controlled explicitly with a ref (not native <details>)
+// so visibility doesn't depend on CSS cascade/origin tricks.
+const DESKTOP_QUERY = "(min-width: 769px)";
+const showFilters = ref(
+  typeof window !== "undefined" ? window.matchMedia(DESKTOP_QUERY).matches : true,
+);
+
+function toggleFilters() {
+  showFilters.value = !showFilters.value;
+}
+
+// if the window is resized (or rotated) into desktop width, force the
+// panel open; on mobile/tablet widths we leave whatever the user chose
+function syncFiltersOnResize() {
+  if (window.matchMedia(DESKTOP_QUERY).matches) {
+    showFilters.value = true;
+  }
+}
+
+onMounted(() => {
+  window.addEventListener("resize", syncFiltersOnResize);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", syncFiltersOnResize);
+});
 
 function goToPage(page) {
   props.fetchPosts(page, isMyPosts.value);
@@ -149,58 +187,91 @@ watch(
       </h2>
 
       <div class="posts-navigation">
-        <button
-          v-if="!isMyPosts"
-          type="button"
-          class="button"
-          @click="goToMyPosts"
-        >
-          My Posts
-        </button>
-        <button v-else type="button" class="button" @click="goToAllPosts">
-          All Posts
-        </button>
+        <label class="posts-toggle-switch">
+          <input
+            type="checkbox"
+            class="posts-toggle-input"
+            role="switch"
+            :checked="isMyPosts"
+            :aria-checked="isMyPosts"
+            aria-label="Show only my posts"
+            @change="toggleMyPosts"
+          />
+          <span class="posts-toggle-track" aria-hidden="true"></span>
+          <span class="posts-toggle-label">{{
+            isMyPosts ? "My Posts" : "All Posts"
+          }}</span>
+        </label>
       </div>
-      <CategoryFilter
-        :categories="postCategories"
-        :selected="selectedCategory"
-        @filter-change="selectCategory"
-      />
-       <CategoryFilter
-        v-if="isMyPosts"
-        :categories="statusOptions"
-        :selected="postsStore.myPostsStatus"
-        @filter-change="selectStatus"
-      />
-      <div class="latest-posts-search-container">
-        <textarea
-          id="search-word"
-          v-model="searchInput"
-          name="search-word"
-          rows="1"
-          placeholder="Search posts by title..."
-          maxlength="200"
-          :disabled="activeLoading || activeError"
-          @keydown.enter.prevent="runSearch"
-        ></textarea>
 
+      <!-- Filters: always expanded on desktop; collapses behind a small
+           icon toggle on tablet/mobile so the page doesn't feel crowded -->
+      <div class="filters-panel">
         <button
-          id="search-button"
-          class="button"
           type="button"
-          @click="runSearch"
+          class="filters-toggle"
+          :aria-expanded="showFilters"
+          aria-controls="filters-panel-body"
+          @click="toggleFilters"
         >
-          Search
+          <span aria-hidden="true">☰</span> Filters
+
         </button>
 
-        <button
-          id="clear-search"
-          class="button"
-          type="button"
-          @click="clearSearch"
+
+
+             <div
+          v-show="showFilters"
+          id="filters-panel-body"
+          class="filters-panel-body"
         >
-          Clear
-        </button>
+          <div class="filters-primary-row">
+            <CategoryFilter
+              :categories="postCategories"
+              :selected="selectedCategory"
+              @filter-change="selectCategory"
+            />
+
+            <div class="latest-posts-search-container">
+              <textarea
+                id="search-word"
+                v-model="searchInput"
+                name="search-word"
+                rows="1"
+                placeholder="Search posts by title..."
+                maxlength="200"
+                :disabled="activeLoading || activeError"
+                @keydown.enter.prevent="runSearch"
+              ></textarea>
+
+              <button
+                id="search-button"
+                class="button"
+                type="button"
+                @click="runSearch"
+              >
+                Search
+              </button>
+
+              <button
+                id="clear-search"
+                class="button"
+                type="button"
+                @click="clearSearch"
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+
+          <CategoryFilter
+            v-if="isMyPosts"
+            :categories="statusOptions"
+            :selected="postsStore.myPostsStatus"
+            @filter-change="selectStatus"
+            class="status-filter-row"
+          />
+        </div>
       </div>
 
       <!-- Loading state -->

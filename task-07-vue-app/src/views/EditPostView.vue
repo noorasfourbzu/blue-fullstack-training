@@ -65,6 +65,10 @@ const isFormValid = computed(() =>
     !titleError.value && !bodyError.value && !categoryError.value
 )
 
+const titleCount = computed(() => form.title.length)
+const bodyCount = computed(() => form.body.length)
+const isOverBodyLimit = computed(() => bodyCount.value > MAX_BODY_LENGTH)
+
 const statusMessage = computed(() => {
     if (formStatus.value === 'success') return 'Post updated successfully.'
     if (formStatus.value === 'validation-error') return 'Please check the highlighted fields above.'
@@ -132,19 +136,24 @@ async function handleSubmit() {
 
             <template v-else>
                 <h2 class="section-title">Edit Post</h2>
-                <form novalidate @submit.prevent="handleSubmit">
+                <form   id="edit-post-form"  novalidate @submit.prevent="handleSubmit">
                     <label for="edit-title">Title</label>
                     <input id="edit-title" v-model="form.title" type="text" class="form-control"
                         :maxlength="MAX_TITLE_LENGTH" />
                     <small class="error-message">{{ titleError }}</small>
                     <small v-if="backendErrors.title" class="error-message">{{ backendErrors.title[0] }}</small>
+                    <small id="edit-title-counter" class="character-counter">
+  {{ titleCount }} / {{ MAX_TITLE_LENGTH }} characters used
+</small>
 
                     <label for="edit-body">Body</label>
                     <textarea id="edit-body" v-model="form.body" rows="5" class="form-control"
                         :maxlength="MAX_BODY_LENGTH"></textarea>
                     <small class="error-message">{{ bodyError }}</small>
                     <small v-if="backendErrors.body" class="error-message">{{ backendErrors.body[0] }}</small>
-
+<small id="edit-body-counter" class="character-counter" :class="{ 'counter-warning': isOverBodyLimit }">
+  {{ bodyCount }} / {{ MAX_BODY_LENGTH }} characters used
+</small>
                     <label for="edit-category">Category</label>
                     <select id="edit-category" v-model="form.category_id" class="form-control">
                         <option value="" disabled>Select a category</option>

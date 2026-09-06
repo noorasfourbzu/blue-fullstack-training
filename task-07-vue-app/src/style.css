@@ -13,6 +13,8 @@
   --color-border: #d9d9d9;
   --color-footer: #252525;
   --header-offset: 90px;
+  /* caps content width on large screens instead of letting it stretch full-bleed */
+  --container-max-width: 1200px;
 }
 
 /* every section that a nav link can jump to reserves space above it
@@ -795,33 +797,116 @@ controls content width and centering
 
 /* post details page */
 .post-details-content {
+  position: relative;
   max-width: 700px;
   margin: 0 auto;
-  background: var(--card-bg, #fff);
-  border: 1px solid var(--border-color, #ddd);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 12px;
   padding: 2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.post-details-id {
-  font-size: 0.85rem;
-  color: var(--color-muted-text, #888);
+.post-details-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
   margin-bottom: 8px;
 }
 
+.post-details-id {
+  font-size: 0.85rem;
+  color: var(--color-muted-text);
+}
+
+/* dotted-bar (kebab) menu with Edit/Delete, top right of the card */
+.post-actions-menu-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.post-actions-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.post-actions-toggle:hover,
+.post-actions-toggle:focus-visible {
+  border-color: var(--color-secondary);
+  background-color: var(--color-secondary);
+}
+
+.post-actions-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  min-width: 160px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  box-shadow: 0 8px 20px rgba(37, 37, 37, 0.15);
+}
+
+.post-actions-menu-item {
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  color: var(--color-text);
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.post-actions-menu-item:hover:not(:disabled) {
+  background-color: var(--color-background);
+}
+
+.post-actions-menu-item--danger {
+  color: #c62828;
+}
+
+.post-actions-menu-item--danger:hover:not(:disabled) {
+  background-color: #fdecea;
+}
+
+.post-actions-menu-item:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 .post-details-title {
-  margin-top: 0;
+  margin: 0 0 12px;
   font-size: 1.6rem;
   line-height: 1.3;
-  color: var(--heading-color, #222);
+  color: var(--color-text);
 }
 
 .post-details-body {
+  margin-bottom: 24px;
+  color: var(--color-muted-text);
   font-size: 1rem;
   line-height: 1.7;
-  color: var(--text-color, #444);
-  margin-bottom: 24px;
 }
 
 .back-to-posts {
@@ -861,7 +946,8 @@ controls content width and centering
   background-color: var(--color-surface);
 }
 
-#create-post-form {
+#create-post-form,
+#edit-post-form {
   display: flex;
   flex-direction: column;
   max-width: 700px;
@@ -871,7 +957,8 @@ controls content width and centering
   background-color: var(--color-background);
 }
 
-#create-post-form label {
+#create-post-form label,
+#edit-post-form label {
   margin: 14px 0 6px;
   color: var(--color-text);
   font-weight: bold;
@@ -879,6 +966,16 @@ controls content width and centering
 
 #create-post-form .form-status + .button {
   margin-top: 20px;
+}
+
+/* Save Changes / Cancel buttons on the Edit Post form */
+#edit-post-form .button {
+  margin-top: 20px;
+}
+
+#edit-post-form .button + .button {
+  margin-top: 12px;
+  margin-left: 12px;
 }
 
 /* contact form  section */
@@ -1055,6 +1152,357 @@ textarea.form-control {
   text-align: center;
 }
 
+/* ---------- Auth (Login) ---------- */
+.auth-card {
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 30px;
+  border-radius: 15px;
+  background-color: var(--color-background);
+}
+
+.auth-card-header {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.auth-subtitle {
+  margin-top: -8px;
+  margin-bottom: 6px;
+  color: var(--color-muted-text);
+  text-align: center;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin: 14px 0 6px;
+  color: var(--color-text);
+  font-weight: bold;
+}
+
+/* same visual language as .button, scoped to the login submit control */
+.auth-submit {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 24px;
+  border: 2px solid var(--color-accent);
+  border-radius: 6px;
+  color: #ffffff;
+  background-color: var(--color-accent);
+  font: inherit;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.auth-submit:hover,
+.auth-submit:focus-visible {
+  border-color: var(--color-secondary);
+  background-color: var(--color-secondary);
+  color: #404040;
+}
+
+/* ---------- Account / Me ---------- */
+.account-card {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  background-color: var(--color-background);
+}
+
+.account-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  color: var(--color-text);
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.account-header {
+  margin-bottom: 20px;
+}
+
+.account-details {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  text-align: left;
+}
+
+.account-detail dt {
+  margin-bottom: 4px;
+  color: var(--color-muted-text);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.account-detail dd {
+  color: var(--color-text);
+  font-size: 1rem;
+  overflow-wrap: break-word;
+}
+
+.account-message {
+  margin-bottom: 20px;
+  color: var(--color-muted-text);
+}
+
+.account-logout {
+  width: 100%;
+  max-width: 260px;
+}
+
+.account-loading {
+  padding: 60px 0;
+  color: var(--color-muted-text);
+  text-align: center;
+}
+
+/* ---------- Posts page: navigation, cards, pagination ---------- */
+.posts-navigation {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.post-meta {
+  margin: 12px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-muted-text);
+  font-size: 0.85rem;
+  line-height: 1.8;
+}
+
+.read-more-link {
+  display: inline-block;
+  margin-top: 8px;
+  color: var(--color-accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.read-more-link:hover,
+.read-more-link:focus-visible {
+  text-decoration: underline;
+}
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 35px 0 10px;
+}
+
+.pagination button {
+  min-width: 40px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  border-color: var(--color-secondary);
+  background-color: var(--color-secondary);
+}
+
+.pagination button.active {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent);
+  color: #ffffff;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* My Posts / All Posts slider switch */
+.posts-toggle-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* visually hidden but still focusable/clickable and screen-reader friendly */
+.posts-toggle-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.posts-toggle-track {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 24px;
+  border-radius: 999px;
+  background-color: var(--color-border);
+  transition: background-color 0.25s ease;
+}
+
+.posts-toggle-track::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  transition: transform 0.25s ease;
+}
+
+.posts-toggle-input:checked + .posts-toggle-track {
+  background-color: var(--color-accent);
+}
+
+.posts-toggle-input:checked + .posts-toggle-track::after {
+  transform: translateX(22px);
+}
+
+.posts-toggle-input:focus-visible + .posts-toggle-track {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.posts-toggle-label {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+/* ---------- Collapsible filters panel (Posts / My Posts) ---------- */
+/* Built on <details>/<summary> so it works with zero extra JS state.
+   Desktop: always expanded, the icon toggle is hidden.
+   Tablet/mobile: collapsed by default behind a small gear icon. */
+.filters-panel {
+  margin-bottom: 20px;
+}
+
+.filters-toggle {
+  display: none;
+}
+
+.filters-panel-body {
+  display: block;
+}
+
+
+
+/* ---------- Create Post: status fieldset ---------- */
+#create-post-form fieldset,
+#edit-post-form fieldset {
+  margin: 14px 0 6px;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+#create-post-form legend,
+#edit-post-form legend {
+  padding: 0 6px;
+  color: var(--color-text);
+  font-weight: bold;
+}
+
+#create-post-form fieldset label,
+#edit-post-form fieldset label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 12px 6px 0;
+  font-weight: normal;
+}
+
+
+.status-filter-row {
+  margin: 12px 0 0;
+  gap: 0;
+  justify-content: flex-start;
+}
+
+/* strip the pill look from the status filter's buttons — plain text links */
+.status-filter-row .category-capsule {
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: none;
+  color: var(--color-muted-text);
+}
+
+.status-filter-row .category-capsule:hover {
+  border: none;
+  background: none;
+  transform: none;
+  color: var(--color-text);
+}
+
+.status-filter-row .category-capsule.is-active {
+  border: none;
+  background: none;
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.status-filter-row .category-capsule.is-active:hover {
+  border: none;
+  background: none;
+  color: var(--color-accent);
+}
+
+.status-filter-row .category-capsule:not(:last-child)::after {
+  content: "/";
+  margin: 0 10px;
+  color: var(--color-border);
+  font-weight: 400;
+}
+
 /* Tablet / small desktop */
 @media (max-width: 1024px) {
   /* header and navigation */
@@ -1200,6 +1648,72 @@ textarea.form-control {
     align-items: flex-start;
     gap: 8px;
   }
+
+  /* auth / account cards */
+  .auth-card,
+  .account-card {
+    padding: 24px;
+  }
+
+  /* posts navigation + pagination stay comfortable to tap */
+  .pagination button {
+    min-width: 38px;
+    padding: 7px 11px;
+  }
+
+  .filters-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 4px;
+    padding: 10px 16px;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    color: var(--color-text);
+    background-color: var(--color-surface);
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  .filters-toggle:hover,
+  .filters-toggle:focus-visible {
+    border-color: var(--color-secondary);
+    background-color: var(--color-secondary);
+  }
+
+  /* chevron flips so the open/closed state is unmistakable */
+  .filters-toggle::after {
+    content: "▾";
+    transition: transform 0.2s ease;
+  }
+
+  .filters-toggle[aria-expanded="true"]::after {
+    transform: rotate(180deg);
+  }
+
+  /* the open panel reads as one clearly contained box, holding both the
+     category filter and (on My Posts) the status filter, plus search */
+  .filters-panel-body {
+    margin-top: 10px;
+    padding: 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    background-color: var(--color-surface);
+  }
+
+  .filters-panel-body .category-buttons-container {
+    justify-content: flex-start;
+    margin: 0 0 12px;
+  }
+
+  /* post details: keep the id and the actions menu comfortably spaced */
+  .post-details-content {
+    padding: 1.5rem;
+  }
 }
 
 /* Mobile */
@@ -1290,5 +1804,62 @@ textarea.form-control {
   #search-button,
   #clear-search {
     flex: 1 1 auto;
+  }
+
+  /* auth / account cards: less padding, full-width primary actions */
+  .auth-card,
+  .account-card {
+    padding: 20px 16px;
+  }
+
+  .account-logout {
+    max-width: 100%;
+  }
+
+  /* posts navigation: let the My Posts / All Posts button take the full row */
+  .posts-navigation .button {
+    width: 100%;
+  }
+
+  /* pagination: smaller tap targets so the row doesn't overflow at 320-375px */
+  .pagination {
+    gap: 6px;
+  }
+
+  .pagination button {
+    min-width: 34px;
+    padding: 6px 9px;
+    font-size: 0.9rem;
+  }
+
+  /* create-post status fieldset: stack Draft/Publish on very narrow screens */
+  #create-post-form fieldset label,
+  #edit-post-form fieldset label {
+    display: flex;
+    margin: 6px 0;
+  }
+
+  /* post details: tighter padding, menu never pushes past the card edge */
+  .post-details-content {
+    padding: 1.25rem;
+  }
+
+  .post-actions-menu {
+    min-width: 140px;
+  }
+
+  /* Edit Post: Save/Cancel stack full-width instead of squeezing side by side */
+  #edit-post-form .button {
+    width: 100%;
+  }
+
+  #edit-post-form .button + .button {
+    margin-left: 0;
+  }
+
+  /* filters icon toggle: slightly smaller footprint */
+  .filters-toggle {
+    padding: 7px 12px;
+    font-size: 0.85rem;
   }
 }

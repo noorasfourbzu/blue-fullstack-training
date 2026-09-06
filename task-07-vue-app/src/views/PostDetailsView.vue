@@ -18,6 +18,8 @@ const { post, loading, error, notFound, fetchPost } = usePost();
 
 const deleteStatus = ref(''); // '', 'forbidden', 'error'
 
+const isActionsMenuOpen = ref(false); 
+
 const backTarget = computed(() =>
   previousRouteName.value === "favorites" ? "/favorites" : "/posts",
 );
@@ -99,12 +101,47 @@ watch(
       </div>
 
       <!-- Success: post loaded -->
-      <article v-else-if="post" class="post-details-content">
-        <p class="post-details-id">Post #{{ post.id }}</p>
+    <article v-else-if="post" class="post-details-content">
+  <div class="post-details-header">
+    <p class="post-details-id">Post #{{ post.id }}</p>
 
+    <div v-if="isOwner" class="post-actions-menu-wrapper">
+      <button
+        type="button"
+        class="post-actions-toggle"
+        aria-haspopup="true"
+        :aria-expanded="isActionsMenuOpen"
+        aria-label="Post actions"
+        @click="isActionsMenuOpen = !isActionsMenuOpen"
+      >
+        &#8942;
+      </button>
+
+      <div v-if="isActionsMenuOpen" class="post-actions-menu" role="menu">
         <button
           type="button"
-          class="favorite-heart favorite-heart--details"
+          role="menuitem"
+          class="post-actions-menu-item"
+          @click="goToEdit(); isActionsMenuOpen = false"
+        >
+          Edit Post
+        </button>
+        <button
+          type="button"
+          role="menuitem"
+          class="post-actions-menu-item post-actions-menu-item--danger"
+          :disabled="postsStore.deleting"
+          @click="handleDelete(); isActionsMenuOpen = false"
+        >
+          {{ postsStore.deleting ? 'Deleting...' : 'Delete Post' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <button
+    type="button"
+    class="favorite-heart favorite-heart--details"
           :aria-label="
             postsStore.favoriteIds.includes(post.id)
               ? 'Remove from favorites'
@@ -134,21 +171,6 @@ watch(
           <p>Author: {{ post.user?.name || "Unknown" }}</p>
         </div>
 
-
-        <!-- owners only actions -->
-<div v-if="isOwner" class="post-owner-actions">
-          <button type="button" class="button" @click="goToEdit">
-            Edit Post
-          </button>
-          <button
-            type="button"
-            class="button"
-            :disabled="postsStore.deleting"
-            @click="handleDelete"
-          >
-            {{ postsStore.deleting ? 'Deleting...' : 'Delete Post' }}
-          </button>
-        </div>
 
         <FormStatusBanner
           v-if="deleteStatus"
