@@ -15,6 +15,7 @@ version of this project (Tasks 07–09) lives in a separate folder,
 ## Features
 
 ### Layout & Navigation
+
 - Responsive layout for desktop, tablet, and mobile screens
 - Sticky header that stays visible while scrolling
 - Accessible mobile menu that can be opened and closed with the keyboard
@@ -25,6 +26,7 @@ version of this project (Tasks 07–09) lives in a separate folder,
 - Search results highlight the searched word in post titles
 
 ### Contact Form
+
 - Client-side validation for name, email, phone, subject, and message
 - Each field has its own validation rules and error message
 - Phone validation supports different international number formats
@@ -38,6 +40,7 @@ version of this project (Tasks 07–09) lives in a separate folder,
 - The form clearly explains that no data is sent to a server
 
 ### Interactive Features
+
 - Back-to-top button appears after scrolling
 - Back-to-top button is keyboard accessible
 - Statistics count up when the section becomes visible
@@ -46,11 +49,9 @@ version of this project (Tasks 07–09) lives in a separate folder,
 - Posts use lazy loading when they are loaded
 
 ### Performance & Accessibility
+
 - Lighthouse Accessibility score: 100/100
 - Lighthouse Performance score: 100/100
-
-
-
 
 ## API UI States
 
@@ -67,7 +68,6 @@ version of this project (Tasks 07–09) lives in a separate folder,
 
 For the Vue version of this project (Tasks 07–09), see `task-07-vue-app/README.md`.
 
-
 ## Completed Tasks
 
 - **Task 01–03:** Responsive layout, styling, and mobile navigation.
@@ -80,10 +80,8 @@ project's own README for details.
 
 ## Known Limitations
 
-- The contact form has no backend  it validates and displays a success message, but no data is actually sent anywhere.
+- The contact form has no backend it validates and displays a success message, but no data is actually sent anywhere.
 - Phone number validation checks digit count only (7–15 digits, based on the international E.164 standard), not whether the number is actually a real, dialable number for a specific country.
-
-
 
 ## Screenshots
 
@@ -98,4 +96,5 @@ project's own README for details.
 Screenshots for Tasks 07–09 (Vue app) are documented in `task-07-vue-app/README.md`.
 
 ## Author
+
 Noor Asfour

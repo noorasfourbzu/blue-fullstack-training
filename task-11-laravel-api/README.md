@@ -1,10 +1,10 @@
 # Task 11 - Laravel API
 
-
 # Task 11 - Laravel API
 
 ## Project Objective
-This project is the Backend Development part of  Blue  Full-Stack Training Program.
+
+This project is the Backend Development part of Blue Full-Stack Training Program.
 
 the project structure, and created JSON API endpoints using routes and
 controllers, including a dynamic route and a validated POST endpoint.(Task 11).
@@ -13,35 +13,34 @@ controllers, including a dynamic route and a validated POST endpoint.(Task 11).
 MySQL, Laravel migrations, Eloquent models, a seeder, and full CRUD endpoints with
 server side validation for the `posts` resource.
 
-(Task 13) The API was extended by adding category table(categories in db), relation between Category and Post, Resources classes for consistence responses (in JSON), sorting, filtering and finaly Pagination on the list of posts. 
+(Task 13) The API was extended by adding category table(categories in db), relation between Category and Post, Resources classes for consistence responses (in JSON), sorting, filtering and finaly Pagination on the list of posts.
 
 (Task 14 ) Authentication(register, login\out , me route with user info) and Authorization were added in this task.So now the app only let authenticated users in , and each user can add/update/delete his own posts only while every one can see all the posts loaded.
 
-
-
 ## Versions Used
+
 - PHP: 8.3
 - Laravel Framework: ^13.17
 
 ## Installation & How to Run Locally
+
 1. Clone the repository and go into the project folder:
-cd task-11-laravel-api
+   cd task-11-laravel-api
 
 2. Install dependencies:
-composer install
+   composer install
 
 3. Copy the example environment file:
-cp .env.example .env
+   cp .env.example .env
 
 4. Generate the application key:
-php artisan key:generate
+   php artisan key:generate
 
 5. Set up the database:
-This project uses MySQL. Create a local MySQL database 
-
+   This project uses MySQL. Create a local MySQL database
 
 Then update your local `.env` file (never commit this file) with your own values:
- 
+
 ```
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -50,34 +49,31 @@ DB_DATABASE=task11_laravel_api
 DB_USERNAME=[FILL: your local MySQL username]
 DB_PASSWORD=[FILL: your local MySQL password]
 ```
- 
+
 Confirm the connection works before migrating, e.g. by running `php artisan migrate:stastus` or by opening `php artisan tinker` and running `DB::connection()->getPdo();`.
 
-
 6. Run migrations:
-`php artisan migrate` , this creates the required database tabels
-note : `php artisan migrate:fresh` is to Reset the database and run migrations again
+   `php artisan migrate` , this creates the required database tabels
+   note : `php artisan migrate:fresh` is to Reset the database and run migrations again
 
 7. Seed the database with sample posts(currently only 8 are available):
-`php artisan db:seed --class=PostSeeder`, The PostSeeder creates several sample technology and science posts with different statuses such as draft and published.
+   `php artisan db:seed --class=PostSeeder`, The PostSeeder creates several sample technology and science posts with different statuses such as draft and published.
 
-note: 
+note:
 `php artisan migrate:fresh`
 `php artisan db:seed --class=PostSeeder`
 this is to Reset the database and seed sample data
 
 `php artisan db:seed --class=UserSeeder`
-seeds test users, and without any personal or secret info 
+seeds test users, and without any personal or secret info
 
 `php artisan migrate:fresh --seed`
 seeds everything together (seeders listed in `DatabaseSeeder.php`)
 
-
 8. Run the local server:
-php artisan serve
+   php artisan serve
 
-6. The app runs at: http://127.0.0.1:8000
-
+9. The app runs at: http://127.0.0.1:8000
 
 ## Part 2 - Laravel Project Structure
 
@@ -85,14 +81,15 @@ This section explains the main parts of the Laravel project and their purpose in
 
 ### 1. app/
 
-It contains the core code of the app and the backend logic; it contains  HTTP , Models, and providers directories.Additional files can be added later in here as we use Artisan commands to generate classes.
+It contains the core code of the app and the backend logic; it contains HTTP , Models, and providers directories.Additional files can be added later in here as we use Artisan commands to generate classes.
 
 ### 2. app/Http/Controllers/
 
 This directory controls requests that come to the web server; it is a middle space between the web browser (where the view is displayed) and the database that contains requested data by the user
-Controllers can handle the requests related to the following operations, for example: 
-- CRUD operations 
-- user authentication 
+Controllers can handle the requests related to the following operations, for example:
+
+- CRUD operations
+- user authentication
 - api requests
 
 ### 3. routes/
@@ -115,6 +112,7 @@ Contains all the application configuration files , it can be a good information 
 
 It controls the database of my project instead of directly using full apps to control data base such as MySQL, only setting connection with it and then manage the whole database from this directory.
 It contains other subdirectories; each does a specific work:
+
 - factories: factory that creates fake data for testing instead of doing this one by one
 - migrations: acts as a map for our database, contains schemas of the project
 - seeders: contains default data for instance usage
@@ -131,13 +129,14 @@ It contains 3 other directories :
 1. app: stores files generated or saved by the application,such as user uploaded files.
 2. framework :stores files and caches generated by the Laravel framework
 3. logs:contains the application log files, such as errors, warnings, and other events recorded while the application is running
+
 ---
 
 ### 8. tests/
 
 contains unit tests and feature tests.
 Classes inside this directory must be suffixed with ‘Test’ word.
-to run files : there are three different ways, but to get  more detailed result and a beautifully presented result, use ‘php artisan test which is an artisan command.
+to run files : there are three different ways, but to get more detailed result and a beautifully presented result, use ‘php artisan test which is an artisan command.
 
 ---
 
@@ -156,87 +155,72 @@ Works side by side with the env file but doesn't contain any sensitive data, so 
 
 Composer is the package manager of PHP (like when we use npm for Vue). Both Composer and Artisan are important command line tools, but what makes one different from the other is that Composer manages external PHP packages and libraries, while Artisan manages internal tasks (such as database migrations)
 
-Main config file 
+Main config file
 Composer: composer.json
 Artisan: .env and configuration file in /config
 
-
-
-## Categories 
+## Categories
 
 Added categories table(id , name , slug , created_at, updated_at).
 Each post will be part of just one category , and we achieve this by having the posts table have a category_id as a forieng key to the categories table
 
 **Relationships:**
+
 - `Category::posts()` → a category `hasMany` posts
 - `Post::category()` → a post `belongsTo` a category
 
-
-
-
-
-
-
 ## Implemented Endpoints
 
-| Method | Endpoint                     | Description                          |
-|--------|-------------------------------|---------------------------------------|
-| GET    | /api/health                   | Returns app status and message        |
-| GET    | /api/profile                  | Returns a sample trainee profile      |
-| GET    | /api/skills                   | Returns a list of technical skills    |
-| GET    | /api/training/tasks           | Returns all sample training tasks     |
-| GET    | /api/training/tasks/{id}      | Returns one task by ID, or 404        |
-| POST   | /api/contact                  | Validates and accepts a contact form  |
-| GET   |  /api/posts                    |  Returns all posts |
-| GET   |  /api/posts/{id}               |  Returns one post by id |
-| POST  | /api/posts                     | Create a new post |
-| PUT   | /api/posts/{id}                | Update an existing post |
-| DELETE | /api/posts{id}                |  Delete an existing post|
-| GET    | /api/categories             | return all categories|
-| GET    | /api/categories/{id}        | returns one category by id, or 404 |
-| POST   | /api/register            | Register a new user | 
-| POST   | /api/login               | Login, returns a token | 
-| POST   | /api/logout         | Logout, deletes the current token | 
-| GET    | /api/me               | Returns the logged in user info  | 
-
+| Method | Endpoint                 | Description                          |
+| ------ | ------------------------ | ------------------------------------ |
+| GET    | /api/health              | Returns app status and message       |
+| GET    | /api/profile             | Returns a sample trainee profile     |
+| GET    | /api/skills              | Returns a list of technical skills   |
+| GET    | /api/training/tasks      | Returns all sample training tasks    |
+| GET    | /api/training/tasks/{id} | Returns one task by ID, or 404       |
+| POST   | /api/contact             | Validates and accepts a contact form |
+| GET    | /api/posts               | Returns all posts                    |
+| GET    | /api/posts/{id}          | Returns one post by id               |
+| POST   | /api/posts               | Create a new post                    |
+| PUT    | /api/posts/{id}          | Update an existing post              |
+| DELETE | /api/posts{id}           | Delete an existing post              |
+| GET    | /api/categories          | return all categories                |
+| GET    | /api/categories/{id}     | returns one category by id, or 404   |
+| POST   | /api/register            | Register a new user                  |
+| POST   | /api/login               | Login, returns a token               |
+| POST   | /api/logout              | Logout, deletes the current token    |
+| GET    | /api/me                  | Returns the logged in user info      |
 
 ## Request Validation Rules (POST /api/posts, PUT /api/posts/{id})
- 
-| Field  | Create (POST)                             | Update (PUT)                                          |
-|--------|---------------------------------------------|----------------------------------------------------------|
-| title  | required, string, max 200 chars              | sometimes, required if present, string, max 200 chars     |
-| body   | required, string, max 500 chars              | sometimes, required if present, string, max 500 chars     |
-| status | required, must be `draft` or `published`     | sometimes, required if present, must be `draft` or `published` |
- 
+
+| Field  | Create (POST)                            | Update (PUT)                                                   |
+| ------ | ---------------------------------------- | -------------------------------------------------------------- |
+| title  | required, string, max 200 chars          | sometimes, required if present, string, max 200 chars          |
+| body   | required, string, max 500 chars          | sometimes, required if present, string, max 500 chars          |
+| status | required, must be `draft` or `published` | sometimes, required if present, must be `draft` or `published` |
+
 If validation fails, Laravel automatically returns a `422 Unprocessable Entity` response with an `errors` object (see example below) instead of saving the record. This is also applied for the `category_id`
- 
 
 ## Posts Filtering, Sorting & Pagination
 
-
-| Parameter       | Example                          | What it does                                              |
-|-----------------|-----------------------------------|--------------------------------------------------------------|
-| search          | `http://127.0.0.1:8000/api/posts?search=laravel`                 | Searches posts with titles that containes the searched word          |
-| status          | `http://127.0.0.1:8000/api/posts?status=published`               | Filters posts by it status (published or draft)     |
-| category_id     | `http://127.0.0.1:8000/api/posts?category_id=2`                  | Filters posts based on a spcesif category               |
-| sort_by         | `http://127.0.0.1:8000/api/posts?sort_by=title`                  | Sorts by `created_at` (default) or by`title`                    |
-| sort_direction  | `http://127.0.0.1:8000/api/posts?sort_direction=asc`             | `asc` or `desc` (`desc` is default )                            |
-| per_page        | `http://127.0.0.1:8000/api/posts?per_page=5`                     | Number of posts per page (max:50 , min:1, default :3)        |
-| page            | `http://127.0.0.1:8000/api/posts?page=2`                         | Returns specific page of the results pages  |
-
+| Parameter      | Example                                              | What it does                                                |
+| -------------- | ---------------------------------------------------- | ----------------------------------------------------------- |
+| search         | `http://127.0.0.1:8000/api/posts?search=laravel`     | Searches posts with titles that containes the searched word |
+| status         | `http://127.0.0.1:8000/api/posts?status=published`   | Filters posts by it status (published or draft)             |
+| category_id    | `http://127.0.0.1:8000/api/posts?category_id=2`      | Filters posts based on a spcesif category                   |
+| sort_by        | `http://127.0.0.1:8000/api/posts?sort_by=title`      | Sorts by `created_at` (default) or by`title`                |
+| sort_direction | `http://127.0.0.1:8000/api/posts?sort_direction=asc` | `asc` or `desc` (`desc` is default )                        |
+| per_page       | `http://127.0.0.1:8000/api/posts?per_page=5`         | Number of posts per page (max:50 , min:1, default :3)       |
+| page           | `http://127.0.0.1:8000/api/posts?page=2`             | Returns specific page of the results pages                  |
 
 `sort_by` and `sort_direction` are checked by the whitelist before using them inorder to avoid arbitrary columns.
 
-
-
-
-
 ## API Resources
+
 Resources classes for both Posts and Categories are used to formate the returning message instead of returning raw Eloquent models.
 
-
-
 **PostResource** returns:
+
 - id
 - user(nested id and name only)
 - title
@@ -246,107 +230,99 @@ Resources classes for both Posts and Categories are used to formate the returnin
 - created_at
 - updated_at
 
-
 **CategoryResource** returns:
+
 - id
 - name
-
-
-
-
 
 ## Authentication & Authorization
 
 This section explains how login/tokens work and who is allowed to do what.
 
 ### Setup
+
 - Authentication uses Laravel Sanctum for token-based authentication.
 - Sanctum stores access tokens in the personal_access_tokens table.
 - Authenticated requests use the generated Bearer token.
 
-
 ### Register, Login, Logout, /api/me
-| Method | Endpoint       | Auth required? | What it does                                  |
-|--------|----------------|-----------------|------------------------------------------------|
-| POST   | /api/register  | No              | Creates a new user (password is hashed)        |
-| POST   | /api/login     | No              | Checks email/password, returns a token if correct |
-| POST   | /api/logout    | Yes             | Deletes the current token (logs the user out)   |
-| GET    | /api/me        | Yes             | Returns the logged-in user's basic info         |
- 
 
+| Method | Endpoint      | Auth required? | What it does                                      |
+| ------ | ------------- | -------------- | ------------------------------------------------- |
+| POST   | /api/register | No             | Creates a new user (password is hashed)           |
+| POST   | /api/login    | No             | Checks email/password, returns a token if correct |
+| POST   | /api/logout   | Yes            | Deletes the current token (logs the user out)     |
+| GET    | /api/me       | Yes            | Returns the logged-in user's basic info           |
 
- ### Hoe to send the Bearer Token in Postman
+### Hoe to send the Bearer Token in Postman
 
- 1. call `POST/api/login`  with valid email and password 
- 2. Copy the token value from the response 
- 3. Go to **Authorization** in post man and tab **Bearer Token** and paste the token
- 
+1.  call `POST/api/login` with valid email and password
+2.  Copy the token value from the response
+3.  Go to **Authorization** in post man and tab **Bearer Token** and paste the token
 
+### Which Posts Endpoints Are Protected
 
-### Which Posts Endpoints Are Protected 
-
-
-
-| Method | Endpoint             | Protected? | 
-|--------|------------------------|:----------:| 
-| GET    | /api/posts             | Public | 
-| GET    | /api/posts/{id}        | Public | 
-| POST   | /api/posts             | Yes | 
-| PUT    | /api/posts/{id}        | Yes | 
-| DELETE | /api/posts/{id}        | Yes | 
+| Method | Endpoint        | Protected? |
+| ------ | --------------- | :--------: |
+| GET    | /api/posts      |   Public   |
+| GET    | /api/posts/{id} |   Public   |
+| POST   | /api/posts      |    Yes     |
+| PUT    | /api/posts/{id} |    Yes     |
+| DELETE | /api/posts/{id} |    Yes     |
 
 Notes:
+
 - Register does **not** log the user in automatically. You still need to call `/api/login` after registering to get a token.
 - Passwords are never sent back in any response
-
-
 
 If you call a protected endpoint without a valid token, you get a `401 Unauthenticated` response
 
 ### Post Ownership
- 
+
 - `posts` table has a `user_id` column (foreign key to `users`).
 - `User hasMany Posts`, `Post belongsTo User`.
 - When a logged-in user creates a post, `user_id` is set automatically from their token — the client can **not** send their own `user_id` to claim a post.
+
 ### Authorization Rules
- 
+
 - Authorization is handled by `PostPolicy`
 - A user can only `update` or `delete` a post **if that post's `user_id` matches their own id**.
 
+### Authorization Rules
 
-### Authorization Rules 
-- PostPolicy controls authorization 
+- PostPolicy controls authorization
 - Users can only update\delete their own posts
 - Unauthorize actions return `403 Forbidden`
-- GET posts are public 
-
-
+- GET posts are public
 
 ### Example: Unauthenticated Response
- 
+
 Calling a protected route with no token or an invalid token:
+
 ```json
 {
     "message": "Unauthenticated."
 }
 ```
+
 Status code: `401`
- 
+
 ### Example: Forbidden Response
- 
+
 Trying to update/delete another user's post ( User B tries to edit User A's post):
+
 ```json
 {
     "message": "This action is unauthorized."
 }
 ```
+
 Status code: `403`
-
-
 
 ## Example Responses
 
 **Success example : GET /api/health**
+
 ```json
 {
     "status": "ok",
@@ -356,6 +332,7 @@ Status code: `403`
 ```
 
 **Error example : GET /api/training/tasks/99 (non-existing ID)**
+
 ```json
 {
     "message": "Training task was not found"
@@ -363,6 +340,7 @@ Status code: `403`
 ```
 
 **Success example: GET /api/posts/1**
+
 ```json
 {
     "data": {
@@ -380,8 +358,8 @@ Status code: `403`
 }
 ```
 
- 
 **Validation error example : POST /api/posts (missing/invalid fields)**
+
 ```json
 {
     "message": "The title field is required. (and 2 more errors)",
@@ -394,6 +372,7 @@ Status code: `403`
 ```
 
 **Validation error example: POST /api/posts (invalid category_id)**
+
 ```json
 {
     "message": "The selected category id is invalid.",
@@ -403,42 +382,39 @@ Status code: `403`
 }
 ```
 
- 
 **Not found example : GET /api/posts/999**
+
 ```json
 {
     "message": "Post was not found"
 }
 ```
- 
-
-
 
 ## Testing the API
- 
+
 All CRUD endpoints were tested using Postman
 covering:
+
 - Listing all posts (with category information)
 - Viewing a single post
 - Creating a valid post (with a valid category_id)
 - Attempting to create an invalid post(with unvalid category_id) and confirming a 422 validation error is returned
-- Searching using post title 
-- Filterung using post status 
+- Searching using post title
+- Filterung using post status
 - Combine Filtering (status+ category_id)
 - Sorting using the post created_at , title, oreder(asc and desc)
-- Seperating results into multible pages using Pagination 
-- Updating a post 
+- Seperating results into multible pages using Pagination
+- Updating a post
 - Deleting a post
 - Requesting a non-existing post and confirming a 404 response
 - Requesting a non-existing post/category and confirming a 404 response
 
-
-
-Database state was verified after create, update, and delete operations by checking the table directly in MySQL App 
-
+Database state was verified after create, update, and delete operations by checking the table directly in MySQL App
 
 ## What I Learned (for Task 11)
-In Laravel routing i got to know how API get connected to its Controller instead of stuffing everything in the route closure.I also learned how dynamic parameters can be used for searching a specific item and give error message if not found(404). i also learned how to do validation in laravel and how it would be catched, i though i need to build every validation method but i found already built in  methods. Finally ive learned how to use postman for the first time. 
+
+In Laravel routing i got to know how API get connected to its Controller instead of stuffing everything in the route closure.I also learned how dynamic parameters can be used for searching a specific item and give error message if not found(404). i also learned how to do validation in laravel and how it would be catched, i though i need to build every validation method but i found already built in methods. Finally ive learned how to use postman for the first time.
 
 ## Challenges / Blockers / Questions
-none for today. 
+
+none for today.
