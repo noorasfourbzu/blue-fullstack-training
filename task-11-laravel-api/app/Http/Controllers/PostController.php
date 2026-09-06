@@ -41,14 +41,19 @@ if (in_array($sortBy, $allowedSortFields) && in_array($sortDirection, $allowedSo
   $query ->where('title','like','%' . $request ->search .'%');  // allows to do this GET /api/posts?search=  and search inside the title 
  }
 
- if ($request->filled('status')) {
-    $query->where('status', $request->status); // GET /api/posts?status=published
-}
+//  if ($request->filled('status')) {
+//     $query->where('status', $request->status); // GET /api/posts?status=published
+// }
+// if ($request->filled('category_id')) {
+//      $query->where('category_id', $request-> category_id);
+// }
+
+// to make published posts visible for all users while the draft only visible for its owner until status is changed 
+ $query->where('status', 'published');
+
 if ($request->filled('category_id')) {
      $query->where('category_id', $request-> category_id);
 }
-
-
 
 
 $perPage = $request -> query('per_page',7);

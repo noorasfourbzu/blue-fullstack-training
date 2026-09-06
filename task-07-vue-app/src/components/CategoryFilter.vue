@@ -9,7 +9,8 @@ const props = defineProps({
   },
   selected: {
     type: [String, Number],
-    required: true,
+    required: false,
+    default: null,
   },
 });
 

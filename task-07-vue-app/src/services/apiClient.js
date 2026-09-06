@@ -5,6 +5,7 @@ export class ApiError extends Error {
     super(message);
     this.status = status;
     this.name = "ApiError";
+    this.errors = errors;
   }
 }
 
@@ -30,32 +31,46 @@ async function request(path, options = {}) {
     throw new ApiError(
       errorData?.message || `Request to ${path} failed`,
       response.status,
+      errorData?.erros || null 
     );
   }
 
+
+if (response.status === 401 && path !== "/login") {
+  window.dispatchEvent(new CustomEvent("auth:unauthorized"));
+}
   return response.json();
 }
 
-export function getPosts(page = 1, categoryId = null) {
+export function getPosts(page = 1, categoryId = null, search ='') {
   let url = `/posts?page=${page}`;
 
   if (categoryId) {
     url += `&category_id=${categoryId}`;
   }
 
-  return request(url);
-}
-
-export function getMyPosts(page = 1, categoryId = null) {
-  let url = `/posts/my?page=${page}`;
-
-  if (categoryId) {
-    url += `&category_id=${categoryId}`;
+   if (search) {
+    url += `&search=${encodeURIComponent(search)}`
   }
 
   return request(url);
 }
 
+export function getMyPosts(page = 1, categoryId = null, search = '', status = '') {
+  let url = `/posts/my?page=${page}`
+
+  if (categoryId) {
+    url += `&category_id=${categoryId}`
+  }
+  if (search) {
+    url += `&search=${encodeURIComponent(search)}`
+  }
+  if (status) {
+    url += `&status=${status}`
+  }
+
+  return request(url)
+}
 export function getPost(id) {
   return request(`/posts/${id}`);
 }
@@ -99,3 +114,5 @@ export function logout() {
 export function getCategories() {
   return request("/categories");
 }
+
+

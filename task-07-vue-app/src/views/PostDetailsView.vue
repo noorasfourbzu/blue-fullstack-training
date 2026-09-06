@@ -6,12 +6,17 @@ import { usePostsStore } from "../stores/posts";
 import heartOutline from "../assets/heart-outline.png";
 import heartFilled from "../assets/heart-filled.png";
 import { previousRouteName } from "../router";
+import { useAuthStore } from "../stores/auth";
+import FormStatusBanner from "../components/FormStatusBanner.vue";
 
 const route = useRoute();
 const router = useRouter();
 const postsStore = usePostsStore();
+const authStore = useAuthStore();
 
 const { post, loading, error, notFound, fetchPost } = usePost();
+
+const deleteStatus = ref(''); // '', 'forbidden', 'error'
 
 const backTarget = computed(() =>
   previousRouteName.value === "favorites" ? "/favorites" : "/posts",
@@ -21,6 +26,38 @@ const backLabel = computed(() =>
     ? "Back to Favorites"
     : "Back to Posts",
 );
+
+const isOwner = computed(() => {
+  if (!post.value || !authStore.user) return false;
+  return post.value.user?.id === authStore.user.id;
+});
+const deleteMessage = computed(() => {
+  if (deleteStatus.value === 'forbidden') return 'You are not allowed to delete this post.';
+  if (deleteStatus.value === 'error') return 'Something went wrong while deleting the post. Please try again.';
+  return '';
+});
+
+function goToEdit(){
+  router.push(`/posts/${post.value.id}/edit`);
+}
+
+async function handleDelete(){
+  if (!confirm('Delete this post? This cannot be undone.')) return;
+
+  deleteStatus.value = '';
+  try {
+    await postsStore.deletePost(post.value.id);
+    router.push(backTarget.value);
+  } catch (err) {
+    // Do NOT navigate away or clear the post,the deletion did not succeed
+    if (err.status === 403) {
+      deleteStatus.value = 'forbidden';
+    } else {
+      deleteStatus.value = 'error';
+    }
+  }
+}
+
 
 function goBackToPosts() {
   router.push(backTarget.value);
@@ -97,6 +134,27 @@ watch(
           <p>Author: {{ post.user?.name || "Unknown" }}</p>
         </div>
 
+
+        <!-- owners only actions -->
+<div v-if="isOwner" class="post-owner-actions">
+          <button type="button" class="button" @click="goToEdit">
+            Edit Post
+          </button>
+          <button
+            type="button"
+            class="button"
+            :disabled="postsStore.deleting"
+            @click="handleDelete"
+          >
+            {{ postsStore.deleting ? 'Deleting...' : 'Delete Post' }}
+          </button>
+        </div>
+
+        <FormStatusBanner
+          v-if="deleteStatus"
+          status="error"
+          :message="deleteMessage"
+        />
         <button type="button" class="back-to-posts" @click="goBackToPosts">
           &larr; {{ backLabel }}
         </button>

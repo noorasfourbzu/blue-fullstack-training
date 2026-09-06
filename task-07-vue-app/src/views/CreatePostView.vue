@@ -3,6 +3,8 @@ import { reactive, computed, onMounted, ref } from "vue";
 import { usePostsStore } from "../stores/posts";
 import FormStatusBanner from "../components/FormStatusBanner.vue";
 
+
+
 //  form state
 const form = reactive({
   title: "",
@@ -97,6 +99,7 @@ const isFormValid = computed(() => {
 const isSubmitting = computed(() => postsStore.submitting);
 const formStatus = ref("");
 const createdPostId = ref(null);
+const backendErrors = ref({});
 
 const bannerVariant = computed(() => {
   if (formStatus.value === "success") return "success";
@@ -133,6 +136,7 @@ async function handleSubmit() {
   }
 
   formStatus.value = "";
+  backendErrors.value = {};
   try {
     const created = await postsStore.createPost({
       title: form.title.trim(),
@@ -153,6 +157,7 @@ async function handleSubmit() {
     console.log(err);
     if (err.status === 422) {
       formStatus.value = "validation-error";
+      backendErrors.value = err.errors || {};
     } else {
       formStatus.value = "submit-error";
     }
@@ -191,6 +196,9 @@ function recheckIfInvalid(field) {
 
         <small id="title-error" class="error-message">
           {{ touched.title ? titleError : "" }}
+        </small>      
+          <small v-if="backendErrors.title" class="error-message">
+          {{ backendErrors.title[0] }}
         </small>
         <small id="title-counter" class="character-counter">
           {{ form.title.length }} / {{ MAX_TITLE_LENGTH }} characters used
@@ -215,6 +223,10 @@ function recheckIfInvalid(field) {
         ></textarea>
         <small id="body-error" class="error-message">
           {{ touched.body ? bodyError : "" }}
+        </small>
+
+                <small v-if="backendErrors.body" class="error-message">
+          {{ backendErrors.body[0] }}
         </small>
         <small
           id="body-counter"
@@ -246,6 +258,10 @@ function recheckIfInvalid(field) {
           {{ touched.category ? categoryError : "" }}
         </small>
 
+        <small v-if="backendErrors.category_id" class="error-message">
+          {{ backendErrors.category_id[0] }}
+        </small>
+
         <fieldset>
           <legend>Save as</legend>
           <label>
@@ -270,6 +286,9 @@ function recheckIfInvalid(field) {
 
         <small class="error-message">
           {{ touched.status ? statusError : "" }}
+        </small>
+          <small v-if="backendErrors.status" class="error-message">
+          {{ backendErrors.status[0] }}
         </small>
         <button type="submit" class="button" :disabled="isSubmitting">
           {{

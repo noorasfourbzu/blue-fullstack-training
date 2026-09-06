@@ -3,6 +3,8 @@ import { ref, computed, watch, onMounted } from "vue";
 import PostCard from "./PostCard.vue";
 import { useRoute, useRouter } from "vue-router";
 import CategoryFilter from "./CategoryFilter.vue";
+import { usePostsStore } from "../stores/posts";
+
 
 const props = defineProps({
   posts: { type: Array, required: true },
@@ -30,6 +32,8 @@ const postCategories = computed(() => [
 
 const route = useRoute();
 const router = useRouter();
+const postsStore = usePostsStore();
+
 
 // what the user is currently typing
 const searchInput = ref(typeof route.query.q === "string" ? route.query.q : "");
@@ -37,18 +41,6 @@ const searchInput = ref(typeof route.query.q === "string" ? route.query.q : "");
 // the URL query, and highlighting in PostCard
 const appliedSearch = ref(searchInput.value);
 
-//******* come to fix it later: this only filters the current page not all pages together */
-// title only search filter derived from posts/appliedSearch
-const filteredPosts = computed(() => {
-  const query = appliedSearch.value.trim().toLowerCase();
-  if (!query) return activePosts.value;
-  return activePosts.value.filter((post) =>
-    post.title.toLowerCase().includes(query),
-  );
-});
-const visiblePosts = computed(() => {
-  return filteredPosts.value;
-});
 
 const isMyPosts = computed(() => route.name === "my-posts");
 const activePosts = computed(() =>
@@ -70,6 +62,8 @@ watch(isMyPosts, () => {
 function loadPosts(page = 1) {
   props.fetchPosts(page, isMyPosts.value);
 }
+
+
 function goToMyPosts() {
   router.push({ name: "my-posts" });
 }
@@ -83,7 +77,9 @@ function goToPage(page) {
 }
 
 onMounted(() => {
+    postsStore.setSearchTerm(appliedSearch.value);
   loadPosts();
+
 });
 
 const isSearching = computed(() => appliedSearch.value.trim().length > 0);
@@ -91,14 +87,30 @@ const isSearching = computed(() => appliedSearch.value.trim().length > 0);
 // runs the search: only called when the Search button is clicked
 function runSearch() {
   appliedSearch.value = searchInput.value.trim();
+   postsStore.setSearchTerm(appliedSearch.value);
+  loadPosts(1);
 }
 
 function clearSearch() {
   searchInput.value = "";
   appliedSearch.value = "";
+    postsStore.setSearchTerm("");
+  loadPosts(1);
 }
 function selectCategory(categoryId) {
   props.selectCategory(categoryId);
+  loadPosts(1);
+}
+
+
+const statusOptions = [
+  { id: "", name: "All" },
+  { id: "published", name: "Published" },
+  { id: "draft", name: "Draft" },
+];
+
+function selectStatus(status) {
+  postsStore.setMyPostsStatus(status);
   loadPosts(1);
 }
 
@@ -122,6 +134,8 @@ watch(
     if (value !== appliedSearch.value) {
       searchInput.value = value;
       appliedSearch.value = value;
+      postsStore.setSearchTerm(value);
+      loadPosts(1);
     }
   },
 );
@@ -151,6 +165,12 @@ watch(
         :categories="postCategories"
         :selected="selectedCategory"
         @filter-change="selectCategory"
+      />
+       <CategoryFilter
+        v-if="isMyPosts"
+        :categories="statusOptions"
+        :selected="postsStore.myPostsStatus"
+        @filter-change="selectStatus"
       />
       <div class="latest-posts-search-container">
         <textarea
@@ -194,9 +214,9 @@ watch(
         </button>
       </div>
 
-      <!-- Success: no posts returned by the API at all -->
+            <!-- Success: no posts returned by the API at all -->
       <p
-        v-else-if="activePosts.length === 0"
+        v-else-if="!isSearching && activePosts.length === 0"
         class="posts-status posts-status--empty"
       >
         No posts are available right now.
@@ -204,19 +224,19 @@ watch(
 
       <!-- Success: posts loaded, but the search matched nothing -->
       <div
-        v-else-if="filteredPosts.length === 0"
+        v-else-if="isSearching && activePosts.length === 0"
         class="posts-status posts-status--empty"
       >
-        <p>No posts match "{{ searchInput }}".</p>
+        <p>No posts match "{{ appliedSearch }}".</p>
       </div>
 
       <!-- Success: posts to show -->
-      <template v-else>
+      <template v-else>               
         <p class="results-count" aria-live="polite">
           <span v-if="isSearching">
-            {{ filteredPosts.length }} result{{
-              filteredPosts.length === 1 ? "" : "s"
-            }}
+            {{ activePagination.total }} result{{
+              activePagination.total === 1 ? "" : "s"
+            }} for "{{appliedSearch}}"
           </span>
           <span v-else>
             Page {{ activePagination.currentPage }} of
@@ -227,7 +247,7 @@ watch(
 
         <div class="latest-posts-container">
           <PostCard
-            v-for="post in visiblePosts"
+            v-for="post in activePosts"
             :key="post.id"
             :post="post"
             :search-term="appliedSearch"

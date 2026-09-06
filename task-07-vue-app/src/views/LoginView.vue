@@ -1,8 +1,9 @@
 <script setup>
 import { ref } from "vue";
 import FormStatusBanner from "../components/FormStatusBanner.vue";
-import { useRouter } from "vue-router";
+import { useRouter,useRoute } from "vue-router";
 import { useAuthStore } from "../stores/auth";
+import { ApiError } from "../services/apiClient.js";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_PASSWORD_LENGTH = 20;
@@ -12,7 +13,11 @@ const email = ref("");
 const password = ref("");
 const authStore = useAuthStore();
 const router = useRouter();
+const route = useRoute();
 
+if(route.query.sessionExpired){
+  formStatus.value = "session-expired";
+}
 const errors = ref({
   email: "",
   password: "",
@@ -63,13 +68,19 @@ async function handleLogin() {
     return;
   }
 
-  try {
+   try {
     await authStore.login({ email: email.value, password: password.value });
     router.push({ name: "account" });
   } catch (error) {
-    formStatus.value = "error";
+    if (error instanceof ApiError) {
+      formStatus.value = "error"; // backend responded: wrong email/password
+    } else {
+      formStatus.value = "network-error"; // fetch itself failed: server unreachable
+    }
   }
 }
+ 
+
 </script>
 
 <template>
@@ -130,6 +141,13 @@ async function handleLogin() {
             class="form-status form-status--error"
           >
             Please recheck your credentials and try again
+          </p>
+
+          <p
+            v-if="formStatus === 'network-error'"
+            class="form-status form-status--error"
+          >
+            Can't reach the server right now. Check your connection and try again.
           </p>
         </form>
       </div>

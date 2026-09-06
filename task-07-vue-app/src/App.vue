@@ -4,17 +4,31 @@ import SiteHeader from "./components/SiteHeader.vue";
 //import ServicesSection from "./components/ServicesSection.vue";
 //import PostsSection from "./components/PostsSection.vue";
 import SiteFooter from "./components/SiteFooter.vue";
-import { onMounted } from "vue";
+import { onMounted, onUnmounted , watch } from "vue";
 import { usePostsStore } from "./stores/posts";
 import { useAuthStore } from "./stores/auth";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const postsStore = usePostsStore();
 const authStore = useAuthStore();
 
-onMounted(() => {
+
+function handleUnauthorized() {
+  authStore.clearSession();
+  router.push({ name: "login", query: { sessionExpired: "1" } });
+}
+onMounted( async () => {
+  await authStore.restoreSession();
   postsStore.restoreFavorites();
-  authStore.restoreSession();
 });
+watch(
+  () => authStore.user?.id,
+  () => {
+    postsStore.restoreFavorites();
+  }
+);
+onUnmounted(() => window.removeEventListener("auth:unauthorized", handleUnauthorized));
 </script>
 
 <template>

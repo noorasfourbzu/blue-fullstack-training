@@ -8,6 +8,8 @@ import {
   updatePost as updatePostRequest,
   deletePost as deletePostRequest,
 } from "../services/apiClient";
+import { useAuthStore } from "./auth";
+
 export const usePostsStore = defineStore("posts", () => {
   // state
   // this is composition api style
@@ -16,6 +18,8 @@ export const usePostsStore = defineStore("posts", () => {
 
   const categories = ref([]);
   const selectedCategory = ref(null);
+  const searchTerm = ref('')
+  const myPostsStatus = ref('')
   const loading = ref(false);
   const error = ref(false);
 
@@ -77,6 +81,14 @@ export const usePostsStore = defineStore("posts", () => {
     selectedCategory.value = categoryId;
   }
 
+  function setSearchTerm(term) {
+  searchTerm.value = term
+}
+
+function setMyPostsStatus(status) {
+  myPostsStatus.value = status
+}
+
   async function fetchPosts(page = 1, mine = false) {
     if (mine) {
       return fetchMyPosts(page);
@@ -85,7 +97,7 @@ export const usePostsStore = defineStore("posts", () => {
     error.value = false;
 
     try {
-      const response = await getPosts(page, selectedCategory.value);
+      const response = await getPosts(page, selectedCategory.value, searchTerm.value);
       posts.value = response.data;
       pagination.value = {
         currentPage: response.meta.current_page,
@@ -107,7 +119,7 @@ export const usePostsStore = defineStore("posts", () => {
     myPostsError.value = false;
 
     try {
-      const response = await getMyPosts(page, selectedCategory.value);
+      const response = await getMyPosts(page, selectedCategory.value, searchTerm.value,  myPostsStatus.value);
       myPosts.value = response.data;
       myPostsPagination.value = {
         currentPage: response.meta.current_page,
@@ -128,6 +140,11 @@ export const usePostsStore = defineStore("posts", () => {
     fetchPosts(1, mine);
   }
 
+    function getFavoritesKey() {
+    const authStore = useAuthStore();
+    return authStore.user ? `favoriteIds_user_${authStore.user.id}` : "favoriteIds";
+  }
+
   function toggleFavorite(postId) {
     if (favoriteIds.value.includes(postId))
       favoriteIds.value = favoriteIds.value.filter((id) => id !== postId);
@@ -136,13 +153,12 @@ export const usePostsStore = defineStore("posts", () => {
   }
 
   function persistFavorites() {
-    localStorage.setItem("favoriteIds", JSON.stringify(favoriteIds.value));
-  }
+    localStorage.setItem(getFavoritesKey(), JSON.stringify(favoriteIds.value));  }
 
   function restoreFavorites() {
-    const saved = localStorage.getItem("favoriteIds");
-    if (saved) favoriteIds.value = JSON.parse(saved);
-  }
+    const saved = localStorage.getItem(getFavoritesKey());
+    favoriteIds.value = saved ? JSON.parse(saved) : [];
+    }
 
   async function createPost(newPost) {
     submitting.value = true;
@@ -160,26 +176,62 @@ export const usePostsStore = defineStore("posts", () => {
     }
   }
 
-  async function updatePost(id, updatePost) {
-    const updated = await updatePostRequest(id, updatePost);
-    const index = posts.value.findIndex((post) => post.id === id);
+  
 
-    const myIndex = myPosts.value.findIndex((post) => post.id === id);
+async function updatePost(id, changes){
+  updating.value = true
+  updateError.value = false
+  updateForbidden.value = false
+
+  try {
+    const response = await updatePostRequest(id, changes)
+    const updated = response.data
+
+    const index = posts.value.findIndex(post => post.id === id)
+    const myIndex = myPosts.value.findIndex(post => post.id === id)
 
     if (index !== -1) {
-      posts.value[index] = updated;
+      posts.value[index] = updated
     }
     if (myIndex !== -1) {
-      myPosts.value[myIndex] = updated;
+      myPosts.value[myIndex] = updated
     }
-    return updated;
-  }
 
-  async function deletePost(id) {
-    await deletePostRequest(id);
-    posts.value = posts.value.filter((post) => post.id !== id);
-    myPosts.value = myPosts.value.filter((post) => post.id !== id);
+    return updated
+  } catch (err) {
+    if (err.status === 403) {
+      updateForbidden.value = true
+    } else {
+      updateError.value = true
+    }
+    throw err
+  } finally {
+    updating.value = false
   }
+}
+
+
+
+async function deletePost(id){
+  deleting.value = true
+  deleteError.value = false
+  deleteForbidden.value = false
+
+  try {
+    await deletePostRequest(id)
+    posts.value = posts.value.filter(post => post.id !== id)
+    myPosts.value = myPosts.value.filter(post => post.id !== id)
+  } catch (err) {
+    if (err.status === 403) {
+      deleteForbidden.value = true
+    } else {
+      deleteError.value = true
+    }
+    throw err
+  } finally {
+    deleting.value = false
+  }
+}
 
   return {
     posts,
@@ -198,6 +250,16 @@ export const usePostsStore = defineStore("posts", () => {
     lastCreatedPost,
     favoritePosts,
     favoriteCount,
+    updating, 
+    updateError,
+    updateForbidden,
+    deleting,
+    deleteError,
+    deleteForbidden,
+    searchTerm,
+    myPostsStatus,
+     setMyPostsStatus,
+    setSearchTerm,
     selectCategory,
     retryFetch,
     toggleFavorite,
