@@ -240,7 +240,9 @@ function recheckIfInvalid(field) {
         <p v-if="postsStore.categoriesLoading" class="posts-status">Loading categories...</p>
 <p v-else-if="postsStore.categoriesError" class="posts-status posts-status--error">
   Couldn't load categories.
-  <button type="button" @click="postsStore.fetchCategories">Retry</button>
+  <button type="button" :disabled="postsStore.categoriesLoading" @click="postsStore.fetchCategories">
+    {{ postsStore.categoriesLoading ? "Retrying..." : "Retry" }}
+  </button>
 </p>
         <select
           id="category"

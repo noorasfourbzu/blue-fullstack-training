@@ -90,7 +90,9 @@ watch(
       <!-- API Error-->
       <div v-else-if="error" class="posts-status posts-status--error">
         <p>Something went wrong while loading the post</p>
-        <button type="button" @click="fetchPost(route.params.id)">Retry</button>
+        <button type="button" :disabled="loading" @click="fetchPost(route.params.id)">
+          {{ loading ? "Retrying..." : "Retry" }}
+        </button>
         <button type="button" @click="goBackToPosts()">Back to Posts</button>
       </div>
 

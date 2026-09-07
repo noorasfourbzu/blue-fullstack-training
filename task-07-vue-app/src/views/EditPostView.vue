@@ -123,7 +123,9 @@ async function handleSubmit() {
 
             <div v-else-if="error" class="posts-status posts-status--error">
                 <p>Something went wrong while loading the post.</p>
-                <button type="button" @click="fetchPost(route.params.id)">Retry</button>
+                <button type="button" :disabled="loading" @click="fetchPost(route.params.id)">
+                    {{ loading ? "Retrying..." : "Retry" }}
+                </button>
             </div>
 
             <div v-else-if="notFound" class="posts-status posts-status--empty">
@@ -161,7 +163,9 @@ async function handleSubmit() {
                     <p v-if="postsStore.categoriesLoading" class="posts-status">Loading categories...</p>
                     <p v-else-if="postsStore.categoriesError" class="posts-status posts-status--error">
                       Couldn't load categories.
-                      <button type="button" @click="postsStore.fetchCategories">Retry</button>
+                      <button type="button" :disabled="postsStore.categoriesLoading" @click="postsStore.fetchCategories">
+                        {{ postsStore.categoriesLoading ? "Retrying..." : "Retry" }}
+                      </button>
                     </p>
                     
                     <select id="edit-category" v-model="form.category_id" class="form-control">

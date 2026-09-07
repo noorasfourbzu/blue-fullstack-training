@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from "vue";
 import BaseCard from "./BaseCard.vue";
 import { usePostsStore } from "../stores/posts";
 import heartOutline from "../assets/heart-outline.png";
@@ -17,6 +18,23 @@ const props = defineProps({
 });
 
 const store = usePostsStore();
+
+
+const BODY_PREVIEW_LENGTH = 20;
+const TITLE_PREVIEW_LENGTH = 20;
+
+
+const bodyPreview = computed(() => {
+  const body = props.post.body || "";
+  if (body.length <= BODY_PREVIEW_LENGTH) return body;
+  return body.slice(0, BODY_PREVIEW_LENGTH).trimEnd() + "…";
+});
+
+const titlePreview = computed(() => {
+  const title = props.post.title || "";
+  if (title.length <= TITLE_PREVIEW_LENGTH) return title;
+  return title.slice(0, TITLE_PREVIEW_LENGTH).trimEnd() + "…";
+});
 
 function highlightParts(text) {
   const query = props.searchTerm.trim();
@@ -54,7 +72,7 @@ function highlightParts(text) {
 <template>
   <BaseCard variant="post-card">
     <h3>
-      <template v-for="(part, i) in highlightParts(post.title)" :key="i">
+      <template v-for="(part, i) in highlightParts(titlePreview)" :key="i">
         <mark v-if="part.matched" class="search-highlight">{{
           part.text
         }}</mark>
@@ -62,7 +80,7 @@ function highlightParts(text) {
       </template>
     </h3>
     <p>
-      <template v-for="(part, i) in highlightParts(post.body)" :key="i">
+      <template v-for="(part, i) in highlightParts(bodyPreview)" :key="i">
         <mark v-if="part.matched" class="search-highlight">{{
           part.text
         }}</mark>

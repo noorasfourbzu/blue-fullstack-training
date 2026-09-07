@@ -2,7 +2,7 @@
 import { ref, computed } from "vue";
 import FormStatusBanner from "../components/FormStatusBanner.vue";
 
-// validation rules (same as Task 01)
+// validation rules 
 const NAME_MIN_LENGTH = 2;
 const NAME_MAX_LENGTH = 60;
 const PHONE_MIN_DIGITS = 8;
@@ -32,6 +32,8 @@ const errors = ref({
 
 // submit result banner: "success" | "error" | ""
 const formStatus = ref("");
+// guards the submit button while handleSubmit runs (form is local-only / no backend call)
+const isSubmitting = ref(false);
 
 const statusMessage = computed(() => {
   if (formStatus.value === "success") {
@@ -133,6 +135,8 @@ function recheckIfInvalid(field, validateFn) {
 }
 
 function handleSubmit() {
+  isSubmitting.value = true;
+
   const isNameValid = validateName();
   const isEmailValid = validateEmail();
   const isPhoneValid = validatePhone();
@@ -148,6 +152,7 @@ function handleSubmit() {
 
   if (!isValid) {
     formStatus.value = "error";
+    isSubmitting.value = false;
     return;
   }
 
@@ -159,6 +164,7 @@ function handleSubmit() {
   phone.value = "";
   subject.value = "";
   message.value = "";
+  isSubmitting.value = false;
 }
 </script>
 
@@ -276,7 +282,9 @@ function handleSubmit() {
           {{ messageCount }} / {{ MESSAGE_MAX_LENGTH }} characters used
         </small>
 
-        <button type="submit" class="button">Send</button>
+        <button type="submit" class="button" :disabled="isSubmitting">
+          {{ isSubmitting ? "Sending..." : "Send" }}
+        </button>
 
         <FormStatusBanner :status="formStatus" :message="statusMessage" />
       </form>
