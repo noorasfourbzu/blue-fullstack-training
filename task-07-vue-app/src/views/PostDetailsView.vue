@@ -34,11 +34,11 @@ const isOwner = computed(() => {
   return post.value.user?.id === authStore.user.id;
 });
 const deleteMessage = computed(() => {
+  if (deleteStatus.value === 'success') return 'Post deleted successfully.';
   if (deleteStatus.value === 'forbidden') return 'You are not allowed to delete this post.';
   if (deleteStatus.value === 'error') return 'Something went wrong while deleting the post. Please try again.';
   return '';
 });
-
 function goToEdit(){
   router.push(`/posts/${post.value.id}/edit`);
 }
@@ -49,7 +49,8 @@ async function handleDelete(){
   deleteStatus.value = '';
   try {
     await postsStore.deletePost(post.value.id);
-    router.push(backTarget.value);
+    deleteStatus.value = 'success';
+    setTimeout(() => router.push(backTarget.value), 800);
   } catch (err) {
     // Do NOT navigate away or clear the post,the deletion did not succeed
     if (err.status === 403) {
@@ -59,7 +60,6 @@ async function handleDelete(){
     }
   }
 }
-
 
 function goBackToPosts() {
   router.push(backTarget.value);
@@ -171,10 +171,9 @@ watch(
           <p>Author: {{ post.user?.name || "Unknown" }}</p>
         </div>
 
-
         <FormStatusBanner
           v-if="deleteStatus"
-          status="error"
+          :status="deleteStatus === 'success' ? 'success' : 'error'"
           :message="deleteMessage"
         />
         <button type="button" class="back-to-posts" @click="goBackToPosts">

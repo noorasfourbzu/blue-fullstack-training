@@ -113,7 +113,7 @@ const bannerVariant = computed(() => {
 
 const statusMessage = computed(() => {
   if (formStatus.value === "success") {
-    return `Post created successfully. Returned ID: ${createdPostId.value}`;
+    return `Post created successfully (ID: ${createdPostId.value})`;
   }
   if (formStatus.value === "validation-error") {
     return "Please check the highlighted fields above and make sure they match the required rules.";
@@ -127,7 +127,7 @@ async function handleSubmit() {
   // mark all fields touched so all errors show if user tries to submit early
   touched.title = true;
   touched.body = true;
-  touched.category_id = true;
+  touched.category = true;
   touched.status = true;
 
   if (!isFormValid.value) {
@@ -237,6 +237,11 @@ function recheckIfInvalid(field) {
         </small>
 
         <label for="category">Category</label>
+        <p v-if="postsStore.categoriesLoading" class="posts-status">Loading categories...</p>
+<p v-else-if="postsStore.categoriesError" class="posts-status posts-status--error">
+  Couldn't load categories.
+  <button type="button" @click="postsStore.fetchCategories">Retry</button>
+</p>
         <select
           id="category"
           v-model="form.category_id"
@@ -248,6 +253,8 @@ function recheckIfInvalid(field) {
           @change="touched.category = true"
           @blur="touched.category = true"
         >
+
+      
           <option value="" disabled>Select a category</option>
           <option v-for="c in postsStore.categories" :key="c.id" :value="c.id">
             {{ c.name }}
@@ -312,5 +319,3 @@ function recheckIfInvalid(field) {
     </div>
   </section>
 </template>
-
->

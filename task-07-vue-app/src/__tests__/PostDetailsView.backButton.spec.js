@@ -8,14 +8,13 @@ import router from "../router";
 // send the user to /posts. It should send them back to wherever they
 // actually came from (Favorites in this case), and fall back to /posts
 // when there is no known previous route.
-
 function mockFetchPostOnce(post) {
   vi.stubGlobal(
     "fetch",
     vi.fn().mockResolvedValue({
       ok: true,
       status: 200,
-      json: async () => post,
+      json: async () => ({ data: post }),
     }),
   );
 }

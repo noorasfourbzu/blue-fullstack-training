@@ -1,7 +1,9 @@
+import { getToken } from "./tokenStore";
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export class ApiError extends Error {
-  constructor(message, status) {
+  constructor(message, status, errors = null) {
     super(message);
     this.status = status;
     this.name = "ApiError";
@@ -9,8 +11,19 @@ export class ApiError extends Error {
   }
 }
 
+function buildQueryString(params = {}) {
+  const query = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== null && value !== undefined && value !== "") {
+      query.append(key, value);
+    }
+  });
+  const qs = query.toString();
+  return qs ? `?${qs}` : "";
+}
+
 async function request(path, options = {}) {
-  const token = sessionStorage.getItem(`authToken`);
+  const token = getToken();
 
   const headers = {
     "Content-Type": "application/json",
@@ -28,77 +41,49 @@ async function request(path, options = {}) {
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => null);
+
+    if (response.status === 401 && path !== "/login") {
+      window.dispatchEvent(new CustomEvent("auth:unauthorized"));
+    }
+
     throw new ApiError(
       errorData?.message || `Request to ${path} failed`,
       response.status,
-      errorData?.erros || null 
+      errorData?.errors || null
     );
   }
 
-
-if (response.status === 401 && path !== "/login") {
-  window.dispatchEvent(new CustomEvent("auth:unauthorized"));
-}
   return response.json();
 }
 
-export function getPosts(page = 1, categoryId = null, search ='') {
-  let url = `/posts?page=${page}`;
-
-  if (categoryId) {
-    url += `&category_id=${categoryId}`;
-  }
-
-   if (search) {
-    url += `&search=${encodeURIComponent(search)}`
-  }
-
-  return request(url);
+export function getPosts(page = 1, categoryId = null, search = "") {
+  const query = buildQueryString({ page, category_id: categoryId, search });
+  return request(`/posts${query}`);
 }
 
-export function getMyPosts(page = 1, categoryId = null, search = '', status = '') {
-  let url = `/posts/my?page=${page}`
-
-  if (categoryId) {
-    url += `&category_id=${categoryId}`
-  }
-  if (search) {
-    url += `&search=${encodeURIComponent(search)}`
-  }
-  if (status) {
-    url += `&status=${status}`
-  }
-
-  return request(url)
+export function getMyPosts(page = 1, categoryId = null, search = "", status = "") {
+  const query = buildQueryString({ page, category_id: categoryId, search, status });
+  return request(`/posts/my${query}`);
 }
+
 export function getPost(id) {
   return request(`/posts/${id}`);
 }
 
 export function createPost(newPost) {
-  return request("/posts", {
-    method: "POST",
-    body: JSON.stringify(newPost),
-  });
+  return request("/posts", { method: "POST", body: JSON.stringify(newPost) });
 }
 
 export function updatePost(id, updatedPost) {
-  return request(`/posts/${id}`, {
-    method: "PUT",
-    body: JSON.stringify(updatedPost),
-  });
+  return request(`/posts/${id}`, { method: "PUT", body: JSON.stringify(updatedPost) });
 }
 
 export function deletePost(id) {
-  return request(`/posts/${id}`, {
-    method: "DELETE",
-  });
+  return request(`/posts/${id}`, { method: "DELETE" });
 }
+
 export function login(credentials) {
-  return request("/login", {
-    method: "POST",
-    body: JSON.stringify(credentials),
-  });
+  return request("/login", { method: "POST", body: JSON.stringify(credentials) });
 }
 
 export function getAuthenticatedUser() {
@@ -106,13 +91,9 @@ export function getAuthenticatedUser() {
 }
 
 export function logout() {
-  return request("/logout", {
-    method: "POST",
-  });
+  return request("/logout", { method: "POST" });
 }
 
 export function getCategories() {
   return request("/categories");
 }
-
-

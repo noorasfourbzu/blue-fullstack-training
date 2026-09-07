@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
-
+import {getToken , setToken , clearToken} from "../services/tokenStore";
 import {
   login as loginRequest,
   getAuthenticatedUser,
@@ -9,7 +9,7 @@ import {
 
 export const useAuthStore = defineStore("auth", () => {
   // state
-  const token = ref(sessionStorage.getItem("authToken"));
+  const token = ref(getToken());
   const user = ref(null);
   const loading = ref(false);
   const error = ref(null);
@@ -25,7 +25,7 @@ export const useAuthStore = defineStore("auth", () => {
     try {
       const response = await loginRequest(credentials);
       token.value = response.token;
-      sessionStorage.setItem("authToken", response.token);
+      setToken(response.token);  
       user.value = response.user;
       return response;
     } catch (err) {
@@ -50,7 +50,7 @@ export const useAuthStore = defineStore("auth", () => {
 
   // restore session after refresh
   async function restoreSession() {
-    const savedToken = sessionStorage.getItem("authToken");
+    const savedToken = getToken();
     if (!savedToken) return;
     token.value = savedToken;
     try {
@@ -72,7 +72,7 @@ export const useAuthStore = defineStore("auth", () => {
   function clearSession() {
     token.value = null;
     user.value = null;
-    sessionStorage.removeItem("authToken");
+    clearToken();
   }
 
   return {

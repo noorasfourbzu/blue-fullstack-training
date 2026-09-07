@@ -23,6 +23,9 @@ export const usePostsStore = defineStore("posts", () => {
   const loading = ref(false);
   const error = ref(false);
 
+const categoriesLoading = ref(false);
+const categoriesError = ref(false);
+
   const viewingMyPosts = ref(false);
   const pagination = ref({
     currentPage: 1,
@@ -68,13 +71,23 @@ export const usePostsStore = defineStore("posts", () => {
   // actions
 
   async function fetchCategories() {
+  categoriesLoading.value = true;
+  categoriesError.value = false;
+
     try {
       const response = await getCategories();
       categories.value = response.data;
     } catch (err) {
       console.error("failed to fetch categories", err);
       categories.value = [];
+          categoriesError.value = true;
     }
+    finally{
+          categoriesLoading.value = false;
+    }
+
+
+
   }
 
   async function selectCategory(categoryId) {
@@ -160,21 +173,22 @@ function setMyPostsStatus(status) {
     favoriteIds.value = saved ? JSON.parse(saved) : [];
     }
 
-  async function createPost(newPost) {
-    submitting.value = true;
-    submitError.value = false;
+ async function createPost(newPost) {
+  submitting.value = true;
+  submitError.value = false;
 
-    try {
-      const created = await createPostRequest(newPost);
-      lastCreatedPost.value = created;
-      return created;
-    } catch (err) {
-      submitError.value = true;
-      throw err;
-    } finally {
-      submitting.value = false;
-    }
+  try {
+    const response = await createPostRequest(newPost);
+    const created = response.data;
+    lastCreatedPost.value = created;
+    return created;
+  } catch (err) {
+    submitError.value = true;
+    throw err;
+  } finally {
+    submitting.value = false;
   }
+}
 
   
 
@@ -245,6 +259,8 @@ async function deletePost(id){
     myPostsPagination,
     categories,
     selectedCategory,
+    categoriesError,
+    categoriesLoading,
     submitting,
     submitError,
     lastCreatedPost,

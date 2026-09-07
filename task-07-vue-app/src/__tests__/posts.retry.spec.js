@@ -1,13 +1,15 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { setActivePinia, createPinia } from "pinia";
 import { usePostsStore } from "../stores/posts";
-import { getPosts as getPostsMock } from "../services/postsApi";
+import { getPosts as getPostsMock } from "../services/apiClient";
 
-// mock the service layer so no real network request happens,
-// and so we can control exactly when the "API" fails vs succeeds
-vi.mock("../services/postsApi", () => ({
+vi.mock("../services/apiClient", () => ({
   getPosts: vi.fn(),
+  getMyPosts: vi.fn(),
+  getCategories: vi.fn(),
   createPost: vi.fn(),
+  updatePost: vi.fn(),
+  deletePost: vi.fn(),
 }));
 
 describe("posts store - fetch error and retry", () => {
@@ -30,15 +32,14 @@ describe("posts store - fetch error and retry", () => {
   it("recovers from an error state when retryFetch succeeds", async () => {
     const store = usePostsStore();
 
-    // first attempt fails
     getPostsMock.mockRejectedValueOnce(new Error("Network down"));
     await store.fetchPosts();
     expect(store.error).toBe(true);
 
-    // when user click Retry the API this time responds successfully
-    getPostsMock.mockResolvedValueOnce([
-      { id: 1, title: "Post 1", body: "Body 1" },
-    ]);
+    getPostsMock.mockResolvedValueOnce({
+      data: [{ id: 1, title: "Post 1", body: "Body 1" }],
+      meta: { current_page: 1, last_page: 1, per_page: 7, total: 1 },
+    });
     await store.retryFetch();
 
     expect(store.error).toBe(false);

@@ -91,7 +91,7 @@ async function handleSubmit() {
 
     formStatus.value = ''
     backendErrors.value = {}
-    try {
+       try {
         await postsStore.updatePost(route.params.id, {
             title: form.title.trim(),
             body: form.body.trim(),
@@ -99,13 +99,15 @@ async function handleSubmit() {
             status: form.status
         })
         formStatus.value = 'success'
-        router.push(`/posts/${route.params.id}`)
+        setTimeout(() => router.push(`/posts/${route.params.id}`), 800)
     }catch (err) {
         if (err.status === 403) {
             formStatus.value = 'forbidden'
         } else if (err.status === 422) {
             formStatus.value = 'validation-error'
             backendErrors.value = err.errors || {}
+        } else if (err.status === 401) {
+            formStatus.value = 'submit-error'
         } else {
             formStatus.value = 'submit-error'
         }
@@ -155,6 +157,13 @@ async function handleSubmit() {
   {{ bodyCount }} / {{ MAX_BODY_LENGTH }} characters used
 </small>
                     <label for="edit-category">Category</label>
+                     <label for="edit-category">Category</label>
+                    <p v-if="postsStore.categoriesLoading" class="posts-status">Loading categories...</p>
+                    <p v-else-if="postsStore.categoriesError" class="posts-status posts-status--error">
+                      Couldn't load categories.
+                      <button type="button" @click="postsStore.fetchCategories">Retry</button>
+                    </p>
+                    
                     <select id="edit-category" v-model="form.category_id" class="form-control">
                         <option value="" disabled>Select a category</option>
                         <option v-for="c in postsStore.categories" :key="c.id" :value="c.id">{{ c.name }}</option>

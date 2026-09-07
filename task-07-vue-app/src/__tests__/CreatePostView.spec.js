@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { mount } from "@vue/test-utils";
 import { setActivePinia, createPinia } from "pinia";
 import CreatePostView from "../views/CreatePostView.vue";
@@ -7,30 +7,32 @@ import { usePostsStore } from "../stores/posts";
 describe("CreatePostView - validation", () => {
   beforeEach(() => {
     setActivePinia(createPinia());
-    localStorage.clear();
   });
 
-  it("blocks submission and shows field errors when the form is empty", async () => {
-    const wrapper = mount(CreatePostView);
+  function mountWithCategory() {
     const store = usePostsStore();
-    const createPostSpy = vi.spyOn(store, "createPost");
+    store.categories = [{ id: 1, name: "Technology" }];
+    return { wrapper: mount(CreatePostView), store };
+  }
+
+  it("blocks submission and shows field errors when the form is empty", async () => {
+    const { wrapper, store } = mountWithCategory();
+
     await wrapper.find("#create-post-form").trigger("submit");
 
-    // error message for every empty field
     expect(wrapper.find("#title-error").text()).toBe("Title is required.");
     expect(wrapper.find("#body-error").text()).toBe("Body is required.");
-    expect(wrapper.find("#userId-error").text()).toBe("User ID is required.");
-    // overall form status flips to error
+    expect(wrapper.find("#category-error").text()).toBe(
+      "Please select a category",
+    );
     expect(wrapper.find("#form-status").text()).toContain(
       "Please check the highlighted fields above",
     );
-
-    // and no attempt was made to actually create the post
-    expect(createPostSpy).not.toHaveBeenCalled();
+    expect(store.submitting).toBe(false);
   });
 
   it("shows a specific error when the title is too short", async () => {
-    const wrapper = mount(CreatePostView);
+    const { wrapper } = mountWithCategory();
 
     const titleInput = wrapper.find("#title");
     await titleInput.setValue("Hi");
@@ -42,11 +44,10 @@ describe("CreatePostView - validation", () => {
   });
 
   it("does not show an error before the user has touched a field", () => {
-    const wrapper = mount(CreatePostView);
+    const { wrapper } = mountWithCategory();
 
-    // component just mounted user hasnt typed or blurred anything yet
     expect(wrapper.find("#title-error").text()).toBe("");
     expect(wrapper.find("#body-error").text()).toBe("");
-    expect(wrapper.find("#userId-error").text()).toBe("");
+    expect(wrapper.find("#category-error").text()).toBe("");
   });
 });

@@ -19,6 +19,7 @@ function handleUnauthorized() {
   router.push({ name: "login", query: { sessionExpired: "1" } });
 }
 onMounted( async () => {
+    window.addEventListener("auth:unauthorized", handleUnauthorized);
   await authStore.restoreSession();
   postsStore.restoreFavorites();
 });

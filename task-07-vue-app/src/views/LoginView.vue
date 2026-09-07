@@ -15,15 +15,11 @@ const authStore = useAuthStore();
 const router = useRouter();
 const route = useRoute();
 
-if(route.query.sessionExpired){
-  formStatus.value = "session-expired";
-}
+const formStatus = ref(route.query.sessionExpired ? "session-expired" : "");
 const errors = ref({
   email: "",
   password: "",
 });
-
-const formStatus = ref("");
 
 function validateEmail() {
   const value = email.value.trim();
@@ -134,7 +130,7 @@ async function handleLogin() {
             }}</span>
           </div>
 
-          <button type="submit" class="auth-submit">Login</button>
+          <button type="submit" class="auth-submit"  :disabled="authStore.loading">   {{ authStore.loading ? "Logging in..." : "Login" }} </button>
 
           <p
             v-if="formStatus === 'error'"
@@ -147,8 +143,14 @@ async function handleLogin() {
             v-if="formStatus === 'network-error'"
             class="form-status form-status--error"
           >
+
+
             Can't reach the server right now. Check your connection and try again.
           </p>
+
+          <p v-if="formStatus === 'session-expired'" class="form-status form-status--error">
+  Your session has expired. Please log in again.
+</p>
         </form>
       </div>
     </div>
