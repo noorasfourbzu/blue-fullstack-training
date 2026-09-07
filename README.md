@@ -1,10 +1,24 @@
 # Task - Full Stack Integration (Vue + Laravel)
-This is the README for Task 15. In this task I connected the Vue frontend.
+This is the README for Tass 15 + 16 + 17 In these tasks I connected the Vue frontend.
 
-This Task connects the Vue frontend with the Laravel backend, including authentication, posts, categories, filtering, pagination, and CRUD operations using real MySQL data.
+This Task connects the Vue frontend with the Laravel backend, including authentication, posts, categories, filtering, pagination, and CRUD operations using real MySQL data. Then Done several Tests on it. 
 
 Below is how to run both projects
 together and how the integration works.
+
+
+
+
+## Required Software
+ 
+Install these before doing anything else:
+ 
+- **Node.js** 20.19+ (or 22.12+) and **npm** — for the Vue frontend
+- **PHP** 8.3+
+- **Composer** //  PHP's package manager, used to install the Laravel backend
+- **MySQL** //  a local server (XAMPP, MAMP, or a native install all work)
+- **Git**
+
 
 
 ## Project Structure 
@@ -108,6 +122,35 @@ Authentication uses Laravel Sanctum with **tokens** :
 - Create, Update, and Delete use the Laravel API and require authentication. Users can only modify their own posts.
 - The Pinia store updates automatically after changes, keeping the UI in sync.
 
+
+
+
+## Running Tests 
+**Frontend using Vitest**
+```
+npm test
+```
+Run this inside `task-07-vue-app`. All API calls are mocked, so this doesn't need the backend running.
+ 
+**Backend ( using Laravel test runner):**
+```
+php artisan test
+```
+Run this inside `task-11-laravel-api`.
+Note : it uses SQLLite database for testing so it doesnt effect your real database.
+
+
+## Posts and Categories
+
+| Feature | Description |
+|---|---|
+| Posts | Posts are loaded from `GET /api/posts` with pagination, search, and category filters. |
+| Categories | Categories are loaded from `GET /api/categories` and used in the Create/Edit forms. |
+| Create / Update / Delete | Create, Update, and Delete use the Laravel API and require authentication. Users can only modify their own posts. |
+| Pinia Store | The Pinia store updates automatically after changes, keeping the UI in sync. |
+
+
+
 ## Error Handling 
 The app displays errors for:
 - Network/backend errors
@@ -116,6 +159,3 @@ The app displays errors for:
 - Unauthorized actions (401)
 - Forbidden actions (403)
 - Missing posts (404)
-
-
-
