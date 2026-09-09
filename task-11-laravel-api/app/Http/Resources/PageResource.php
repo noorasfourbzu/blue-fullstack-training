@@ -26,6 +26,17 @@ class PageResource extends JsonResource
                 ];
             }),
 
+            'blocks' => $this->whenLoaded('blocks', function () {
+                return $this->blocks->map(function ($block) {
+                    return [
+                        'id' => $block->id,
+                        'type' => $block->type,
+                        'position' => $block->position,
+                        'data' => $block->data,
+                    ];
+                });
+            }),
+
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

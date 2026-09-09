@@ -3,7 +3,10 @@ import { reactive, computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { usePagesStore } from "../stores/pages.js";
 import FormStatusBanner from "../components/FormStatusBanner.vue";
+import { useBlocksStore } from "../stores/blocks.js";
+import PageBlocksManager from "../components/PageBlocksManager.vue";
 
+const blocksStore = useBlocksStore();
 const route = useRoute();
 const router = useRouter();
 const pagesStore = usePagesStore();
@@ -26,6 +29,7 @@ onMounted(async () => {
       form.slug = page.slug;
       form.content = page.content;
       form.status = page.status;
+      blocksStore.setBlocks(page.blocks);
     }
   } catch (err) {
     // pageForbidden/notFound/pageError are already set inside the store.
@@ -161,6 +165,7 @@ async function handleSubmit() {
 
           <FormStatusBanner :status="bannerVariant" :message="statusMessage" />
         </form>
+                <PageBlocksManager :page-id="route.params.id" :initial-blocks="pagesStore.currentPage?.blocks || []" />
       </template>
     </div>
   </section>

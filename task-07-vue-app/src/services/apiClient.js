@@ -126,3 +126,29 @@ export function deletePage(id) {
 export function getPublicPage(slug) {
   return request(`/pages/${slug}`);
 }
+export function createBlock(pageId, block) {
+  return request(`/pages/${pageId}/blocks`, {
+    method: "POST",
+    body: JSON.stringify(block),
+  });
+}
+
+export function updateBlock(pageId, blockId, block) {
+  return request(`/pages/${pageId}/blocks/${blockId}`, {
+    method: "PUT",
+    body: JSON.stringify(block),
+  });
+}
+
+export function deleteBlock(pageId, blockId) {
+  return request(`/pages/${pageId}/blocks/${blockId}`, {
+    method: "DELETE",
+  });
+}
+
+export function reorderBlocks(pageId, blockIds) {
+  return request(`/pages/${pageId}/blocks/reorder`, {
+    method: "POST",
+    body: JSON.stringify({ block_ids: blockIds }),
+  });
+}

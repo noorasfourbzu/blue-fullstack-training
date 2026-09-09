@@ -25,16 +25,14 @@ class PageController extends Controller
     }
 
 
-    /*Display a published page by its slug  */
     public function publicShow(string $slug):PageResource{
-         $page = Page::with('user')
+         $page = Page::with(['user', 'blocks'])
         ->where('slug', $slug)
         ->where('status', 'published')
         ->firstOrFail();
 
     return new PageResource($page);
     }
-
     /**
      * Store a newly created page.
      */
@@ -52,6 +50,7 @@ class PageController extends Controller
         return new PageResource($page);
     }
 
+   
     /**
      * Display the specified page.
      */
@@ -59,7 +58,7 @@ class PageController extends Controller
     {
         $this->authorize('view', $page);
 
-        $page->load('user');
+        $page->load(['user', 'blocks']);
 
         return new PageResource($page);
     }
