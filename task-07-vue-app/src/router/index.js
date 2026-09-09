@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import CreatePostView from "../views/CreatePostView.vue";
 import AccountView from "../views/AccountView.vue";
+import PageView from "../views/PageView.vue";
 import { ref } from "vue";
 
 import { useAuthStore } from "../stores/auth.js";
@@ -75,6 +76,31 @@ const router = createRouter({
       component: AccountView,
     },
 
+{
+  path: "/pages",
+  name: "pages",
+  component: () => import("../views/PageView.vue"),
+  meta: { requiresAuth: true },
+},
+{
+  path: "/pages/create",
+  name: "create-page",
+  component: () => import("../views/CreatePageView.vue"),
+  meta: { requiresAuth: true },
+},
+
+{
+  path: "/pages/:id/edit",
+  name: "edit-page",
+  component: () => import("../views/EditPageView.vue"),
+  meta: { requiresAuth: true },
+},
+
+{
+  path: "/p/:slug",
+  name: "public-page",
+  component: () => import("../views/PublicPageView.vue"),
+},
     {
       path: "/:pathMatch(.*)*",
       name: "not-found",

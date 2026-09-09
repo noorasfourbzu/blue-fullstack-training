@@ -55,6 +55,11 @@ async function handleLogout() {
           You are successfully logged in to your account.
         </p>
 
+        <RouterLink to="/pages" class="button account-manage-pages">
+          Manage My Pages
+        </RouterLink>
+
+
         <button
           type="button"
           class="button account-logout"

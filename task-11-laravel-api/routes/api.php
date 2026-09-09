@@ -10,6 +10,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\MeController;
+use App\Http\Controllers\PageController;
 
 
 
@@ -51,6 +52,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/posts/{id}', [PostController::class, 'deletePost'])->whereNumber('id');
 
 
+    Route::get('/pages', [PageController::class, 'index']);
+    Route::post('/pages', [PageController::class, 'store']);
+    Route::get('/pages/{page}', [PageController::class, 'show'])
+        ->whereNumber('page');
+    Route::put('/pages/{page}', [PageController::class, 'update'])
+        ->whereNumber('page');
+    Route::patch('/pages/{page}', [PageController::class, 'update'])
+        ->whereNumber('page');
+    Route::delete('/pages/{page}', [PageController::class, 'destroy'])
+        ->whereNumber('page');
 });
 Route::get('/posts/{id}', [PostController::class, 'getPost'])->whereNumber('id');
 
+// public page slug 
+Route::get('/pages/{slug}',[PageController::class, 'publicShow'])
+-> where('slug','[A-Za-z0-9_-]+');

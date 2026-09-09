@@ -8,9 +8,9 @@ use App\Http\Resources\PageResource;
 use App\Models\Page;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class PageController extends Controller
-{
+{    use AuthorizesRequests;
     /**
      * Display a listing of the authenticated user's pages.
      */
@@ -24,18 +24,28 @@ class PageController extends Controller
         return PageResource::collection($pages);
     }
 
+
+    /*Display a published page by its slug  */
+    public function publicShow(string $slug):PageResource{
+         $page = Page::with('user')
+        ->where('slug', $slug)
+        ->where('status', 'published')
+        ->firstOrFail();
+
+    return new PageResource($page);
+    }
+
     /**
      * Store a newly created page.
      */
     public function store(StorePageRequest $request): PageResource
     {
-        $page = Page::create([
-            'title' => $request->title,
-            'slug' => $request->slug,
-            'content' => $request->content,
-            'status' => $request->status,
-            'user_id' => $request->user()->id,
-        ]);
+        $page = new Page($request->validated());
+
+        // Assign ownership to the authenticated user.
+        $page->user_id = $request->user()->id;
+
+        $page->save();
 
         $page->load('user');
 
@@ -43,7 +53,7 @@ class PageController extends Controller
     }
 
     /**
-     * Display the specified page for management.
+     * Display the specified page.
      */
     public function show(Page $page): PageResource
     {
@@ -63,12 +73,7 @@ class PageController extends Controller
     ): PageResource {
         $this->authorize('update', $page);
 
-        $page->update([
-            'title' => $request->title,
-            'slug' => $request->slug,
-            'content' => $request->content,
-            'status' => $request->status,
-        ]);
+        $page->update($request->validated());
 
         $page->load('user');
 

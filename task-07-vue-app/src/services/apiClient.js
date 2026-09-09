@@ -97,3 +97,32 @@ export function logout() {
 export function getCategories() {
   return request("/categories");
 }
+
+export function getPages(){
+  return request('/pages');
+}
+export function getPage(id){
+  return request(`/pages/${id}`);
+}
+export function createPage(newPage){
+  return request("/pages",{
+    method:"POST",
+    body: JSON.stringify(newPage),
+  });
+}
+export function updatePage(id, updatedPage) {
+  return request(`/pages/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(updatedPage),
+  });
+}
+
+export function deletePage(id) {
+  return request(`/pages/${id}`, {
+    method: "DELETE",
+  });
+}
+
+export function getPublicPage(slug) {
+  return request(`/pages/${slug}`);
+}

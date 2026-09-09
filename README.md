@@ -3,9 +3,10 @@ This is the README for Tass 15 + 16 + 17 In these tasks I connected the Vue fron
 
 This Task connects the Vue frontend with the Laravel backend, including authentication, posts, categories, filtering, pagination, and CRUD operations using real MySQL data. Then Done several Tests on it. 
 
+(Task 18) I also added a Pages module on top of this, so the app can show simple CMS-style pages (like an About Us page) in addition to the blog-style posts.
+
 Below is how to run both projects
 together and how the integration works.
-
 
 
 
@@ -123,7 +124,26 @@ Authentication uses Laravel Sanctum with **tokens** :
 - The Pinia store updates automatically after changes, keeping the UI in sync.
 
 
+## Pages (Task 18)
 
+The app now includes a simple CMS style **Pages** module alongside Posts.
+
+- Each page has a **title, unique slug, content, and status** (`draft` or `published`)
+- **Public pages:** Published pages can be viewed without login using `/p/<slug>`. Draft or unknown pages return `404`.
+- **Page management:** Authenticated users can view, create, edit, and delete their own pages from `/pages`.
+- **Ownership:** Users can only update or delete their own pages; unauthorized actions return `403 Forbidden`.
+- The **Manage My Pages** button on the Account page links to the Pages management section.
+
+- **Endpoints:**
+
+| Method | Endpoint | Protected? |
+|---|---|:---:|
+| GET | /api/pages | Yes (own pages only) |
+| POST | /api/pages | Yes |
+| GET | /api/pages/{id} | Yes (own pages only) |
+| PUT | /api/pages/{id} | Yes (own pages only) |
+| DELETE | /api/pages/{id} | Yes (own pages only) |
+| GET | /api/pages/{slug} | **No** for public, published only |
 
 ## Running Tests 
 **Frontend using Vitest**
@@ -150,7 +170,6 @@ Note : it uses SQLLite database for testing so it doesnt effect your real databa
 | Pinia Store | The Pinia store updates automatically after changes, keeping the UI in sync. |
 
 
-
 ## Error Handling 
 The app displays errors for:
 - Network/backend errors
@@ -159,3 +178,5 @@ The app displays errors for:
 - Unauthorized actions (401)
 - Forbidden actions (403)
 - Missing posts (404)
+-  Missing or draft pages when viewed publicly (404)
+- duplicate-slug validation errors (422)

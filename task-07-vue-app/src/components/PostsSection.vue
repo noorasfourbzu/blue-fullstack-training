@@ -37,7 +37,7 @@ const postsStore = usePostsStore();
 
 // what the user is currently typing
 const searchInput = ref(typeof route.query.q === "string" ? route.query.q : "");
-// the term that has actually been searched - only this drives filtering,
+// the term that has actually been searched, only this drives filtering
 // the URL query, and highlighting in PostCard
 const appliedSearch = ref(searchInput.value);
 
