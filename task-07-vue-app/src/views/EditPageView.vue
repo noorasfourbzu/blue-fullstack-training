@@ -114,58 +114,73 @@ async function handleSubmit() {
 <template>
   <section id="edit-page" class="section">
     <div class="container">
-      <p v-if="pagesStore.pageLoading" class="posts-status">Loading page...</p>
+      <p v-if="pagesStore.pageLoading" class="page-state page-state--loading">Loading page...</p>
 
-      <div v-else-if="pagesStore.pageForbidden" class="posts-status posts-status--error">
+      <div v-else-if="pagesStore.pageForbidden" class="page-state page-state--error">
         <p>You are not allowed to edit this page. It belongs to another user.</p>
-        <button type="button" @click="goBack">Back to Pages</button>
+        <button type="button" class="button page-ui-button" @click="goBack">Back to Pages</button>
       </div>
 
-      <div v-else-if="pagesStore.notFound" class="posts-status posts-status--empty">
+      <div v-else-if="pagesStore.notFound" class="page-state page-state--empty">
         <p>We couldn't find a page with id "{{ route.params.id }}".</p>
-        <button type="button" @click="goBack">Back to Pages</button>
+        <button type="button" class="button page-ui-button page-ui-button--secondary" @click="goBack">Back to Pages</button>
       </div>
 
-      <div v-else-if="pagesStore.pageError" class="posts-status posts-status--error">
+      <div v-else-if="pagesStore.pageError" class="page-state page-state--error">
         <p>Something went wrong while loading the page.</p>
-        <button type="button" :disabled="pagesStore.pageLoading" @click="pagesStore.fetchPage(route.params.id)">
+        <button
+          type="button"
+          class="button page-ui-button"
+          :disabled="pagesStore.pageLoading"
+          @click="pagesStore.fetchPage(route.params.id)"
+        >
           {{ pagesStore.pageLoading ? "Retrying..." : "Retry" }}
         </button>
       </div>
 
       <template v-else>
         <h2 class="section-title">Edit Page</h2>
-        <form id="edit-page-form" novalidate @submit.prevent="handleSubmit">
-          <label for="edit-page-title">Title</label>
-          <input id="edit-page-title" v-model="form.title" type="text" class="form-control" :maxlength="MAX_TITLE_LENGTH" />
-          <small class="error-message">{{ titleError }}</small>
-          <small v-if="backendErrors.title" class="error-message">{{ backendErrors.title[0] }}</small>
+        <form id="edit-page-form" class="page-editor-form" novalidate @submit.prevent="handleSubmit">
+          <div class="page-form-field">
+            <label for="edit-page-title">Title</label>
+            <input id="edit-page-title" v-model="form.title" type="text" class="form-control" :maxlength="MAX_TITLE_LENGTH" />
+            <small class="error-message">{{ titleError }}</small>
+            <small v-if="backendErrors.title" class="error-message">{{ backendErrors.title[0] }}</small>
+          </div>
 
-          <label for="edit-page-slug">Slug</label>
-          <input id="edit-page-slug" v-model="form.slug" type="text" class="form-control" />
-          <small class="character-counter">Public URL: /p/{{ form.slug }}</small>
-          <small class="error-message">{{ slugError }}</small>
-          <small v-if="backendErrors.slug" class="error-message">{{ backendErrors.slug[0] }}</small>
+          <div class="page-form-field">
+            <label for="edit-page-slug">Slug</label>
+            <input id="edit-page-slug" v-model="form.slug" type="text" class="form-control" />
+            <small class="character-counter">Public URL: /p/{{ form.slug }}</small>
+            <small class="error-message">{{ slugError }}</small>
+            <small v-if="backendErrors.slug" class="error-message">{{ backendErrors.slug[0] }}</small>
+          </div>
 
-          <label for="edit-page-content">Content</label>
-          <textarea id="edit-page-content" v-model="form.content" rows="8" class="form-control"></textarea>
-          <small class="error-message">{{ contentError }}</small>
-          <small v-if="backendErrors.content" class="error-message">{{ backendErrors.content[0] }}</small>
+          <div class="page-form-field">
+            <label for="edit-page-content">Content</label>
+            <textarea id="edit-page-content" v-model="form.content" rows="8" class="form-control"></textarea>
+            <small class="error-message">{{ contentError }}</small>
+            <small v-if="backendErrors.content" class="error-message">{{ backendErrors.content[0] }}</small>
+          </div>
 
-          <fieldset>
-            <legend>Save as</legend>
-            <label><input type="radio" value="draft" v-model="form.status" /> Draft</label>
-            <label><input type="radio" value="published" v-model="form.status" /> Publish</label>
-          </fieldset>
+          <div class="page-form-field">
+            <fieldset>
+              <legend>Save as</legend>
+              <label><input type="radio" value="draft" v-model="form.status" /> Draft</label>
+              <label><input type="radio" value="published" v-model="form.status" /> Publish</label>
+            </fieldset>
+          </div>
 
-          <button type="submit" class="button" :disabled="pagesStore.updating">
-            {{ pagesStore.updating ? "Saving..." : "Save Changes" }}
-          </button>
-          <button type="button" class="button" @click="goBack">Cancel</button>
+          <div class="page-form-actions">
+            <button type="submit" class="button page-ui-button" :disabled="pagesStore.updating">
+              {{ pagesStore.updating ? "Saving..." : "Save Changes" }}
+            </button>
+            <button type="button" class="button page-ui-button page-ui-button--secondary" @click="goBack">Cancel</button>
+          </div>
 
           <FormStatusBanner :status="bannerVariant" :message="statusMessage" />
         </form>
-                <PageBlocksManager :page-id="route.params.id" :initial-blocks="pagesStore.currentPage?.blocks || []" />
+        <PageBlocksManager :page-id="route.params.id" :initial-blocks="pagesStore.currentPage?.blocks || []" />
       </template>
     </div>
   </section>

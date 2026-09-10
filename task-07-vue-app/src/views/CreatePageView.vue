@@ -173,121 +173,131 @@ function recheckIfInvalid(field) {
     <div class="container">
       <h2 class="section-title">Create New Page</h2>
 
-      <form id="create-page-form" novalidate @submit.prevent="handleSubmit">
+        <form id="create-page-form" class="page-editor-form" novalidate @submit.prevent="handleSubmit">
         <!-- title field -->
-        <label for="page-title">Title</label>
-        <input
-          id="page-title"
-          v-model="form.title"
-          type="text"
-          name="title"
-          placeholder="Enter the page title"
-          required
-          class="form-control"
-          :class="{ 'is-invalid': touched.title && titleError }"
-          :aria-invalid="touched.title && titleError ? 'true' : 'false'"
-          aria-describedby="page-title-error"
-          :maxlength="MAX_TITLE_LENGTH"
-          @input="
-            recheckIfInvalid('title');
-            handleTitleInput();
-          "
-          @blur="markTouched('title')"
-        />
-        <small id="page-title-error" class="error-message">
-          {{ touched.title ? titleError : "" }}
-        </small>
-        <small v-if="backendErrors.title" class="error-message">
-          {{ backendErrors.title[0] }}
-        </small>
+        <div class="page-form-field">
+          <label for="page-title">Title</label>
+          <input
+            id="page-title"
+            v-model="form.title"
+            type="text"
+            name="title"
+            placeholder="Enter the page title"
+            required
+            class="form-control"
+            :class="{ 'is-invalid': touched.title && titleError }"
+            :aria-invalid="touched.title && titleError ? 'true' : 'false'"
+            aria-describedby="page-title-error"
+            :maxlength="MAX_TITLE_LENGTH"
+            @input="
+              recheckIfInvalid('title');
+              handleTitleInput();
+            "
+            @blur="markTouched('title')"
+          />
+          <small id="page-title-error" class="error-message">
+            {{ touched.title ? titleError : "" }}
+          </small>
+          <small v-if="backendErrors.title" class="error-message">
+            {{ backendErrors.title[0] }}
+          </small>
+        </div>
 
         <!-- slug field -->
-        <label for="page-slug">Slug</label>
-        <input
-          id="page-slug"
-          v-model="form.slug"
-          type="text"
-          name="slug"
-          placeholder="e.g. about-us"
-          required
-          class="form-control"
-          :class="{ 'is-invalid': touched.slug && slugError }"
-          :aria-invalid="touched.slug && slugError ? 'true' : 'false'"
-          aria-describedby="page-slug-error"
-          @input="recheckIfInvalid('slug')"
-          @blur="markTouched('slug')"
-        />
-        <small class="character-counter">
-          This will be your page's public URL: /p/{{ form.slug || "your-slug" }}
-        </small>
-        <small id="page-slug-error" class="error-message">
-          {{ touched.slug ? slugError : "" }}
-        </small>
-        <small v-if="backendErrors.slug" class="error-message">
-          {{ backendErrors.slug[0] }}
-        </small>
+        <div class="page-form-field">
+          <label for="page-slug">Slug</label>
+          <input
+            id="page-slug"
+            v-model="form.slug"
+            type="text"
+            name="slug"
+            placeholder="e.g. about-us"
+            required
+            class="form-control"
+            :class="{ 'is-invalid': touched.slug && slugError }"
+            :aria-invalid="touched.slug && slugError ? 'true' : 'false'"
+            aria-describedby="page-slug-error"
+            @input="recheckIfInvalid('slug')"
+            @blur="markTouched('slug')"
+          />
+          <small class="character-counter">
+            This will be your page's public URL: /p/{{ form.slug || "your-slug" }}
+          </small>
+          <small id="page-slug-error" class="error-message">
+            {{ touched.slug ? slugError : "" }}
+          </small>
+          <small v-if="backendErrors.slug" class="error-message">
+            {{ backendErrors.slug[0] }}
+          </small>
+        </div>
 
         <!-- content field -->
-        <label for="page-content">Content</label>
-        <textarea
-          id="page-content"
-          v-model="form.content"
-          name="content"
-          rows="8"
-          placeholder="Write the page content here"
-          required
-          class="form-control"
-          :class="{ 'is-invalid': touched.content && contentError }"
-          :aria-invalid="touched.content && contentError ? 'true' : 'false'"
-          aria-describedby="page-content-error"
-          @input="recheckIfInvalid('content')"
-          @blur="markTouched('content')"
-        ></textarea>
-        <small id="page-content-error" class="error-message">
-          {{ touched.content ? contentError : "" }}
-        </small>
-        <small v-if="backendErrors.content" class="error-message">
-          {{ backendErrors.content[0] }}
-        </small>
+        <div class="page-form-field">
+          <label for="page-content">Content</label>
+          <textarea
+            id="page-content"
+            v-model="form.content"
+            name="content"
+            rows="8"
+            placeholder="Write the page content here"
+            required
+            class="form-control"
+            :class="{ 'is-invalid': touched.content && contentError }"
+            :aria-invalid="touched.content && contentError ? 'true' : 'false'"
+            aria-describedby="page-content-error"
+            @input="recheckIfInvalid('content')"
+            @blur="markTouched('content')"
+          ></textarea>
+          <small id="page-content-error" class="error-message">
+            {{ touched.content ? contentError : "" }}
+          </small>
+          <small v-if="backendErrors.content" class="error-message">
+            {{ backendErrors.content[0] }}
+          </small>
+        </div>
 
         <!-- status field -->
-        <fieldset>
-          <legend>Save as</legend>
-          <label>
-            <input
-              type="radio"
-              value="draft"
-              v-model="form.status"
-              @change="touched.status = true"
-            />
-            Draft</label
-          >
-          <label>
-            <input
-              type="radio"
-              value="published"
-              v-model="form.status"
-              @change="touched.status = true"
-            />
-            Publish</label
-          >
-        </fieldset>
-        <small class="error-message">
-          {{ touched.status ? statusError : "" }}
-        </small>
-        <small v-if="backendErrors.status" class="error-message">
-          {{ backendErrors.status[0] }}
-        </small>
+        <div class="page-form-field">
+          <fieldset>
+            <legend>Save as</legend>
+            <label>
+              <input
+                type="radio"
+                value="draft"
+                v-model="form.status"
+                @change="touched.status = true"
+              />
+              Draft</label
+            >
+            <label>
+              <input
+                type="radio"
+                value="published"
+                v-model="form.status"
+                @change="touched.status = true"
+              />
+              Publish</label
+            >
+          </fieldset>
+          <small class="error-message">
+            {{ touched.status ? statusError : "" }}
+          </small>
+          <small v-if="backendErrors.status" class="error-message">
+            {{ backendErrors.status[0] }}
+          </small>
+        </div>
 
-        <button type="submit" class="button" :disabled="isSubmitting">
-          {{
-            isSubmitting
-              ? "Submitting..."
-              : formStatus === "submit-error"
-                ? "Retry"
-                : "Create Page"
-          }}
-        </button>
+        <div class="page-form-actions">
+          <button type="submit" class="button page-ui-button" :disabled="isSubmitting">
+            {{
+              isSubmitting
+                ? "Submitting..."
+                : formStatus === "submit-error"
+                  ? "Retry"
+                  : "Create Page"
+            }}
+          </button>
+        </div>
 
         <FormStatusBanner :status="bannerVariant" :message="statusMessage" />
       </form>

@@ -46,31 +46,31 @@ const deleteBannerVariant = computed(() => (deleteMessage.value ? "error" : ""))
         <p>Manage your website pages.</p>
       </div>
 
-      <button class="create-page-btn" @click="goToCreate">
-  Create Page
-  </button>
+      <button class="button page-ui-button create-page-btn" @click="goToCreate">
+        Create Page
+      </button>
     </section>
 
     <!-- Loading -->
-    <div v-if="store.loading" class="pages-state">
+    <div v-if="store.loading" class="pages-state pages-state--loading">
       <p>Loading pages...</p>
     </div>
 
     <!-- Error -->
-    <div v-else-if="store.error" class="pages-state">
+    <div v-else-if="store.error" class="pages-state pages-state--error">
       <p>Failed to load pages.</p>
 
-      <button @click="store.retryFetch">
+      <button class="button page-ui-button" @click="store.retryFetch">
         Try Again
       </button>
     </div>
 
     <!-- Empty -->
-    <div v-else-if="store.pages.length === 0" class="pages-state">
+    <div v-else-if="store.pages.length === 0" class="pages-state pages-state--empty">
       <h2>No pages yet</h2>
       <p>Create your first page to get started.</p>
 
-      <button class="create-page-btn">
+      <button class="button page-ui-button create-page-btn" @click="goToCreate">
         Create Page
       </button>
     </div>
@@ -96,20 +96,24 @@ const deleteBannerVariant = computed(() => (deleteMessage.value ? "error" : ""))
             {{ page.status }}
           </span>
         </div>
-<div class="page-card-actions">
+    <div class="page-card-actions">
   <RouterLink
     v-if="page.status === 'published'"
     :to="`/p/${page.slug}`"
-    class="page-view-link"
+    class="button page-ui-button page-ui-button--secondary page-view-link"
   >
     View
   </RouterLink>
 
-  <button @click="goToEdit(page)">
+  <button class="button page-ui-button page-ui-button--secondary" @click="goToEdit(page)">
     Edit
   </button>
 
-  <button :disabled="store.deleting" @click="handleDelete(page)">
+  <button
+    class="button page-ui-button page-ui-button--danger"
+    :disabled="store.deleting"
+    @click="handleDelete(page)"
+  >
     {{ store.deleting ? "Deleting..." : "Delete" }}
   </button>
 </div>
@@ -121,9 +125,10 @@ const deleteBannerVariant = computed(() => (deleteMessage.value ? "error" : ""))
 
 <style scoped>
 .pages-view {
-  max-width: 1100px;
+  width: 90%;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 70px 0;
 }
 
 .pages-header {
@@ -136,31 +141,40 @@ const deleteBannerVariant = computed(() => (deleteMessage.value ? "error" : ""))
 
 .pages-header h1 {
   margin: 0 0 8px;
+  color: var(--color-text);
+  font-size: 2rem;
+  line-height: 1.2;
 }
 
 .pages-header p {
   margin: 0;
+  color: var(--color-muted-text);
 }
 
 .create-page-btn {
-  padding: 10px 18px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+  flex-shrink: 0;
 }
 
 .pages-state {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
   padding: 60px 20px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+  color: var(--color-muted-text);
+  text-align: center;
 }
 
-.pages-state button {
-  margin-top: 15px;
+.pages-state h2 {
+  color: var(--color-text);
 }
 
 .pages-list {
   display: grid;
-  gap: 16px;
+  gap: 20px;
 }
 
 .page-card {
@@ -169,46 +183,64 @@ const deleteBannerVariant = computed(() => (deleteMessage.value ? "error" : ""))
   align-items: center;
   gap: 20px;
   padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background-color: var(--color-surface);
+  box-shadow: 0 4px 15px rgba(37, 37, 37, 0.08);
+}
+
+.page-card-content {
+  min-width: 0;
 }
 
 .page-card-content h2 {
   margin: 0 0 8px;
+  color: var(--color-text);
+  font-size: 1.25rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 
 .page-slug {
   margin: 0 0 10px;
-  opacity: 0.7;
+  color: var(--color-muted-text);
+  font-size: 0.95rem;
+  overflow-wrap: anywhere;
 }
 
 .page-status {
   display: inline-block;
   padding: 4px 10px;
+  border: 1px solid transparent;
   border-radius: 999px;
-  font-size: 13px;
+  font-size: 0.8rem;
+  font-weight: 700;
   text-transform: capitalize;
 }
 
 .status-published {
-  background: #e7f7ed;
+  border: none;
+  border-radius: 0;
+  color: #1e7e34;
 }
 
 .status-draft {
-  background: #f1f1f1;
+  color: var(--color-muted-text);
 }
 
 .page-card-actions {
   display: flex;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 10px;
 }
 
-.page-card-actions button {
-  padding: 8px 14px;
-  cursor: pointer;
-}
-
 @media (max-width: 600px) {
+  .pages-view {
+    padding: 50px 0;
+  }
+
   .pages-header,
   .page-card {
     align-items: flex-start;
@@ -216,6 +248,39 @@ const deleteBannerVariant = computed(() => (deleteMessage.value ? "error" : ""))
   }
 
   .page-card-actions {
+    width: 100%;
+  }
+
+  .page-card-actions .page-ui-button,
+  .page-card-actions .page-view-link {
+    flex: 1 1 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .pages-view {
+    padding: 40px 0;
+  }
+
+  .pages-header {
+    gap: 16px;
+  }
+
+  .create-page-btn {
+    width: 100%;
+  }
+
+  .page-card {
+    padding: 16px;
+  }
+
+  .page-card-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page-card-actions .page-ui-button,
+  .page-card-actions .page-view-link {
     width: 100%;
   }
 }
