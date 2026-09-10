@@ -180,3 +180,20 @@ The app displays errors for:
 - Missing posts (404)
 -  Missing or draft pages when viewed publicly (404)
 - duplicate-slug validation errors (422)
+
+
+
+## October CMS preperation Notes :
+
+
+During the work on Pages and Content Blocks section I implemented some fundamental CMS concepts which are also implemented in  October CMS
+
+* **Pages:** Page has basic attributes  (exp: title, slug, content, and status. Published pages)  All can be displayed to the public while draft pages can be stored for management purposes
+
+* **Reusable content blocks:** Instead of storing all content directly within one page layout, I implemented reusable block types such as Hero, Text and Call to Action. Each of the blocks has its own content and can be added, edited, removed and reorganized
+
+* **Dynamic rendering:** Public page doesnt have any single layout to render blocks. It gets blocks from the backend and it uses  the appropriate Vue component according to block type
+
+* **Content management:** The page can be managed from the admin panel by adding editing the content of the blocks removing them and reorganizing
+
+* **Separation between public and admin parts:** The management interface is secured and used for content management while the public page just shows published content
