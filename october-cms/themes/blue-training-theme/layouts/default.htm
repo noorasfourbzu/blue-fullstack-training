@@ -1,0 +1,29 @@
+##
+description = "Default layout"
+==
+<!DOCTYPE html>
+<ht lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{{ this.page.title }}</title>
+        {% styles %}
+    </head>
+    <body>
+        <header>
+            <nav>
+                <a href="/">Home</a>
+                <a href ="/">About</a>
+                <a href="/">Contact<a>
+            </nav>
+        </header>
+        <main>
+        {% page %}
+        </main>
+<footer>
+<p>&copy; 2026 Blue Training Website</p>
+</footer>
+   {% framework extras %}
+        {% scripts %}     
+    </body>
+</html>

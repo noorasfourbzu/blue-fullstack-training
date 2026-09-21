@@ -1,0 +1,218 @@
+[
+    {
+        "id": 1,
+        "title": "About Us",
+        "slug": "about-us",
+        "is_enabled": 1,
+        "content_group": null,
+        "blocks": [
+            {
+                "image": "",
+                "content_group": "image_slice",
+                "sort_order": 1
+            },
+            {
+                "title": "Rooted in the wild",
+                "content": "<p>We are a small team of naturalists, writers, and volunteers with a shared belief that people protect what they have learned to love. For over a decade we have worked to bring wild places closer to everyday life, restoring habitats, running field surveys, and telling the stories of the plants and animals that share our landscapes. From replanting native woodland to counting returning swifts each spring, our work is guided by patience, curiosity, and a deep respect for the natural world.<\/p>",
+                "image": "",
+                "content_group": "paragraph_block",
+                "sort_order": 2
+            },
+            {
+                "title": "Why it matters",
+                "content": "<p>Wild places are disappearing quietly, one hedgerow and one wetland at a time. But nature is remarkably willing to return when given the chance. Protect a stretch of river, leave a meadow uncut, plant a stand of native trees, and within a few seasons the birds, insects, and wildflowers come flooding back. Our projects are built on that simple, hopeful truth, and on the volunteers who give their weekends to make it happen.<\/p>",
+                "list_items": [
+                    {
+                        "text": "Restoring native woodland and meadow"
+                    },
+                    {
+                        "text": "Protecting rivers and wetlands"
+                    },
+                    {
+                        "text": "Bringing pollinators back to gardens"
+                    }
+                ],
+                "button_text": "See how you can get involved",
+                "button_url": "https:\/\/octobercms.com\/features",
+                "image": "",
+                "content_group": "detailed_block",
+                "sort_order": 3
+            },
+            {
+                "content_group": "scoreboard_metrics",
+                "sort_order": 4,
+                "metrics": [
+                    {
+                        "number": 3912,
+                        "description": "Native trees planted",
+                        "icon": "notepad",
+                        "content_group": null,
+                        "sort_order": 1
+                    },
+                    {
+                        "number": 223,
+                        "description": "Hectares of habitat protected",
+                        "icon": "shield",
+                        "content_group": null,
+                        "sort_order": 2
+                    },
+                    {
+                        "number": 863,
+                        "description": "Species recorded in surveys",
+                        "icon": "basket",
+                        "content_group": null,
+                        "sort_order": 3
+                    },
+                    {
+                        "number": 865,
+                        "description": "Volunteers in the field",
+                        "icon": "briefcase",
+                        "content_group": null,
+                        "sort_order": 4
+                    }
+                ]
+            },
+            {
+                "content_group": "team_leaders",
+                "sort_order": 5,
+                "members": [
+                    {
+                        "title": "Andy Anderson",
+                        "role": "Habitat Manager",
+                        "description": "Andy leads our woodland and meadow restoration, happiest with a spade in hand and mud on his boots.",
+                        "avatar": "",
+                        "content_group": null,
+                        "sort_order": 1,
+                        "social_links": [
+                            {
+                                "platform": "twitter",
+                                "url": "https:\/\/twitter.com\/octobercms",
+                                "sort_order": 1
+                            },
+                            {
+                                "platform": "linkedin",
+                                "url": "https:\/\/www.linkedin.com\/company\/october-cms\/",
+                                "sort_order": 2
+                            },
+                            {
+                                "platform": "facebook",
+                                "url": "https:\/\/facebook.com\/octobercms",
+                                "sort_order": 3
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Bob Harris",
+                        "role": "Field Naturalist",
+                        "description": "Bob runs our species surveys, from dawn bird counts to late-summer butterfly transects across the reserve.",
+                        "avatar": "",
+                        "content_group": null,
+                        "sort_order": 2,
+                        "social_links": [
+                            {
+                                "platform": "twitter",
+                                "url": "https:\/\/twitter.com\/octobercms",
+                                "sort_order": 1
+                            },
+                            {
+                                "platform": "youtube",
+                                "url": "https:\/\/www.youtube.com\/c\/OctoberCMSOfficial",
+                                "sort_order": 2
+                            },
+                            {
+                                "platform": "dribbble",
+                                "url": "https:\/\/www.dribbble.com",
+                                "sort_order": 3
+                            },
+                            {
+                                "platform": "facebook",
+                                "url": "https:\/\/facebook.com\/octobercms",
+                                "sort_order": 4
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Ann Lewis",
+                        "role": "Community Outreach",
+                        "description": "Ann connects schools and local groups with the wild on their doorstep, turning curiosity into lasting care.",
+                        "avatar": "",
+                        "content_group": null,
+                        "sort_order": 3,
+                        "social_links": [
+                            {
+                                "platform": "twitter",
+                                "url": "https:\/\/twitter.com\/octobercms",
+                                "sort_order": 1
+                            },
+                            {
+                                "platform": "linkedin",
+                                "url": "https:\/\/www.linkedin.com\/company\/october-cms\/",
+                                "sort_order": 2
+                            },
+                            {
+                                "platform": "facebook",
+                                "url": "https:\/\/facebook.com\/octobercms",
+                                "sort_order": 3
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Christina Thompson",
+                        "role": "Conservation Scientist",
+                        "description": "Christina turns years of field data into the evidence that guides where we plant, protect, and rewild next.",
+                        "avatar": "",
+                        "content_group": null,
+                        "sort_order": 4,
+                        "social_links": [
+                            {
+                                "platform": "twitter",
+                                "url": "https:\/\/twitter.com\/octobercms",
+                                "sort_order": 1
+                            },
+                            {
+                                "platform": "youtube",
+                                "url": "https:\/\/www.youtube.com\/c\/OctoberCMSOfficial",
+                                "sort_order": 2
+                            },
+                            {
+                                "platform": "dribbble",
+                                "url": "https:\/\/www.dribbble.com",
+                                "sort_order": 3
+                            },
+                            {
+                                "platform": "facebook",
+                                "url": "https:\/\/facebook.com\/octobercms",
+                                "sort_order": 4
+                            }
+                        ]
+                    },
+                    {
+                        "title": "John Smith",
+                        "role": "Founder",
+                        "description": "John started this work with a single restored hedgerow and a stubborn belief that nature always finds its way back.",
+                        "avatar": "",
+                        "content_group": null,
+                        "sort_order": 5,
+                        "social_links": [
+                            {
+                                "platform": "dribbble",
+                                "url": "https:\/\/www.dribbble.com",
+                                "sort_order": 1
+                            },
+                            {
+                                "platform": "linkedin",
+                                "url": "https:\/\/www.linkedin.com\/company\/october-cms\/",
+                                "sort_order": 2
+                            },
+                            {
+                                "platform": "youtube",
+                                "url": "https:\/\/www.youtube.com\/c\/OctoberCMSOfficial",
+                                "sort_order": 3
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

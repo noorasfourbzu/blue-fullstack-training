@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "title": "Forests",
+        "slug": "forests",
+        "is_enabled": 1,
+        "description": "Stories from the world's woodlands, from ancient old-growth canopies to the quiet science of how trees share water and nutrients through the soil beneath our feet."
+    },
+    {
+        "id": 2,
+        "title": "Wildlife",
+        "slug": "wildlife",
+        "is_enabled": 1,
+        "description": "Field notes on the creatures we share the planet with, tracking the habits, migrations, and small daily dramas that unfold in the wild all around us."
+    },
+    {
+        "id": 3,
+        "title": "Conservation",
+        "slug": "conservation",
+        "is_enabled": 1,
+        "description": "Ideas and efforts to protect wild places, from rewilding river valleys to the community projects quietly bringing native habitats back to life."
+    },
+    {
+        "id": 4,
+        "title": "Seasons",
+        "slug": "seasons",
+        "is_enabled": 1,
+        "description": "How the natural world turns through the year, marking the changing light, the first frosts, and the bloom of spring across meadow, mountain, and coast."
+    },
+    {
+        "id": 5,
+        "title": "Gardens",
+        "slug": "gardens",
+        "is_enabled": 1,
+        "description": "Cultivating a little wilderness of your own, with practical notes on native planting, pollinator gardens, and letting nature find its own balance."
+    }
+]

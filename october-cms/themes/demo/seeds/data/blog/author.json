@@ -1,0 +1,64 @@
+[
+    {
+        "id": 1,
+        "title": "John Smith",
+        "slug": "john-smith",
+        "email": "john.smith@techinnovators.ltd",
+        "is_enabled": 1,
+        "role": "Field Editor",
+        "about": "John has spent two decades following rivers to their source and forests to their edges, notebook in hand. He writes about the quiet workings of wild places and believes the best stories are the ones you have to sit still and wait for.",
+        "social_links": [
+            {
+                "platform": "twitter",
+                "url": "https://twitter.com/octobercms",
+                "sort_order": 1
+            },
+            {
+                "platform": "youtube",
+                "url": "https://www.youtube.com/c/OctoberCMSOfficial",
+                "sort_order": 2
+            },
+            {
+                "platform": "facebook",
+                "url": "https://facebook.com/octobercms",
+                "sort_order": 3
+            },
+            {
+                "platform": "linkedin",
+                "url": "https://www.linkedin.com/company/october-cms/",
+                "sort_order": 4
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "title": "Jane Doe",
+        "slug": "jane-doe",
+        "email": "jane.doe@devsolutions.ltd",
+        "is_enabled": 1,
+        "role": "Wildlife Writer",
+        "about": "Jane is a naturalist and photographer drawn to the creatures most of us walk right past. From dawn chorus surveys to late-night moth traps, she chronicles the small wildlife that makes a garden or a hedgerow come alive.",
+        "social_links": [
+            {
+                "platform": "twitter",
+                "url": "https://twitter.com/octobercms",
+                "sort_order": 1
+            },
+            {
+                "platform": "youtube",
+                "url": "https://www.youtube.com/c/OctoberCMSOfficial",
+                "sort_order": 2
+            },
+            {
+                "platform": "facebook",
+                "url": "https://facebook.com/octobercms",
+                "sort_order": 3
+            },
+            {
+                "platform": "linkedin",
+                "url": "https://www.linkedin.com/company/october-cms/",
+                "sort_order": 4
+            }
+        ]
+    }
+]

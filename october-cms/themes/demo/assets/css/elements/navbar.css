@@ -1,0 +1,114 @@
+.navbar {
+    padding-top: 15px;
+    padding-bottom: 15px;
+
+    &.navbar-dark {
+        background-color: transparent;
+    }
+
+    .navbar-brand {
+        margin-top: -5px;
+    }
+
+    a:hover, a:focus, a.focus {
+        text-decoration: none;
+    }
+
+    .dropdown-item.active, .dropdown-item:active {
+        background-color: #6bc48d;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .navbar {
+        .navbar-nav > li.nav-item {
+            padding: 0 8px;
+
+            > a.btn {
+                padding: 3px 22px;
+                border-radius: 100px;
+                font-size: 14px;
+                margin-top: 7px;
+            }
+
+            > a.nav-link {
+                position: relative;
+                transition: color 0.2s ease 0.05s;
+                color: #fff;
+
+                &:before {
+                    position: absolute;
+                    height: 4px;
+                    bottom: 2px;
+                    content: '';
+                    border-radius: 4px;
+                    z-index: 5;
+                    width: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    transition: all 0.2s ease 0.05s;
+                }
+
+                &.active:before,
+                &.active:hover:before {
+                    background: #fff;
+                }
+
+                &:hover:before {
+                    background: #fff;
+                }
+            }
+        }
+    }
+}
+
+/* Mobile Nav */
+.navbar-mobile {
+    width: 260px;
+    background: #fff;
+
+    .offcanvas-header {
+        justify-content: flex-end;
+        padding: 1.25rem 1.25rem 0;
+    }
+
+    .offcanvas-body {
+        padding: 0 1.25rem 1.25rem;
+    }
+
+    .nav-item {
+        .nav-link {
+            color: #3f4a54;
+            &:hover {
+                color: #000;
+            }
+        }
+        .btn {
+            margin-top: 1rem;
+            margin-left: 1rem;
+        }
+    }
+
+    .btn-outline-light {
+        color: #3f4a54;
+        border-color: rgba(63, 74, 84, 0.3);
+
+        &:hover, &:focus {
+            color: #fff;
+            background-color: #3f4a54;
+            border-color: #3f4a54;
+        }
+    }
+}
+
+@media (max-width: 991px) {
+    #layout-nav .navbar-toggler {
+        color: #fff;
+        padding: 10px;
+        opacity: .8;
+
+        &:hover, &:focus {
+            opacity: 1;
+        }
+    }
+}

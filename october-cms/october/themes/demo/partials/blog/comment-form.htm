@@ -1,0 +1,54 @@
+<div class="blog-post-comment-form">
+    <h3 class="mb-4">
+        Tell us what you think!
+    </h3>
+
+    {% if formSubmitted %}
+        {% partial 'elements/success-message'
+            title="Thank you for your comment!"
+            text="It will appear here once it has been approved." %}
+    {% else %}
+        <form
+            data-request="commentForm::onFormSubmit"
+            data-request-update="{ _self: true }"
+            data-request-flash>
+
+            <input type="hidden" name="post" value="{{ post.id }}">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="text" name="author_name" class="form-control" id="commentNameInput" required>
+                        <label for="commentNameInput">
+                            Name
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input type="email" name="author_email" class="form-control" id="commentEmailInput" required>
+                        <label for="commentEmailInput">
+                            Email address
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3 form-floating">
+                <textarea style="height:125px" name="content" class="form-control" id="commentContentTextarea" required></textarea>
+                <label for="commentContentTextarea">
+                    Comment
+                </label>
+            </div>
+            <div style="display:none">
+                <input type="text" name="_oc_hp" value="" autocomplete="off" tabindex="-1">
+            </div>
+            <div class="form-buttons d-flex pt-2">
+                <div>
+                    <button type="submit" data-attach-loading class="btn btn-primary btn-pill">
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </form>
+    {% endif %}
+</div>
