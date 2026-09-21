@@ -10,19 +10,11 @@ description = "Default layout"
         {% styles %}
     </head>
     <body>
-        <header>
-            <nav>
-                <a href="/">Home</a>
-                <a href ="/">About</a>
-                <a href="/">Contact<a>
-            </nav>
-        </header>
+      {% partial "header" %}
         <main>
         {% page %}
         </main>
-<footer>
-<p>&copy; 2026 Blue Training Website</p>
-</footer>
+{% partial "footer" %}
    {% framework extras %}
         {% scripts %}     
     </body>
