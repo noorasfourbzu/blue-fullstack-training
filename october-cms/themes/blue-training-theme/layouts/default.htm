@@ -2,11 +2,12 @@
 description = "Default layout"
 ==
 <!DOCTYPE html>
-<ht lang="en">
+<html lang="en">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>{{ this.page.title }}</title>
+        <link href="{{ 'assets/css/theme.css'|theme }}" rel="stylesheet">
         {% styles %}
     </head>
     <body>
@@ -15,7 +16,7 @@ description = "Default layout"
         {% page %}
         </main>
 {% partial "footer" %}
-   {% framework extras %}
+        {% framework extras %}
         {% scripts %}     
     </body>
 </html>
